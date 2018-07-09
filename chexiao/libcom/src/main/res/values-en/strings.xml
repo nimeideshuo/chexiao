@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">libcomm</string>
+
+    <string name="server_exception">There is a server failure, please try again later.</string>
+
+    <string name="network_failed_please_check">The connection to server failed, please check and try again.</string>
+
+    <string name="recapture">Again</string>
+
+    <string name="please_complete_logo">Please sign in</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="ok">OK</string>
+
+    <string name="year">Year</string>
+
+    <string name="month">Month</string>
+
+    <string name="day">Day</string>
+
+    <string name="hour">Hour</string>
+
+    <string name="minute">Minute</string>
+
+    <string name="are_you_sure_you_want_to_quit">Are you sure to quit now?</string>
+    <string name="addr_no_found">请求地址不存在</string>
+    <string name="net_fail_dd">网络请求失败，请稍后重试</string>
+
+
+
+
+
+
+
+</resources>
