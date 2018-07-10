@@ -126,7 +126,7 @@ public class HttpConnect {
      */
     public String haveToken(Context context) {
         LoginBean.ObjBean objBean = UserBeanPersistenceUtils.readGoLoad(context, false);
-        return objBean !=null? objBean.getToken() :"";
+        return objBean != null ? objBean.getToken() : "";
     }
 
     /**
@@ -136,20 +136,8 @@ public class HttpConnect {
         return new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                BaseBean baseBean = JSON.parseObject(response.body(), BaseBean.class);
-                if (baseBean.getState() == 1) {
-                    obj = new Object();
-                    obj = JSON.parseObject(response.body(), clazz);
-                    mListener.loadHttp(obj);
-                } else if (baseBean.getState() == 2) {
-                    isLogin(context, postHeader);
-                } else {
-                    if (cache == 6) {
-                        httpErrorConnnet.loadHttpError(baseBean.getState());
-                    } else {
-                        Toast.makeText(context, baseBean.getMsg(), Toast.LENGTH_SHORT).show();
-                    }
-                }
+//                BaseBean baseBean = JSON.parseObject(response.body(), BaseBean.class);
+                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -197,7 +185,7 @@ public class HttpConnect {
                 .headers("token", haveToken(context))
                 .headers("appname", "com.immortal.jeeqin")
                 .headers("v", "1.0")
-                .headers("version","android"+getAppVersionName(context))
+                .headers("version", "android" + getAppVersionName(context))
                 .headers("lang", context.getResources().getConfiguration().locale.getCountry())
                 .headers("country", context.getResources().getConfiguration().locale.getCountry())
                 .execute(stringCallBack(context, clazz, postHeader, progress, cache));
@@ -213,20 +201,19 @@ public class HttpConnect {
      * @param progress   进度条
      * @param cache      缓存模式
      */
-    public void jsonPost(final String url, final Context context,  String json, final Class clazz, final String postHeader, final boolean progress, int cache) {
+    public void jsonPost(final String url, final Context context, String json, final Class clazz, final String postHeader, final boolean progress, int cache) {
         if (!new NetConnectUtil().isNetworkConnected(context)) {
             Toast.makeText(context, context.getString(R.string.network_failed_please_check), Toast.LENGTH_SHORT).show();
             return;
         }
-        OkGo.<String>post(url).cacheKey(url + "cache_mode").cacheMode(getCacheMode(cache))
-                .upJson(json!=null?json:"")
-                .headers("platform", "andriod_phone")
-                .headers("token", haveToken(context))
-                .headers("appname", "com.immortal.jeeqin")
-                .headers("v", "1.0")
-                .headers("version","android"+getAppVersionName(context))
-                .headers("lang", context.getResources().getConfiguration().locale.getCountry())
-                .headers("country", context.getResources().getConfiguration().locale.getCountry())
+        OkGo.<String>post(url).cacheKey(url).cacheMode(getCacheMode(cache))
+                .upJson(json != null ? json : "")
+                .headers("accept", "*/*")
+                .headers("connection", "Keep-Alive")
+                .headers("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)")
+                .headers("Content-Type", "application/x-www-form-urlencoded")
+                .headers("key", "mchexiaoban")
+                .headers("code", "92E1C0A93A5D75D7862915032546356862915037950835")
                 .execute(stringCallBack(context, clazz, postHeader, progress, cache));
     }
 }
