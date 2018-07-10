@@ -43,6 +43,21 @@ public class BaseFullHeadActivity extends BaseActivity {
     }
 
     @Override
+    public View getLayoutID() {
+        return null;
+    }
+
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
     public void setContentView(@LayoutRes int layoutResID) {
         View.inflate(this, layoutResID, (ViewGroup) findViewById(R.id.base_content));
     }

@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import butterknife.ButterKnife;
 import me.drakeet.support.toast.BadTokenListener;
 import me.drakeet.support.toast.ToastCompat;
 
@@ -53,6 +54,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutID());
+        ButterKnife.bind(this);
         initView();
         initData();
     }

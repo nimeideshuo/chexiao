@@ -24,7 +24,7 @@ import android.widget.TextView;
  * 日期： 2017/8/12 10:38
  * 描述： 公用头部的封装
  */
-public class BaseHeadActivity extends BaseActivity {
+public abstract class BaseHeadActivity extends BaseActivity {
     protected TextView titleTv;
     protected TextView titleRight;
     private ImageView titleBack;
@@ -36,7 +36,11 @@ public class BaseHeadActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_basehead_layout);
         initBaseView();
+        setContentView(getLayoutID());
     }
+
+    @Override
+    public abstract View getLayoutID();
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -47,7 +51,7 @@ public class BaseHeadActivity extends BaseActivity {
      * 调用后 才能得到titleTv否则为空
      */
     private void initBaseView() {
-        mToolbar= findViewById(R.id.base_tool_bar);
+        mToolbar = findViewById(R.id.base_tool_bar);
         setSupportActionBar((Toolbar) findViewById(R.id.base_tool_bar));
         titleTv = findViewById(R.id.base_toolbar_title);
         titleBack = findViewById(R.id.base_nav_back);
@@ -76,14 +80,16 @@ public class BaseHeadActivity extends BaseActivity {
         }
         return result;
     }
+
     /**
      * 由于全屏时转非全屏时界面中的布局大小不能改变,所以不能使用流行的在windows中添加一个
      * Status 高度的控件来填充内容,  直接使用toolbar设置padding效果
+     *
      * @param activity
      * @param toolbar
      */
     public static void setStatusBarColor(Activity activity, Toolbar toolbar) {
-        if (toolbar.getTag() == null ) {
+        if (toolbar.getTag() == null) {
             ViewGroup.LayoutParams params = toolbar.getLayoutParams();
             int statusHeight = getStatusBarHeight(activity);
             params.height += statusHeight;
@@ -92,14 +98,15 @@ public class BaseHeadActivity extends BaseActivity {
                     toolbar.getPaddingRight(), toolbar.getPaddingBottom());
             toolbar.setTag(true);
             //toolbar默认有16dp的margin值,可以设置为0,或在布局中配置
-            toolbar.setContentInsetsRelative(0,0);
+            toolbar.setContentInsetsRelative(0, 0);
         }
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
-    protected void setmToolbar(boolean enable, Activity activity,int animInId,int animOutId) {
-        if (!enable){
+
+    protected void setmToolbar(boolean enable, Activity activity, int animInId, int animOutId) {
+        if (!enable) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN); //非全屏
             mToolbar.clearAnimation();
             Animation animation = AnimationUtils.loadAnimation(activity, animInId);
@@ -107,9 +114,9 @@ public class BaseHeadActivity extends BaseActivity {
             setStatusBarColor(activity, mToolbar);
             mToolbar.setVisibility(View.VISIBLE);
             animation.start();
-        }else{
+        } else {
             mToolbar.clearAnimation();
-            Animation animation = AnimationUtils.loadAnimation(this,animOutId);
+            Animation animation = AnimationUtils.loadAnimation(this, animOutId);
             mToolbar.setAnimation(animation);
             animation.start();
             mToolbar.setVisibility(View.GONE);
@@ -117,6 +124,7 @@ public class BaseHeadActivity extends BaseActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //设置全屏的flag
         }
     }
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -150,6 +158,7 @@ public class BaseHeadActivity extends BaseActivity {
             }
         }
     }
+
     public void setTitVisible() {
         mToolbar.setVisibility(View.GONE);
     }
@@ -160,6 +169,7 @@ public class BaseHeadActivity extends BaseActivity {
     public void setBackVisible() {
         titleBack.setVisibility(View.GONE);
     }
+
     /**
      * @param text
      * @param drawableRes 设置右侧的按钮，可显示文字或图片
@@ -191,6 +201,7 @@ public class BaseHeadActivity extends BaseActivity {
             }
         }
     }
+
     /**
      * 标题按钮的点击事件
      */
@@ -202,7 +213,7 @@ public class BaseHeadActivity extends BaseActivity {
                 onBackClick();
             } else if (id == R.id.base_nav_right) {
                 onRightClick();
-            }else if (id==R.id.base_nav_right_img){
+            } else if (id == R.id.base_nav_right_img) {
                 onRightClick();
 
             }
