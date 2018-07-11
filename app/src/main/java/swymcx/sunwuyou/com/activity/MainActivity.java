@@ -2,9 +2,9 @@ package swymcx.sunwuyou.com.activity;
 
 import android.view.View;
 
-import com.immo.libcomm.base.BaseHeadActivity;
-import com.immo.libcomm.http.HttpConnect;
-import com.immo.libcomm.http.HttpErrorConnnet;
+import com.sunwuyou.swycx.app.BaseHeadActivity;
+import com.sunwuyou.swycx.http.HttpConnect;
+import com.sunwuyou.swycx.http.HttpErrorConnnet;
 
 import swymcx.sunwuyou.com.R;
 
