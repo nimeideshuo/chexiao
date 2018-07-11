@@ -1,4 +1,4 @@
-package swymcx.sunwuyou.com.model;
+package com.sunwuyou.swycx.model;
 
 /**
  * Created by admin

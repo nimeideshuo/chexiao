@@ -6,10 +6,8 @@ import android.os.StrictMode;
 import com.alibaba.fastjson.JSON;
 import com.immo.libcomm.base.BaseApplication;
 
-import org.json.JSONObject;
-
-import swymcx.sunwuyou.com.model.AccountSetEntity;
-import swymcx.sunwuyou.com.model.Department;
+import com.sunwuyou.swycx.model.AccountSetEntity;
+import com.sunwuyou.swycx.model.Department;
 
 /**
  * Created by admin

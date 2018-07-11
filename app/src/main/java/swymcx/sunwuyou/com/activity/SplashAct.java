@@ -6,11 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.blankj.utilcode.util.AppUtils;
 import com.immo.libcomm.base.BaseActivity;
 
 import butterknife.BindView;
 import swymcx.sunwuyou.com.R;
 import swymcx.sunwuyou.com.base.BasePath;
+import swymcx.sunwuyou.com.utils.NetUtils;
 
 /**
  * Created by admin
@@ -38,16 +40,13 @@ public class SplashAct extends BaseActivity {
 
     @Override
     public void initView() {
-        version.setText("eeeeeeeeeeeee");
-        loading.setText("eeeeeeeeeeeee");
+        //设置版本版本名
+        version.setText(AppUtils.getAppVersionName());
     }
 
     @Override
     public void initData() {
-//        if (!NetUtils.isNetConnect(this)) {
-//            return;
-//        }
-        startActivity(new Intent(this, MainActivity.class));
+
     }
 
 
