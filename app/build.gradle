@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.sunwuyou.swymcx"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -25,4 +25,24 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    implementation project(':libcomm')
+    implementation project(':dialogui')
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.blankj:utilcode:1.17.3'
+    //网络请求框架
+    implementation 'com.lzy.net:okgo:3.0.4'
+    implementation 'com.lzy.net:okrx2:2.0.2'
+    implementation 'com.lzy.net:okserver:2.0.5'
+
+    //进度条样式
+    implementation 'com.kaopiz:kprogresshud:1.0.1'
+    //json解析
+    implementation 'com.alibaba:fastjson:1.2.35'
+    //TextView的扩展
+    implementation 'com.github.chenBingX:SuperTextView:v3.0.0'
+    //图片加载库
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
 }
