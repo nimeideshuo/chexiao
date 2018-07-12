@@ -54,7 +54,9 @@ public class SplashAct extends BaseActivity {
     public void initView() {
         //设置版本版本名
         version.setText(AppUtils.getAppVersionName());
-        this.user = ((User) SystemState.getObject("cu_user", User.class));
+//        SystemState.setValue()
+//        this.user = ((User) SystemState.getObject("cu_user", User.class));
+        String uniqueCode = MyApplication.getInstance().getUniqueCode();
     }
 
     @Override
@@ -88,22 +90,22 @@ public class SplashAct extends BaseActivity {
 
     //查询工作账套
     private void querySaccountSet() {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("parameter", new TerminalEntity());
-        new HttpConnect(new HttpListener() {
-            @Override
-            public void loadHttp(Object object, String response) {
-                if (RequestHelper.isSuccess(response)) {//已经注册去登陆
-                    List<AccountSetEntity> entityList = JSON.parseArray(response, AccountSetEntity.class);
-                    showAccountDialog(entityList);
-
-
-
-                } else {
-                    loading.setText("无网络连接");
-                }
-            }
-        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, null, AccountSetEntity.class, null, true, 0);
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put("parameter", new TerminalEntity());
+//        new HttpConnect(new HttpListener() {
+//            @Override
+//            public void loadHttp(Object object, String response) {
+//                if (RequestHelper.isSuccess(response)) {//已经注册去登陆
+//                    List<AccountSetEntity> entityList = JSON.parseArray(response, AccountSetEntity.class);
+//                    showAccountDialog(entityList);
+//
+//
+//
+//                } else {
+//                    loading.setText("无网络连接");
+//                }
+//            }
+//        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, null, AccountSetEntity.class, null, true, 0);
     }
 
     private void showAccountDialog(List<AccountSetEntity> entityList) {

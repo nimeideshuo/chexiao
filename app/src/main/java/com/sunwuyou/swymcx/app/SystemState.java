@@ -1,5 +1,6 @@
 package com.sunwuyou.swymcx.app;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 
@@ -22,44 +23,39 @@ public class SystemState {
     public static final String P_STORE = "department";
     public static final String P_WAREHOUSE = "warehouse";
     public static final String SETTING = "basic_setting";
-    public static SharedPreferences basic_setting = MyApplication.getInstance().getSharedPreferences("basic_setting", 0);
     public static final String[] customer_select_items;
     public static final String[] customer_select_keys;
     public static final String[] goods_select_items;
-    public static final String[] goods_select_keys = { "id", "pinyin", "name", "barcode" };
+    public static final String[] goods_select_keys = {"id", "pinyin", "name", "barcode"};
     public static String random;
 
-    static
-    {
-        goods_select_items = new String[] { "编号", "拼音", "名称", "条形码" };
-        customer_select_keys = new String[] { "id", "pinyin", "name" };
-        customer_select_items = new String[] { "编号", "拼音", "名称" };
+    static {
+        goods_select_items = new String[]{"编号", "拼音", "名称", "条形码"};
+        customer_select_keys = new String[]{"id", "pinyin", "name"};
+        customer_select_items = new String[]{"编号", "拼音", "名称"};
         random = "";
     }
 
-    public static void enableStrictMode()
-    {
+    public static SharedPreferences basic_setting = MyApplication.getInstance().getSharedPreferences("basic_setting", Context.MODE_PRIVATE);
+
+    public static void enableStrictMode() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectNetwork().build());
     }
 
-    public static AccountSetEntity getAccountSet()
-    {
-        return (AccountSetEntity)getObject("accountset", AccountSetEntity.class);
+    public static AccountSetEntity getAccountSet() {
+        return (AccountSetEntity) getObject("accountset", AccountSetEntity.class);
     }
 
-    public static Department getDepartment()
-    {
-        return (Department)getObject("department", Department.class);
+    public static Department getDepartment() {
+        return (Department) getObject("department", Department.class);
     }
 
-    public static <T> T getObject(String paramString, Class<T> paramClass)
-    {
+    public static <T> T getObject(String paramString, Class<T> paramClass) {
         return JSON.parseObject(basic_setting.getString(paramString, ""), paramClass);
     }
 
-    public static String getValue(String paramString)
-    {
-        return basic_setting.getString(paramString, "");
+    public static String getValue(String key) {
+        return basic_setting.getString(key, "");
     }
 
 //    public static Warehouse getWarehouse()
@@ -67,15 +63,13 @@ public class SystemState {
 //        return (Warehouse)getObject("warehouse", Warehouse.class);
 //    }
 
-    public static boolean saveObject(String paramString, Object paramObject)
-    {
+    public static boolean saveObject(String paramString, Object paramObject) {
         SharedPreferences.Editor localEditor = basic_setting.edit();
         localEditor.putString(paramString, JSON.toJSONString(paramObject));
         return localEditor.commit();
     }
 
-    public static boolean setValue(String paramString1, String paramString2)
-    {
-        return basic_setting.edit().putString(paramString1, paramString2).commit();
+    public static boolean setValue(String key, String value) {
+        return basic_setting.edit().putString(key, value).commit();
     }
 }

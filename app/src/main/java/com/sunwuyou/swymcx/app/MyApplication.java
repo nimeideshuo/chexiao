@@ -42,7 +42,7 @@ public class MyApplication extends MultiDexApplication {
         if (!TextUtils.isEmptyS(SystemState.getValue("keycode"))) {
             return SystemState.getValue("keycode");
         }
-        String str2 = Settings.Secure.getString(getContentResolver(), "android_id");
+        @SuppressLint("HardwareIds") String str2 = Settings.Secure.getString(getContentResolver(), "android_id");
         Object localObject1 = CTelephoneInfo.getInstance(this);
         ((CTelephoneInfo) localObject1).setCTelephoneInfo();
         Object localObject2 = ((CTelephoneInfo) localObject1).getImeiSIM1();
