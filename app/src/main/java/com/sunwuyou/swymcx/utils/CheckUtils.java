@@ -3,7 +3,7 @@ package com.sunwuyou.swymcx.utils;
 
 import android.widget.TextView;
 
-import com.sunwuyou.swycx.app.BaseActivity;
+import com.sunwuyou.swymcx.app.BaseActivity;
 
 
 /**

@@ -7,7 +7,7 @@ import com.lzy.okgo.cache.CacheMode;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.db.CacheManager;
 import com.lzy.okgo.model.Response;
-import com.sunwuyou.swycx.app.MyApplication;
+import com.sunwuyou.swymcx.app.MyApplication;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

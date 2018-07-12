@@ -4,9 +4,9 @@ import android.content.SharedPreferences;
 import android.os.StrictMode;
 
 import com.alibaba.fastjson.JSON;
+import com.sunwuyou.swymcx.model.AccountSetEntity;
+import com.sunwuyou.swymcx.model.Department;
 
-import com.sunwuyou.swycx.model.AccountSetEntity;
-import com.sunwuyou.swycx.model.Department;
 
 /**
  * Created by admin

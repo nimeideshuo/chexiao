@@ -3,7 +3,7 @@ package com.sunwuyou.swymcx.app;
 import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSON;
-import com.sunwuyou.swycx.utils.JSONUtil;
+import com.sunwuyou.swymcx.utils.JSONUtil;
 
 import java.util.HashMap;
 import java.util.List;

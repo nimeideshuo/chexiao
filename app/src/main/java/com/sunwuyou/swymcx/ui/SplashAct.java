@@ -1,27 +1,24 @@
 package com.sunwuyou.swymcx.ui;
 
-import android.app.Dialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
-import com.dou361.dialogui.DialogUIUtils;
 import com.immo.libcomm.utils.TextUtils;
-import com.sunwuyou.swycx.R;
-import com.sunwuyou.swycx.app.AccountPreference;
-import com.sunwuyou.swycx.app.BaseActivity;
-import com.sunwuyou.swycx.app.BasePath;
-import com.sunwuyou.swycx.app.RequestHelper;
-import com.sunwuyou.swycx.app.SystemState;
-import com.sunwuyou.swycx.http.BaseUrl;
-import com.sunwuyou.swycx.http.HttpConnect;
-import com.sunwuyou.swycx.http.HttpListener;
-import com.sunwuyou.swycx.model.AccountSetEntity;
-import com.sunwuyou.swycx.model.User;
-import com.sunwuyou.swycx.request.TerminalEntity;
+import com.sunwuyou.swymcx.R;
+import com.sunwuyou.swymcx.app.AccountPreference;
+import com.sunwuyou.swymcx.app.BaseActivity;
+import com.sunwuyou.swymcx.app.MyApplication;
+import com.sunwuyou.swymcx.app.RequestHelper;
+import com.sunwuyou.swymcx.app.SystemState;
+import com.sunwuyou.swymcx.http.BaseUrl;
+import com.sunwuyou.swymcx.http.HttpConnect;
+import com.sunwuyou.swymcx.http.HttpListener;
+import com.sunwuyou.swymcx.model.AccountSetEntity;
+import com.sunwuyou.swymcx.model.User;
+import com.sunwuyou.swymcx.request.TerminalEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +30,6 @@ import butterknife.BindView;
  * 2018/7/9.
  * content
  */
-@Route(path = BasePath.activity_splash)
 public class SplashAct extends BaseActivity {
 
     @BindView(R.id.imageView)
@@ -63,18 +59,21 @@ public class SplashAct extends BaseActivity {
 
     @Override
     public void initData() {
-        if(user != null&&!TextUtils.isEmptyS(user.getOfflinepassword())){
-
-
-        }
-        ap = new AccountPreference();
+//        if(user != null&&!TextUtils.isEmptyS(user.getOfflinepassword())){
+//
+//
+//        }
+//        ap = new AccountPreference();
 
         getNet();
     }
 
     private void getNet() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("parameter", new TerminalEntity());
+        TerminalEntity terminalEntity = new TerminalEntity();
+        terminalEntity.setIdentifier(MyApplication.getInstance().getUniqueCode());
+        terminalEntity.setVersionKey("mchexiaoban");
+        map.put("parameter", terminalEntity);
         new HttpConnect(new HttpListener() {
             @Override
             public void loadHttp(Object object, String response) {

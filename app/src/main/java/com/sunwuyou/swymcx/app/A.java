@@ -1,6 +1,7 @@
 package com.sunwuyou.swymcx.app;
 
-import com.sunwuyou.swycx.utils.JSONUtil;
+
+import com.sunwuyou.swymcx.utils.JSONUtil;
 
 /**
  * Created by admin
