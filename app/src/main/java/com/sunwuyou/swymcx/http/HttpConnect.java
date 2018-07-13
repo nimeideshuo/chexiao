@@ -1,5 +1,6 @@
 package com.sunwuyou.swymcx.http;
 
+import com.alibaba.fastjson.JSON;
 import com.immo.libcomm.R;
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.lzy.okgo.OkGo;
@@ -8,15 +9,20 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.db.CacheManager;
 import com.lzy.okgo.model.Response;
 import com.sunwuyou.swymcx.app.MyApplication;
+import com.sunwuyou.swymcx.app.RequestHelper;
+import com.sunwuyou.swymcx.utils.JSONUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.immo.libcomm.utils.AndroidBuildUtils.getAppVersionName;
 import static com.lzy.okgo.cache.CacheMode.DEFAULT;
@@ -129,10 +135,20 @@ public class HttpConnect {
             @Override
             public void onSuccess(Response<String> response) {
                 String body = response.body();
-
-
-//                BaseBean baseBean = JSON.parseObject(response.body(), BaseBean.class);
-                Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show();
+                Log.i("OkGo:   ", body);
+                if (body.contains("register")) {
+                    mListener.loadHttp("", body);
+                    return;
+                }
+                if (!RequestHelper.isSuccess(body)) {
+                    Toast.makeText(context, body, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (JSONUtil.isJson(body)) {
+                    mListener.loadHttp(JSON.parseObject(body, clazz), body);
+                } else {
+                    mListener.loadHttp("", body);
+                }
             }
 
             @Override
@@ -193,15 +209,27 @@ public class HttpConnect {
      * @param progress   进度条
      * @param cache      缓存模式
      */
-    public void jsonPost(final String url, final Context context, String json, final Class clazz, final String postHeader, final boolean progress, int cache) {
+    public void jsonPost(final String url, final Context context, HashMap<String, String> map, final Class clazz, final String postHeader, final boolean progress, int cache) {
         if (!new NetConnectUtil().isNetworkConnected(context)) {
             Toast.makeText(context, context.getString(R.string.network_failed_please_check), Toast.LENGTH_SHORT).show();
             return;
         }
+        String json = getJson(map);
         OkGo.<String>post(url).cacheKey(url).cacheMode(getCacheMode(cache))
-                .upString(json != null ? json : "")
+                .upString(json)
                 .headers("key", "mchexiaoban")
                 .headers("code", MyApplication.getInstance().getUniqueCode())
                 .execute(stringCallBack(context, clazz, postHeader, progress, cache));
+    }
+
+    private String getJson(HashMap<String, String> map) {
+        if (map == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+        }
+        return sb.deleteCharAt(sb.length() - 1).toString();
     }
 }

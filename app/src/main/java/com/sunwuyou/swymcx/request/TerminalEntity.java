@@ -16,6 +16,15 @@ public class TerminalEntity {
     private String RegistrationCode;
     private String VersionKey;
 
+    public TerminalEntity() {
+    }
+
+    public TerminalEntity(String Identifier, String VersionKey) {
+        this.Identifier = Identifier;
+        this.IsPC = false;
+        this.VersionKey = VersionKey;
+    }
+
     public String getIdentifier() {
         return Identifier == null ? "" : Identifier;
     }

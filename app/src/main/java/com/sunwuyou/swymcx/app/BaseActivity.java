@@ -28,13 +28,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutID());
-        ButterKnife.bind(this);
+        super.setContentView(getLayoutID());
         initView();
         initData();
     }
-    public abstract View getLayoutID();
+
+    public abstract int getLayoutID();
+
     public abstract void initView();
+
     public abstract void initData();
 
 

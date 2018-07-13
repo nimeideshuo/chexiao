@@ -7,7 +7,7 @@ package com.sunwuyou.swymcx.app;
  */
 
 public class RequestHelper {
-    public static boolean isSuccess(String paramString) {
-        return !A.isFail(paramString);
+    public static boolean isSuccess(String str) {
+        return !A.isFail(str);
     }
 }

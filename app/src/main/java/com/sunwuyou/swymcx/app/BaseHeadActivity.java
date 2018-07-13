@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.app;
 
 import com.immo.libcomm.R;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,6 +19,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
+
 
 /**
  * 作者： YaoChen
@@ -30,47 +33,6 @@ public abstract class BaseHeadActivity extends BaseActivity {
     private ImageView titleBack;
     private ImageView titleMore;
     private Toolbar mToolbar;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.activity_basehead_layout);
-        initBaseView();
-        setContentView(getLayoutID());
-    }
-
-    @Override
-    public abstract View getLayoutID();
-
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        View.inflate(this, layoutResID, (ViewGroup) findViewById(R.id.base_content));
-    }
-
-    /**
-     * 调用后 才能得到titleTv否则为空
-     */
-    private void initBaseView() {
-        mToolbar = findViewById(R.id.base_tool_bar);
-        setSupportActionBar((Toolbar) findViewById(R.id.base_tool_bar));
-        titleTv = findViewById(R.id.base_toolbar_title);
-        titleBack = findViewById(R.id.base_nav_back);
-        titleRight = findViewById(R.id.base_nav_right);
-        titleMore = findViewById(R.id.base_nav_right_img);
-
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        titleRight.setEnabled(true);
-        BaseTitleClick baseTitleClick = new BaseTitleClick();
-        titleBack.setOnClickListener(baseTitleClick);
-        titleRight.setOnClickListener(baseTitleClick);
-        titleMore.setOnClickListener(baseTitleClick);
-    }
 
     public static int getStatusBarHeight(Activity activity) {
         int result = 0;
@@ -103,6 +65,49 @@ public abstract class BaseHeadActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        super.setContentView(R.layout.activity_basehead_layout);
+        initBaseView();
+        setContentViewContent(getLayoutID());
+        ButterKnife.bind(this);
+        initView();
+        initData();
+    }
+
+    @Override
+    public abstract int getLayoutID();
+
+    public void setContentViewContent(@LayoutRes int layoutResID) {
+        View.inflate(this, layoutResID, (ViewGroup) findViewById(R.id.base_content));
+    }
+
+    /**
+     * 调用后 才能得到titleTv否则为空
+     */
+    private void initBaseView() {
+        mToolbar = findViewById(R.id.base_tool_bar);
+        setSupportActionBar((Toolbar) findViewById(R.id.base_tool_bar));
+        titleTv = findViewById(R.id.base_toolbar_title);
+        titleBack = findViewById(R.id.base_nav_back);
+        titleRight = findViewById(R.id.base_nav_right);
+        titleMore = findViewById(R.id.base_nav_right_img);
+
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        titleRight.setEnabled(true);
+        BaseTitleClick baseTitleClick = new BaseTitleClick();
+        titleBack.setOnClickListener(baseTitleClick);
+        titleRight.setOnClickListener(baseTitleClick);
+        titleMore.setOnClickListener(baseTitleClick);
     }
 
     protected void setmToolbar(boolean enable, Activity activity, int animInId, int animOutId) {
@@ -203,6 +208,20 @@ public abstract class BaseHeadActivity extends BaseActivity {
     }
 
     /**
+     * 标题中右边的部分，
+     */
+    protected void onRightClick() {
+
+    }
+
+    /**
+     * 返回按钮的点击事件
+     */
+    private void onBackClick() {
+        back();
+    }
+
+    /**
      * 标题按钮的点击事件
      */
     private class BaseTitleClick implements View.OnClickListener {
@@ -218,19 +237,5 @@ public abstract class BaseHeadActivity extends BaseActivity {
 
             }
         }
-    }
-
-    /**
-     * 标题中右边的部分，
-     */
-    protected void onRightClick() {
-
-    }
-
-    /**
-     * 返回按钮的点击事件
-     */
-    private void onBackClick() {
-        back();
     }
 }

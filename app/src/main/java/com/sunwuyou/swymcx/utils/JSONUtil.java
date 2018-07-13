@@ -16,8 +16,8 @@ import java.util.List;
  */
 
 public class JSONUtil {
-    public static boolean isJson(String paramString) {
-        return (paramString != null) && (!TextUtils.isEmpty(paramString)) && ((paramString.startsWith("{")) || (paramString.startsWith("[")));
+    public static boolean isJson(String isJson) {
+        return (isJson != null) && (!TextUtils.isEmpty(isJson)) && ((isJson.startsWith("{")) || (isJson.startsWith("[")));
     }
 
     // json 转 list hashMap

@@ -1,11 +1,13 @@
 package com.sunwuyou.swymcx.app;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.dou361.dialogui.DialogUIUtils;
 import com.immo.libcomm.utils.TextUtils;
@@ -18,49 +20,55 @@ import com.lzy.okgo.OkGo;
  */
 
 public class MyApplication extends MultiDexApplication {
-    private static final MyApplication instance = new MyApplication();
+    private static final String TAG = MyApplication.class.getSimpleName();
+    private static MyApplication instance = null;
 
     public static MyApplication getInstance() {
+        if (instance == null) {
+            instance = new MyApplication();
+        }
         return instance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         OkGo.getInstance().init(this);
-//        if (true) {           // 这两行必须写在init之前，否则这些配置在init过程中将无效
-//            ARouter.openLog();     // 打印日志
-//            ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
-//        }
-//        ARouter.init(this); // 尽可能早，推荐在Application中初始化
         Utils.init(this);
         DialogUIUtils.init(this);
     }
 
-    @SuppressLint("WrongConstant")
+
     public String getUniqueCode() {
-        if (!TextUtils.isEmptyS(SystemState.getValue("keycode"))) {
-            return SystemState.getValue("keycode");
+        String keycode = SystemState.getValue("keycode");
+        if ((TextUtils.isEmptyS(keycode))) {
+            return keycode;
         }
-        @SuppressLint("HardwareIds") String str2 = Settings.Secure.getString(getContentResolver(), "android_id");
-        Object localObject1 = CTelephoneInfo.getInstance(this);
-        ((CTelephoneInfo) localObject1).setCTelephoneInfo();
-        Object localObject2 = ((CTelephoneInfo) localObject1).getImeiSIM1();
-        String str1 = ((CTelephoneInfo) localObject1).getImeiSIM2();
-        localObject1 = localObject2;
-        if (TextUtils.isEmptyS((String) localObject2)) {
-            localObject1 = "";
+        @SuppressLint("HardwareIds") String str1 = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        CTelephoneInfo localCTelephoneInfo = CTelephoneInfo.getInstance(this);
+        localCTelephoneInfo.setCTelephoneInfo();
+        String str2 = localCTelephoneInfo.getImeiSIM1();
+        String str3 = localCTelephoneInfo.getImeiSIM2();
+        if (!TextUtils.isEmptyS(str2)) {
+            str2 = "";
         }
-        localObject2 = str1;
-        if (TextUtils.isEmptyS(str1)) {
-            localObject2 = "";
+        if (!TextUtils.isEmptyS(str3)) {
+            str3 = "";
         }
-        if (!TextUtils.isEmptyS(str2 + (String) localObject1 + (String) localObject2)) {
-            SystemState.setValue("keycode", (str2 + (String) localObject1 + (String) localObject2).toUpperCase());
-            return (str2 + (String) localObject1 + (String) localObject2).toUpperCase();
+        if ((TextUtils.isEmptyS(str1 + str2 + str3))) {
+            // 将所有字母 全部转换成大写 toUpperCase
+            keycode = (str1 + str2 + str3).toUpperCase();
+            SystemState.setValue("keycode", keycode);
+            return keycode;
         }
-        localObject1 = ((WifiManager) getSystemService("wifi")).getConnectionInfo();
-        SystemState.setValue("keycode", ((WifiInfo) localObject1).getMacAddress());
-        return ((WifiInfo) localObject1).getMacAddress();
+        @SuppressLint("WrongConstant") WifiInfo localWifiInfo = ((WifiManager) getSystemService("wifi")).getConnectionInfo();
+        keycode = localWifiInfo.getMacAddress();
+        SystemState.setValue("keycode", keycode);
+        return localWifiInfo.getMacAddress();
+    }
+
+    public String getMac() {
+        return ((WifiManager) getSystemService("wifi")).getConnectionInfo().getMacAddress();
     }
 }

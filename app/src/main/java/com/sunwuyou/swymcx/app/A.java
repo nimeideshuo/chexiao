@@ -21,8 +21,8 @@ public class A {
     public static final String REGISTER = "register";
     public static final String SUCCESS = "success";
 
-    public static boolean isFail(String paramString) {
-        return (!"success".equals(paramString)) && (!"permit".equals(paramString)) && (!JSONUtil.isJson(paramString));
+    public static boolean isFail(String str) {
+        return (!"success".equals(str)) && (!"permit".equals(str)) && (!JSONUtil.isJson(str));
     }
 
 }

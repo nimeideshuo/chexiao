@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/view_size_15"
+    android:layout_marginRight="@dimen/main_dimens"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:paddingLeft="10.0dip"
+        android:text="@string/_register_message"
+        android:textSize="16.0sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_size_50"
+        android:layout_margin="5.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5.0dip"
+            android:gravity="center|left"
+            android:text="注册码"
+            android:textSize="@dimen/dialog_label" />
+
+        <EditText
+            android:id="@+id/etRegisterId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/view_size_2"
+            android:layout_marginRight="2.0dip"
+            android:background="@drawable/login_panel_edit_bg"
+            android:ems="10"
+            android:hint="请输入注册码"
+            android:paddingLeft="5.0dip"
+            android:singleLine="true"
+            android:textSize="14.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_size_50"
+        android:layout_margin="5.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5.0dip"
+            android:gravity="center|left"
+            android:text="注册人"
+            android:textSize="@dimen/dialog_label" />
+
+        <EditText
+            android:id="@+id/etPadUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.0dip"
+            android:layout_marginRight="2.0dip"
+            android:background="@drawable/login_panel_edit_bg"
+            android:ems="10"
+            android:hint="请输入注册人"
+            android:paddingLeft="5.0dip"
+            android:singleLine="true"
+            android:textSize="14.0sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="36.0dip"
+        android:layout_marginLeft="2.0dip"
+        android:layout_marginRight="2.0dip"
+        android:layout_marginTop="10.0dip"
+        android:background="@drawable/btn_1_selector"
+        android:text="注册" />
+
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="match_parent"
+        android:layout_height="36.0dip"
+        android:layout_marginLeft="2.0dip"
+        android:layout_marginRight="2.0dip"
+        android:layout_marginTop="10.0dip"
+        android:background="@drawable/btn_1_selector"
+        android:text="退出" />
+</LinearLayout>

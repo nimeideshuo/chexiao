@@ -1,39 +1,40 @@
 package com.sunwuyou.swymcx.ui;
 
-import android.view.View;
-import android.widget.ImageView;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
-import com.sunwuyou.swymcx.app.AccountPreference;
-import com.sunwuyou.swymcx.app.BaseActivity;
 import com.sunwuyou.swymcx.app.MyApplication;
 import com.sunwuyou.swymcx.app.RequestHelper;
-import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
 import com.sunwuyou.swymcx.http.HttpListener;
 import com.sunwuyou.swymcx.model.AccountSetEntity;
-import com.sunwuyou.swymcx.model.User;
 import com.sunwuyou.swymcx.request.TerminalEntity;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by admin
- * 2018/7/9.
+ * 2018/7/13.
  * content
  */
-public class SplashAct extends BaseActivity {
 
-    @BindView(R.id.imageView)
-    ImageView imageView;
+public class SplashAct extends Activity {
+    private static final int REQUEST_CODE_PERMISSION_MULTI = 101;
     @BindView(R.id.loading)
     TextView loading;
     @BindView(R.id.version)
@@ -42,75 +43,72 @@ public class SplashAct extends BaseActivity {
     TextView edition;
     @BindView(R.id.copyright)
     TextView copyright;
-    User user;
-    AccountPreference ap;
 
     @Override
-    public View getLayoutID() {
-        return View.inflate(this, R.layout.activity_splash, null);
-    }
-
-    @Override
-    public void initView() {
-        //设置版本版本名
-        version.setText(AppUtils.getAppVersionName());
-//        SystemState.setValue()
-//        this.user = ((User) SystemState.getObject("cu_user", User.class));
-        String uniqueCode = MyApplication.getInstance().getUniqueCode();
-    }
-
-    @Override
-    public void initData() {
-//        if(user != null&&!TextUtils.isEmptyS(user.getOfflinepassword())){
-//
-//
-//        }
-//        ap = new AccountPreference();
-
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
+        ButterKnife.bind(this);
+        initView();
         getNet();
     }
 
+    private void initView() {
+        //设置版本版本名
+        version.setText(AppUtils.getAppVersionName());
+        getPerMission(this);
+        loading.setText(AppUtils.getAppName());
+    }
+
     private void getNet() {
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
         TerminalEntity terminalEntity = new TerminalEntity();
         terminalEntity.setIdentifier(MyApplication.getInstance().getUniqueCode());
         terminalEntity.setVersionKey("mchexiaoban");
-        map.put("parameter", terminalEntity);
+        map.put("parameter", JSON.toJSONString(terminalEntity));
         new HttpConnect(new HttpListener() {
             @Override
             public void loadHttp(Object object, String response) {
-                if (RequestHelper.isSuccess(response)) {//已经注册去登陆
-                    querySaccountSet();
+                if (response.contains("register")) {
+                    //未注册去注册
+                    startActivity(new Intent(SplashAct.this, RegisterPadAct.class));
+                    finish();
                 } else {
-                    loading.setText("无网络连接");
+                    querySaccountNet();
                 }
             }
-        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, JSON.toJSONString(map), TerminalEntity.class, null, true, 0);
+        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, map, null, null, true, 0);
     }
 
     //查询工作账套
-    private void querySaccountSet() {
-//        HashMap<String, Object> map = new HashMap<>();
-//        map.put("parameter", new TerminalEntity());
-//        new HttpConnect(new HttpListener() {
-//            @Override
-//            public void loadHttp(Object object, String response) {
-//                if (RequestHelper.isSuccess(response)) {//已经注册去登陆
-//                    List<AccountSetEntity> entityList = JSON.parseArray(response, AccountSetEntity.class);
-//                    showAccountDialog(entityList);
-//
-//
-//
-//                } else {
-//                    loading.setText("无网络连接");
-//                }
-//            }
-//        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, null, AccountSetEntity.class, null, true, 0);
+    private void querySaccountNet() {
+        new HttpConnect(new HttpListener() {
+            @Override
+            public void loadHttp(Object object, String response) {
+                List<AccountSetEntity> entityList = JSON.parseArray(response, AccountSetEntity.class);
+
+
+            }
+        }).jsonPost(BaseUrl.getUrl(BaseUrl.SUPPORT_QUERYSACCOUNTSET), this, null, null, null, true, 0);
+
     }
 
-    private void showAccountDialog(List<AccountSetEntity> entityList) {
-//        View view = View.inflate(this, R.layout.dia_servicer_ip, null);
-//        Dialog show = DialogUIUtils.showCustomAlert(this, view).show();
-
+    /**
+     * 获取权限
+     */
+    public void getPerMission(final Activity baseActivity) {
+        AndPermission.with(baseActivity)
+                .requestCode(REQUEST_CODE_PERMISSION_MULTI).permission(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WAKE_LOCK
+        ).callback(this).rationale(new RationaleListener() {
+            @Override
+            public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
+                AndPermission.rationaleDialog(baseActivity, rationale).show();
+            }
+        }).start();
     }
 }

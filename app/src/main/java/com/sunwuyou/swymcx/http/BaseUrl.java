@@ -9,9 +9,11 @@ package com.sunwuyou.swymcx.http;
 
 public class BaseUrl {
     //基础url
-    private static String URL = "https://api.no1im.com";
+    private static String URL = "http://192.168.1.5:9682";
 
     public static final String SYSTEM_CHECKREGISTER = "/system/checkregister";
+    //注册
+    public static final String SYSTEM_REGISTER = "/system/register";
     //查询工作账套
     public static final String SUPPORT_QUERYSACCOUNTSET = "/support/querysaccountset";
 
