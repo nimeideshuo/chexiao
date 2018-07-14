@@ -82,8 +82,8 @@ public class AccountPreference {
 //        return this.setPreferences.edit().putString("printername", paramBTPrinter.getName()).putString("printeradress", paramBTPrinter.getAddress()).commit();
 //    }
 
-    public boolean setServerIp(String paramString) {
-        return setValue("ip", paramString);
+    public boolean setServerIp(String ip) {
+        return setValue("ip", ip);
     }
 
     public boolean setValue(String paramString, Object paramObject) {

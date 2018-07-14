@@ -7,5 +7,4 @@ package com.sunwuyou.swymcx.http;
  */
 public interface HttpListener {
     void loadHttp(Object object, String response);
-
 }

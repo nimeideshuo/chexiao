@@ -7,6 +7,8 @@ import android.os.StrictMode;
 import com.alibaba.fastjson.JSON;
 import com.sunwuyou.swymcx.model.AccountSetEntity;
 import com.sunwuyou.swymcx.model.Department;
+import com.sunwuyou.swymcx.model.User;
+import com.sunwuyou.swymcx.model.Warehouse;
 
 
 /**
@@ -28,6 +30,7 @@ public class SystemState {
     public static final String[] goods_select_items;
     public static final String[] goods_select_keys = {"id", "pinyin", "name", "barcode"};
     public static String random;
+    public static SharedPreferences basic_setting = MyApplication.getInstance().getSharedPreferences("basic_setting", Context.MODE_PRIVATE);
 
     static {
         goods_select_items = new String[]{"编号", "拼音", "名称", "条形码"};
@@ -35,8 +38,6 @@ public class SystemState {
         customer_select_items = new String[]{"编号", "拼音", "名称"};
         random = "";
     }
-
-    public static SharedPreferences basic_setting = MyApplication.getInstance().getSharedPreferences("basic_setting", Context.MODE_PRIVATE);
 
     public static void enableStrictMode() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectNetwork().build());
@@ -50,18 +51,17 @@ public class SystemState {
         return (Department) getObject("department", Department.class);
     }
 
-    public static <T> T getObject(String paramString, Class<T> paramClass) {
-        return JSON.parseObject(basic_setting.getString(paramString, ""), paramClass);
+    public static <T> T getObject(String key, Class<T> classs) {
+        return JSON.parseObject(basic_setting.getString(key, ""), classs);
     }
 
     public static String getValue(String key) {
         return basic_setting.getString(key, "");
     }
 
-//    public static Warehouse getWarehouse()
-//    {
-//        return (Warehouse)getObject("warehouse", Warehouse.class);
-//    }
+    public static Warehouse getWarehouse() {
+        return (Warehouse) getObject("warehouse", Warehouse.class);
+    }
 
     public static boolean saveObject(String paramString, Object paramObject) {
         SharedPreferences.Editor localEditor = basic_setting.edit();
@@ -71,5 +71,9 @@ public class SystemState {
 
     public static boolean setValue(String key, String value) {
         return basic_setting.edit().putString(key, value).commit();
+    }
+    // 获取 user 用户
+    public static User getUser() {
+        return ((User) getObject("cu_user", User.class));
     }
 }

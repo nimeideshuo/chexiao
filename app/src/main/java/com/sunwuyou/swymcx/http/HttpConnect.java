@@ -10,6 +10,7 @@ import com.lzy.okgo.db.CacheManager;
 import com.lzy.okgo.model.Response;
 import com.sunwuyou.swymcx.app.MyApplication;
 import com.sunwuyou.swymcx.app.RequestHelper;
+import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.utils.JSONUtil;
 
 import android.annotation.SuppressLint;
@@ -106,26 +107,6 @@ public class HttpConnect {
         return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
     }
 
-    /**
-     * 是否登录的判断
-     */
-    private void isLogin(Context context, String postHeader) {
-        if (context instanceof Activity) {
-            Intent intent = new Intent();
-            intent.setClassName("com.immo.winner", "com.immo.winner.login.LoginActivity");
-            intent.putExtra("contextTips", context.toString().split("@")[0]);
-            if (context.toString().contains("com.immo.winner.main.MainActivity")) {
-                if (postHeader != null) {
-                    intent.putExtra("flags", postHeader);
-                }
-                context.startActivity(intent);
-            } else {
-                context.startActivity(intent);
-                ((Activity) context).finish();
-            }
-        }
-    }
-
 
     /**
      * 数据回调
@@ -135,7 +116,7 @@ public class HttpConnect {
             @Override
             public void onSuccess(Response<String> response) {
                 String body = response.body();
-                Log.i("OkGo:   ", body);
+                Log.i("OkGo:返回结果>>", "   " + body);
                 if (body.contains("register")) {
                     mListener.loadHttp("", body);
                     return;
@@ -155,6 +136,7 @@ public class HttpConnect {
             public void onError(Response<String> response) {
                 super.onError(response);
                 Toast.makeText(context, response.code() == 404 ? context.getString(R.string.addr_no_found) : context.getString(R.string.server_exception), Toast.LENGTH_SHORT).show();
+                httpErrorConnnet.loadHttpError(response.code());
             }
 
             @Override
@@ -227,8 +209,15 @@ public class HttpConnect {
             return "";
         }
         StringBuilder sb = new StringBuilder();
+
         for (Map.Entry<String, String> entry : map.entrySet()) {
             sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+        }
+        if (SystemState.getAccountSet() != null) {
+            sb.append("accountset").append("=").append(SystemState.getAccountSet().getDatabase()).append("&");
+        }
+        if (SystemState.getUser() != null) {
+            sb.append("userid").append("=").append(SystemState.getUser().getId()).append("&");
         }
         return sb.deleteCharAt(sb.length() - 1).toString();
     }

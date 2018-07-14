@@ -1,7 +1,7 @@
 package com.sunwuyou.swymcx.app;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
@@ -12,6 +12,8 @@ import com.blankj.utilcode.util.Utils;
 import com.dou361.dialogui.DialogUIUtils;
 import com.immo.libcomm.utils.TextUtils;
 import com.lzy.okgo.OkGo;
+import com.sunwuyou.swymcx.http.BaseUrl;
+import com.sunwuyou.swymcx.ui.SplashAct;
 
 /**
  * @author Administrator
@@ -22,6 +24,7 @@ import com.lzy.okgo.OkGo;
 public class MyApplication extends MultiDexApplication {
     private static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication instance = null;
+    private ActivityManager activityManager;
 
     public static MyApplication getInstance() {
         if (instance == null) {
@@ -37,6 +40,10 @@ public class MyApplication extends MultiDexApplication {
         OkGo.getInstance().init(this);
         Utils.init(this);
         DialogUIUtils.init(this);
+        //设置服务器IP地址
+        String serverIp = new AccountPreference().getServerIp();
+        LogUtils.e(TAG, "本地服务器地址>>" + serverIp);
+        BaseUrl.setUrl(serverIp);
     }
 
 
@@ -68,7 +75,24 @@ public class MyApplication extends MultiDexApplication {
         return localWifiInfo.getMacAddress();
     }
 
+    @SuppressLint("WrongConstant")
     public String getMac() {
         return ((WifiManager) getSystemService("wifi")).getConnectionInfo().getMacAddress();
+    }
+
+    public void exit() {
+        this.activityManager.popAllActivityExceptOne(null);
+        System.exit(0);
+    }
+
+    public void splash() {
+        this.activityManager.popAllActivityExceptOne(null);
+        main();
+    }
+
+    private void main() {
+        Intent localIntent = new Intent(instance, SplashAct.class);
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(localIntent);
     }
 }

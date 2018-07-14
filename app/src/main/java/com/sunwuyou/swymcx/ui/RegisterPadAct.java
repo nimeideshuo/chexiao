@@ -1,11 +1,14 @@
 package com.sunwuyou.swymcx.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.dou361.dialogui.DialogUIUtils;
 import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
@@ -45,6 +48,7 @@ public class RegisterPadAct extends BaseHeadActivity {
 
     @Override
     public void initData() {
+
 
     }
 

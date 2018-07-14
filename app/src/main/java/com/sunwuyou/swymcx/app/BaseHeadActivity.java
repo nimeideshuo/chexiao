@@ -65,6 +65,7 @@ public abstract class BaseHeadActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        toolbar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -78,12 +79,22 @@ public abstract class BaseHeadActivity extends BaseActivity {
         initData();
     }
 
-    @Override
     public abstract int getLayoutID();
+
+    public abstract void initView();
+
+    public abstract void initData();
 
     public void setContentViewContent(@LayoutRes int layoutResID) {
         View.inflate(this, layoutResID, (ViewGroup) findViewById(R.id.base_content));
     }
+
+    public void setBackVisibility(boolean isShow) {
+        if (titleBack != null) {
+            titleBack.setVisibility(isShow?View.VISIBLE:View.INVISIBLE);
+        }
+    }
+
 
     /**
      * 调用后 才能得到titleTv否则为空

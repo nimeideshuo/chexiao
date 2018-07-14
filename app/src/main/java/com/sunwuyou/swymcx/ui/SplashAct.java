@@ -5,27 +5,36 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
 import com.sunwuyou.swymcx.R;
+import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.MyApplication;
-import com.sunwuyou.swymcx.app.RequestHelper;
+import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
+import com.sunwuyou.swymcx.http.HttpErrorConnnet;
 import com.sunwuyou.swymcx.http.HttpListener;
-import com.sunwuyou.swymcx.model.AccountSetEntity;
+import com.sunwuyou.swymcx.model.User;
+import com.sunwuyou.swymcx.request.ReqUsrUserLogin;
+import com.sunwuyou.swymcx.request.RespUserEntity;
 import com.sunwuyou.swymcx.request.TerminalEntity;
+import com.sunwuyou.swymcx.ui.login.LoginAct;
+import com.sunwuyou.swymcx.ui.login.LoginPassword;
+import com.sunwuyou.swymcx.view.AccountSelectDialog;
+import com.sunwuyou.swymcx.view.ServerIpDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
 
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by admin
@@ -43,6 +52,8 @@ public class SplashAct extends Activity {
     TextView edition;
     @BindView(R.id.copyright)
     TextView copyright;
+    private ServerIpDialog seviceDialog;
+    private AccountPreference ap;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,17 +61,36 @@ public class SplashAct extends Activity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         initView();
-        getNet();
     }
 
     private void initView() {
         //设置版本版本名
         version.setText(AppUtils.getAppVersionName());
         getPerMission(this);
-        loading.setText(AppUtils.getAppName());
+        ap = new AccountPreference();
+        String serverIp = ap.getServerIp();
+        if (serverIp.isEmpty()) {
+            seviceDialog = new ServerIpDialog(this).showDialog("服务器地址", "", null, null, new ServerIpDialog.CallBack() {
+                @Override
+                public void btnOk(View view) {
+                    String input = seviceDialog.getmInput();
+                    //验证是否正确
+                    ap.setServerIp(input);
+                    BaseUrl.setUrl(input);
+                    checkRegisterNet();
+                }
+
+                @Override
+                public void btnCancel(View view) {
+
+                }
+            });
+            return;
+        }
+        checkRegisterNet();
     }
 
-    private void getNet() {
+    private void checkRegisterNet() {
         HashMap<String, String> map = new HashMap<>();
         TerminalEntity terminalEntity = new TerminalEntity();
         terminalEntity.setIdentifier(MyApplication.getInstance().getUniqueCode());
@@ -74,24 +104,30 @@ public class SplashAct extends Activity {
                     startActivity(new Intent(SplashAct.this, RegisterPadAct.class));
                     finish();
                 } else {
-                    querySaccountNet();
+                    if (SystemState.getAccountSet() == null) {
+                        new AccountSelectDialog(SplashAct.this).showDialog("工作账套");
+                        return;
+                    }
+                    if (SystemState.getUser() == null) {
+                        //跳转到登陆模块
+                        startActivity(new Intent(SplashAct.this, LoginAct.class));
+                        finish();
+                    } else {
+                        startActivity(new Intent(SplashAct.this, LoginPassword.class));
+                        finish();
+                    }
                 }
             }
-        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, map, null, null, true, 0);
-    }
-
-    //查询工作账套
-    private void querySaccountNet() {
-        new HttpConnect(new HttpListener() {
+        }, new HttpErrorConnnet() {
             @Override
-            public void loadHttp(Object object, String response) {
-                List<AccountSetEntity> entityList = JSON.parseArray(response, AccountSetEntity.class);
-
-
+            public void loadHttpError(int i) {
+                loading.setText("无网络连接");
             }
-        }).jsonPost(BaseUrl.getUrl(BaseUrl.SUPPORT_QUERYSACCOUNTSET), this, null, null, null, true, 0);
+        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, map, null, null, true, 0);
+
 
     }
+
 
     /**
      * 获取权限
@@ -110,5 +146,23 @@ public class SplashAct extends Activity {
                 AndPermission.rationaleDialog(baseActivity, rationale).show();
             }
         }).start();
+    }
+
+    @OnClick(R.id.loading)
+    public void onViewClicked() {
+        seviceDialog = new ServerIpDialog(this).showDialog("服务器地址", ap.getServerIp(), null, null, new ServerIpDialog.CallBack() {
+            @Override
+            public void btnOk(View view) {
+                String input = seviceDialog.getmInput();
+                //验证是否正确
+                ap.setServerIp(input);
+                checkRegisterNet();
+            }
+
+            @Override
+            public void btnCancel(View view) {
+
+            }
+        });
     }
 }
