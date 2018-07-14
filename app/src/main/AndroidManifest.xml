@@ -53,6 +53,10 @@
         <activity
             android:name=".ui.RegisterPadAct"
             android:screenOrientation="portrait" />
+        <activity android:name=".ui.login.LoginAct" />
+        <activity android:name=".ui.login.LoginPassword" />
+        <activity android:name=".ui.FieldMainAct" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.center.SettingActivity" android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>
