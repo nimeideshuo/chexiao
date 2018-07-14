@@ -22,6 +22,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -38,6 +40,9 @@ dependencies {
     implementation 'com.lzy.net:okrx2:2.0.2'
     implementation 'com.lzy.net:okserver:2.0.5'
 
+
+    //列表适配
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     //进度条样式
     implementation 'com.kaopiz:kprogresshud:1.0.1'
     //json解析
