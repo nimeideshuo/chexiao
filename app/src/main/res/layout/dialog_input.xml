@@ -30,7 +30,7 @@
             android:layout_marginLeft="@dimen/view_size_30"
             android:layout_marginRight="@dimen/view_size_30"
             android:hint="请输入服务器地址"
-            android:textCursorDrawable="@drawable/ed_blue"
+            android:textCursorDrawable="@mipmap/ed_blue"
             android:padding="10.0dip"
             android:gravity="center"
             android:singleLine="true"

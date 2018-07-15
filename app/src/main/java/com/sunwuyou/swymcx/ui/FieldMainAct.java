@@ -1,7 +1,9 @@
 package com.sunwuyou.swymcx.ui;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,8 +22,11 @@ import com.sunwuyou.swymcx.model.Department;
 import com.sunwuyou.swymcx.popupmenu.MainMenuPopup;
 import com.sunwuyou.swymcx.request.ReqSupQueryDepartment;
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
+import com.sunwuyou.swymcx.service.ServiceSynchronize;
 import com.sunwuyou.swymcx.utils.NetUtils;
+import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.SwyUtils;
+import com.sunwuyou.swymcx.utils.UpdateUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.MessageDialog;
 import com.sunwuyou.swymcx.view.SelectDialog;
@@ -46,6 +51,45 @@ public class FieldMainAct extends BaseHeadActivity {
     private MainMenuPopup menuPopup;
     private AccountPreference ap;
     private ProgressDialog progressDialog;
+    @SuppressLint("HandlerLeak") Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case 0:
+                    progressDialog.cancel();
+                    toast("同步成功");
+                    break;
+                case 2:
+                    toast("同步失败，请重试");
+                    break;
+            }
+        }
+
+        ;
+    };
+    // 数据更新
+    @SuppressLint("HandlerLeak") private Handler handlerProgress = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+
+                case -1:
+                    progressDialog.setProgress(0);
+                    progressDialog.setMessage("数据同步中");
+                    progressDialog.setMax(Integer.parseInt(msg.obj.toString()));
+                    progressDialog.show();
+                    break;
+                case -2:
+                    progressDialog.setProgress(0);
+                    progressDialog.setMessage("商品图片同步中");
+                    progressDialog.setMax(Integer.parseInt(msg.obj.toString()));
+                    progressDialog.show();
+                    break;
+                case -3:
+                    progressDialog.cancel();
+                    break;
+            }
+            progressDialog.setProgress(msg.what);
+        }
+    };
 
     @Override
     public int getLayoutID() {
@@ -84,11 +128,22 @@ public class FieldMainAct extends BaseHeadActivity {
                 String time = Utils.formatDate(this.ap.getValue("customer_data_updateime", "1990-01-01 00:00:00"), "yyyy-MM-dd");
                 if (!Utils.formatDate(new Date().getTime(), "yyyy-MM-dd").equals(time)) {
                     toast("今天还未同步客户信息");
-                    getMaxRVersion();
+//                    getMaxRVersion();
                 }
             }
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        PDH.show(this, "更新中", new PDH.ProgressCallBack() {
+            @Override
+            public void action() {
+                getMaxRVersion();
+            }
+        });
     }
 
     @OnClick({R.id.field_fields_open, R.id.field_settleup_open, R.id.field_transfer_open, R.id.field_fields_record, R.id.field_settleup_record, R.id.field_transfer_record, R.id.fieldsale_customer, R.id.field_truckstock, R.id.field_local_goods, R.id.root})
@@ -190,53 +245,24 @@ public class FieldMainAct extends BaseHeadActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-
     public void getMaxRVersion() {
-        long rversion = Long.parseLong(new AccountPreference().getValue("max_rversion", "0"));
-        getUpdata(rversion);
-//        if(){
-//            this.ap.setValue("basic_data_updatitme", Utils.formatDate(new Date().getTime()));
-//        }
-    }
-
-    public void getUpdata(final Long rv) {
-        ArrayList<ReqSynUpdateInfo> localArrayList = new ArrayList<ReqSynUpdateInfo>();
-        localArrayList.add(new ReqSynUpdateInfo("log_deleterecord", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_unit", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_department", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_warehouse", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_paytype", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_account", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_pricesystem", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("cu_customertype", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_region", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_visitline", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_goods", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_goodsunit", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_goodsprice", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("sz_goodsimage", 0L));
-        localArrayList.add(new ReqSynUpdateInfo("rversion", rv));
-        localArrayList.add(new ReqSynUpdateInfo("pagesize", 1000L));
-        HashMap<String, String> map = new HashMap<>();
-        map.put("parameter", JSON.toJSONString(localArrayList));
-        map.put("ischexiao", "" + true);
-        new HttpConnect(new HttpListener() {
-            @Override
-            public void loadHttp(Object object, String response) {
-                List<ReqSynUpdateInfo> departmentList = JSON.parseArray(response, ReqSynUpdateInfo.class);
-                long rversion = new SwyUtils().getPagesFromUpdateInfo(departmentList, "rversion");
-                if (rversion < 0) {
-                    ap.setValue("basic_data_updatitme", Utils.formatDate(new Date().getTime()));
-                    return;
+        long max_rversion = Long.parseLong(new AccountPreference().getValue("max_rversion", "0"));
+        List<ReqSynUpdateInfo> listReqSyn = new ServiceSynchronize().syn_QueryUpdateInfo(max_rversion);
+        if (listReqSyn != null) {
+            long rversion = new SwyUtils().getPagesFromUpdateInfo(listReqSyn, "rversion");
+            if (rversion >= 0) {
+                ap.setValue("basic_data_updatitme", Utils.formatDate(new Date().getTime()));
+                if (rversion != max_rversion) {
+                    if (new UpdateUtils().executeUpdate(this.handlerProgress, listReqSyn, max_rversion)) {
+                        ap.setValue("max_rversion", String.valueOf(rversion));
+                        handler.sendEmptyMessage(0);
+                    } else {
+                        handler.sendEmptyMessage(2);
+                    }
+                    handlerProgress.sendEmptyMessage(-3);
                 }
-                if (rversion != rv) {
-                    //执行更新
-
-                }
-
             }
-        }).jsonPost(BaseUrl.getUrl(BaseUrl.SYNCHRONIZE_QUERYUPDATEINFO), this, map, null, null, true, 0);
 
-
+        }
     }
 }

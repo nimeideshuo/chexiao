@@ -29,7 +29,7 @@
             android:layout_marginBottom="10.0dip"
             android:layout_marginLeft="@dimen/view_size_30"
             android:layout_marginRight="@dimen/view_size_30"
-            android:textCursorDrawable="@drawable/ed_blue"
+            android:textCursorDrawable="@mipmap/ed_blue"
             android:padding="10.0dip"
             android:gravity="center"
             android:singleLine="true"

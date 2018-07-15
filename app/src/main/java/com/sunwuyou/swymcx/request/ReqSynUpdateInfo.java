@@ -7,29 +7,34 @@ package com.sunwuyou.swymcx.request;
  */
 
 public class ReqSynUpdateInfo {
-    private String tablename;
-    private long pages;
 
-    public ReqSynUpdateInfo(String tablename, long pages) {
+
+    /**
+     * tablename : log_deleterecord
+     * pages : 1
+     */
+
+    private String tablename;
+    private int pages;
+
+    public ReqSynUpdateInfo(String tablename, int pages) {
         this.tablename = tablename;
         this.pages = pages;
     }
 
-    public long getPages() {
-        return pages;
-    }
-
-    public void setPages(long pages) {
-        this.pages = pages;
-    }
-
     public String getTablename() {
-        return tablename == null ? "" : tablename;
+        return tablename;
     }
 
     public void setTablename(String tablename) {
         this.tablename = tablename;
     }
 
+    public int getPages() {
+        return pages;
+    }
 
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
 }

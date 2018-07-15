@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.utils;
 
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -18,5 +19,17 @@ public class SwyUtils {
             }
         }
         return 0;
+    }
+
+    // 获取 list 中 需要更新 的 pages
+    public int getSumPagesFromUpdateInfo(List<ReqSynUpdateInfo> paramList) {
+        int i = 0;
+        for (ReqSynUpdateInfo info : paramList) {
+            if ((!info.getTablename().equals("rversion"))
+                    && (!info.getTablename().equals("pagesize"))) {
+                i = (int) (i + info.getPages());
+            }
+        }
+        return i;
     }
 }
