@@ -6,8 +6,8 @@ package com.sunwuyou.swymcx.utils;
  * content
  */
 public class TextUtils {
-    public static boolean isEmptyS(String str) {
-        return ((str != null) && (str.length() != 0) && (!("null".equals(str))));
+    public static boolean isEmptyS(String arg1) {
+        return arg1 == null || arg1.length() == 0 || ("null".equals(arg1));
     }
 
     public static boolean isEmpty(String str) {

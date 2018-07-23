@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,35 +57,15 @@ public class JSONUtil {
     }
 
     public static <T> List<T> str2list(String content, Class<T> paramClass) {
-        List<T> list = new ArrayList<T>();
-        com.alibaba.fastjson.JSONArray jsonArray = JSON.parseArray(content);
-
-        for (Object object :jsonArray) {
-            list.add(JSON.parseObject(object.toString(),paramClass));
+        if (TextUtils.isEmptyS(content)) {
+            return new ArrayList<>();
         }
-
-
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        org.codehaus.jackson.JsonParser parser;
-//        List<T> list = new ArrayList<T>();
-//        if (!TextUtils.isEmptyS(content)) {
-//            return list;
-//        }
-//        try {
-//            parser = objectMapper.getJsonFactory().createJsonParser(content);
-//            JsonNode nodes = parser.readValueAsTree();
-//            // list = new ArrayList<T>(nodes.size());
-//            for (JsonNode node : nodes) {
-//                list.add(objectMapper.readValue(node, paramClass));
-//            }
-//            return list;
-//        } catch (JsonParseException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        return list;
-
+        try {
+            return JSON.parseArray(content, paramClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 
     public static String toJSONString(Object object) {

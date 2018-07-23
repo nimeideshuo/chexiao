@@ -19,7 +19,7 @@ public class RespCustomerGoodsAndDocPages {
         this.customers = customers;
     }
 
-    public int getDocpages() {
+    public int getDocPages() {
         return docpages;
     }
 
@@ -27,7 +27,7 @@ public class RespCustomerGoodsAndDocPages {
         this.docpages = docpages;
     }
 
-    public int getGoodspages() {
+    public int getGoodsPages() {
         return goodspages;
     }
 

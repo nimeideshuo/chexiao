@@ -9,6 +9,15 @@ import java.io.Serializable;
  */
 public class GoodsThin implements Serializable {
     private String barcode;
+    private String biginitnumber;
+    private String bigstocknumber;
+    private String id;
+    private double initnumber;
+    private boolean isusebatch;
+    private String name;
+    private String pinyin;
+    private String specification;
+    private double stocknumber;
 
     public String getBarcode() {
         return barcode == null ? "" : barcode;
@@ -90,13 +99,19 @@ public class GoodsThin implements Serializable {
         this.stocknumber = stocknumber;
     }
 
-    private String biginitnumber;
-    private String bigstocknumber;
-    private String id;
-    private double initnumber;
-    private boolean isusebatch;
-    private String name;
-    private String pinyin;
-    private String specification;
-    private double stocknumber;
+    @Override
+    public String toString() {
+        return "GoodsThin{" +
+                "barcode='" + barcode + '\'' +
+                ", biginitnumber='" + biginitnumber + '\'' +
+                ", bigstocknumber='" + bigstocknumber + '\'' +
+                ", id='" + id + '\'' +
+                ", initnumber=" + initnumber +
+                ", isusebatch=" + isusebatch +
+                ", name='" + name + '\'' +
+                ", pinyin='" + pinyin + '\'' +
+                ", specification='" + specification + '\'' +
+                ", stocknumber=" + stocknumber +
+                '}';
+    }
 }

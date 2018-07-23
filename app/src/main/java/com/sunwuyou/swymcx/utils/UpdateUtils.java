@@ -4,13 +4,19 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 
+import com.sunwuyou.swymcx.dao.CustomerDAO;
 import com.sunwuyou.swymcx.dao.DBOpenHelper;
+import com.sunwuyou.swymcx.dao.GoodsDAO;
 import com.sunwuyou.swymcx.dao.GoodsImageDAO;
+import com.sunwuyou.swymcx.dao.PromotionDAO;
 import com.sunwuyou.swymcx.model.GoodsImage;
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
+import com.sunwuyou.swymcx.response.IDNameEntity;
 import com.sunwuyou.swymcx.response.RespCustomerGoodsAndDocPages;
+import com.sunwuyou.swymcx.service.ServiceSupport;
 import com.sunwuyou.swymcx.service.ServiceSynchronize;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,10 +33,254 @@ public class UpdateUtils {
     public static final int AddVisitLineID = 2;
     public static final int RefreshLocalALl = 4;
 
-    public boolean executeCustomerGoodsAndDocUpdate(Handler paramHandler, List<String> paramList) {
+
+    public boolean executeCustomerUpdate(Handler paramHandler, int paramInt, String arg26) {
+        ArrayList localObject2 = new ArrayList();
+        ServiceSynchronize v19 = new ServiceSynchronize(0L);
+        CustomerDAO v4 = new CustomerDAO();
+        ArrayList<String> v13 = new ArrayList<String>();
+        boolean v21 = false;
+        switch (paramInt) {
+            case 0:
+                int pages = v19.syn_QueryCustomerIDPages();
+                if (pages > 0) {
+                    for (int i = 1; i <= pages; i++) {
+                        List<HashMap<String, String>> maps = v19.syn_QueryCustomerIDs(i);
+                        if (maps == null) {
+                            continue;
+                        }
+                        for (int j = 0; j < maps.size(); j++) {
+                            v13.add(maps.get(j).get("id"));
+                        }
+                    }
+                } else {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+                    v21 = false;
+                }
+
+                break;
+            case 1: {
+                if (v4.isExists(arg26)) {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定客户已存在"));
+                    return false;
+                }
+                v13.add(arg26);
+                break;
+            }
+            case 2:
+                List<IDNameEntity> v15 = JSONUtil.str2list(new ServiceSupport().QueryVisitLineCustomers(arg26), IDNameEntity.class);
+                if (v15 != null && v15.size() != 0) {
+                    for (int i = 0; i < v15.size(); i++) {
+                        String id = v15.get(i).getId();
+                        if (v4.isExists(id)) {
+                            v15.remove(id);
+                        } else {
+                            v13.add(id);
+                        }
+                    }
+
+                } else {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定路线无客户"));
+                }
+                break;
+            case 3:
+//                List<IDNameEntity> v14 = JSONUtil.str2list(new ServiceSupport().QueryRegionCustomers(arg26), IDNameEntity.class);
+//                //获取所有客户信息  把相同的客户去掉
+//                if (v14 != null && v14.size() != 0) {
+////                    for (int i = 0; i < v14.size(); i++) {
+////                        String id = v14.get(i).getId();
+////                        if (v4.isExists(id)) {
+////                            v14.remove(id);
+////                        } else {
+////                            v13.add(id);
+////                        }
+////
+////                    }
+//                    int v9 = 0;
+//                    while (true) {
+//                        if (v9 < v14.size()) {
+//                            String v5 = v14.get(v9).getId();
+//                            if (v4.isExists(v5)) {
+//                                v14.remove(v9);
+//                                --v9;
+//                            } else {
+//                                v13.add(v5);
+//                            }
+//                            ++v9;
+//                        } else {
+//                            break;
+//                        }
+//                    }
+//
+//                    if (v13.size() != 0) {
+//
+//                        int v17 = v19.getPageSize();
+//                        int v22 = ((List) v13).size() / v17;
+//                        int v21_1 = ((List) v13).size() % v17 > 0 ? 1 : 0;
+//                        int v20 = v22 + v21_1;
+//
+//                        for (int i = 0; i < v20; i++) {
+//                            if (i >= v20) {
+//                                if (!this.executeCustomerGoodsAndDocUpdate(paramHandler, ((List) v13))) {
+//                                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+//                                    return false;
+//                                }
+//
+//                                if (!this.executePromotionUpdate(paramHandler, ((List) v13))) {
+//                                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+//                                    return false;
+//                                }
+//                            }
+//
+//
+//                        }
+//
+//
+//                    }
+//
+//                } else {
+//                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定区域无客户"));
+//                }
+                break;
+        }
+        if (v13.size() != 0) {
+            int v17 = v19.getPageSize();
+            int v22 = v13.size() / v17;
+            int v21_1 = v13.size() % v17 > 0 ? 1 : 0;
+            int v20 = v22 + v21_1;
+            if (v20 <= 0) {
+                if (!this.executeCustomerGoodsAndDocUpdate(paramHandler, v13)) {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+                    return false;
+                }
+                if (!this.executePromotionUpdate(paramHandler, v13)) {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+                    return false;
+                }
+                v21 = true;
+            }
+
+            for (int i = 0; i < v20; i++) {
+                int v3 = i * v17;
+                int v8 = (i + 1) * v17 - 1;
+                if (v8 >= v13.size()) {
+                    v8 = v13.size() - 1;
+                }
+                String v6 = "";
+                for (int v12 = v3; v12 <= v8; ++v12) {
+                    v6 = String.valueOf(v6) + ",\'" + ((List) v13).get(v12) + "\'";
+                }
+                if (v6.length() > 0) {
+                    v6 = v6.substring(1);
+                }
+
+                boolean v10 = false;
+                if (paramInt == 4) {
+                    v10 = true;
+                }
+
+                List<HashMap<String, String>> list = v19.syn_QueryCustomerRecordsByID(v6, v10, v4.getMaxOrderNo());
+                if (list == null) {
+                    break;
+                }
+                this.saveToLocalDB(list);
+
+            }
+            return true;
+        }
+        return true;
+    }
+
+    public boolean executePromotionUpdate(Handler arg26, List arg27) {
+
+        int v15;
+        int v7;
+        int v3;
+        ArrayList<String> v11 = new ArrayList<String>();
+        ServiceSynchronize v21 = new ServiceSynchronize(0);
+        int v14 = v21.getPageSize();
+        int v24 = arg27.size() / v14;
+        int v23 = arg27.size() % v14 > 0 ? 1 : 0;
+        int v22 = v24 + v23;
+        CustomerDAO v4 = new CustomerDAO();
+        for (int v13 = 0; v13 < v22; ++v13) {
+            v3 = v13 * v14;
+            v7 = (v13 + 1) * v14 - 1;
+            if (v7 >= arg27.size()) {
+                v7 = arg27.size() - 1;
+            }
+
+            String v5 = "";
+            int v10;
+            for (v10 = v3; v10 <= v7; ++v10) {
+                v5 = String.valueOf(v5) + ",\'" + arg27.get(v10) + "\'";
+            }
+
+            if (v5.length() > 0) {
+                v5 = v5.substring(1);
+            }
+            v4.getPromotionID(v11, v5);
+        }
+        PromotionDAO v16 = new PromotionDAO();
+        int v8;
+        for (v8 = 0; v8 < v11.size(); ++v8) {
+            if (v16.isExists(v11.get(v8))) {
+                v11.remove(v8);
+                --v8;
+            }
+        }
+
+        if (v11.size() == 0) {
+            return true;
+        }
 
 
-        return false;
+        return true;
+    }
+
+
+    public boolean executeGoodsStockUpdate(Handler paramHandler, String warehouseid) {
+        ServiceSynchronize localServiceSynchronize = new ServiceSynchronize(0L);
+        SwyUtils localObject = new SwyUtils();
+        new GoodsDAO().clearStock();
+        List<ReqSynUpdateInfo> localList1 = localServiceSynchronize.syn_QueryStockPages(warehouseid);
+        if (localList1 == null) {
+            paramHandler.sendMessage(paramHandler.obtainMessage(1, "服务器访问异常"));
+            return false;
+        }
+        if (localObject.getSumPagesFromUpdateInfo(localList1) == 0) {
+            paramHandler.sendMessage(paramHandler.obtainMessage(1, "无库存可以装车"));
+            return false;
+        }
+        int i = 0;
+        int sz_stockwarn = (int) localObject.getPagesFromUpdateInfo(localList1, "sz_stockwarn");
+        if (sz_stockwarn > 0) {
+            for (int j = 1; j <= sz_stockwarn; j++) {
+                List<HashMap<String, String>> localList2 = localServiceSynchronize.syn_QueryStockWarnRecords(warehouseid, j);
+                if (localList2 == null) {
+                    return false;
+                }
+                saveToLocalDB(localList2);
+                i++;
+                paramHandler.sendEmptyMessage(i);
+            }
+        }
+
+        int kf_goodsbatch = (int) localObject.getPagesFromUpdateInfo(localList1, "kf_goodsbatch");
+
+        if (kf_goodsbatch > 0) {
+            for (int j = 1; j <= kf_goodsbatch; j++) {
+                List<HashMap<String, String>> localList2 = localServiceSynchronize.syn_QueryGoodsBatchRecords(warehouseid, j);
+                if (localList2 == null) {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "装货失败，请重试"));
+                    return false;
+                }
+                saveToLocalDB(localList2);
+                i++;
+                paramHandler.sendEmptyMessage(i);
+            }
+        }
+        return true;
     }
 
     public boolean executeUpdate(Handler paramHandler, List<ReqSynUpdateInfo> paramList, long rversion) {
@@ -38,7 +288,7 @@ public class UpdateUtils {
         ServiceSynchronize ssy = new ServiceSynchronize(rversion);
         SwyUtils localSwyUtils = new SwyUtils();
         paramHandler.sendMessage(
-                paramHandler.obtainMessage(-1, Integer.valueOf(localSwyUtils.getSumPagesFromUpdateInfo(paramList))));
+                paramHandler.obtainMessage(-1, localSwyUtils.getSumPagesFromUpdateInfo(paramList)));
 
         int i = 0;
         int log_deleterecord = (int) localSwyUtils.getPagesFromUpdateInfo(paramList, "log_deleterecord");
@@ -108,20 +358,18 @@ public class UpdateUtils {
             }
 
         }
-        // 客户
-        int i5 = (int) localSwyUtils.getPagesFromUpdateInfo(paramList, "cu_customer");
-        if (i5 > 0) {
-            for (int j = 1; j <= i5; j++) {
-                List<HashMap<String, String>> localList5 = ssy.syn_QueryCustomerRecords(j);
-                if (localList5 == null) {
+        int i4 = (int) localSwyUtils.getPagesFromUpdateInfo(paramList, "sz_account");
+        if (i4 > 0) {
+            for (int j = 1; j <= i4; j++) {
+                List<HashMap<String, String>> localList4 = ssy.syn_QueryAccountRecords(j);
+                if (localList4 == null) {
                     return false;
                 }
-                saveToLocalDB(localList5);
+                saveToLocalDB(localList4);
                 i++;
                 paramHandler.sendEmptyMessage(i);
             }
         }
-
         // 所有客户 包括供应商 由于返回值 电话号码 返回值 NULL 放在前面防止客户 电话等信息被覆盖
         int i6 = (int) localSwyUtils.getPagesFromUpdateInfo(paramList, "sz_visitjob");
         if (i6 > 0) {
@@ -136,6 +384,22 @@ public class UpdateUtils {
                 paramHandler.sendEmptyMessage(i);
             }
         }
+
+
+        // 客户
+        int i5 = (int) localSwyUtils.getPagesFromUpdateInfo(paramList, "cu_customer");
+        if (i5 > 0) {
+            for (int j = 1; j <= i5; j++) {
+                List<HashMap<String, String>> localList5 = ssy.syn_QueryCustomerRecords(j);
+                if (localList5 == null) {
+                    return false;
+                }
+                saveToLocalDB(localList5);
+                i++;
+                paramHandler.sendEmptyMessage(i);
+            }
+        }
+
 
         int pricesystemPages = (int) localSwyUtils.getPagesFromUpdateInfo(paramList, "sz_pricesystem");
         if (pricesystemPages > 0) {
@@ -309,7 +573,7 @@ public class UpdateUtils {
 
     }
 
-//    private void updataToLocalDB(List<HashMap<String, String>> paramList) {
+    //    private void updataToLocalDB(List<HashMap<String, String>> paramList) {
 //
 //        SQLiteDatabase database = new DBOpenHelper().getWritableDatabase();
 //        List<SupplierThin> listSupplier = new ArrayList<SupplierThin>();
@@ -355,5 +619,55 @@ public class UpdateUtils {
 //        }
 //
 //    }
-
+    public boolean executeCustomerGoodsAndDocUpdate(Handler arg20, List arg21) {
+        int v16 = 0;
+        ServiceSynchronize v15 = new ServiceSynchronize(0);
+        int v12 = v15.getPageSize();
+        int v18 = arg21.size() / v12;
+        int v17 = arg21.size() % v12 > 0 ? 1 : 0;
+        int v13 = v18 + v17;
+        ArrayList<RespCustomerGoodsAndDocPages> v10 = new ArrayList<RespCustomerGoodsAndDocPages>();
+        if (v13 > 0) {
+            int v6 = v12 - 1;
+            if (v6 >= arg21.size()) {
+                v6 = arg21.size() - 1;
+            }
+            String v4 = "";
+            for (int i = 0; i <= v6; i++) {
+                v4 = String.valueOf(v4) + ",\'" + arg21.get(i) + "\'";
+            }
+            if (v4.length() > 0) {
+                v4 = v4.substring(1);
+            }
+            try {
+                RespCustomerGoodsAndDocPages v14 = v15.syn_QueryCustomerGoodsAndDocPages(v4);
+                if (v14 == null) {
+                    arg20.sendMessage(arg20.obtainMessage(1, "客户信息同步失败，请重试"));
+                    return false;
+                }
+                v14.setCustomers(v4);
+                v16 += v14.getGoodsPages() + v14.getDocPages();
+                v10.add(v14);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (v16 > 0) {
+            for (int i = 0; i < v10.size(); i++) {
+                RespCustomerGoodsAndDocPages v14_1 = v10.get(i);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerGoodsRecords(v14_1.getCustomers(), i);
+                if (v8 != null) {
+                    this.saveToLocalDB(v8);
+                }
+            }
+            for (int i = 0; i < v10.size(); i++) {
+                RespCustomerGoodsAndDocPages docPages = v10.get(i);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords((docPages).getCustomers(), i);
+                if (v8 != null) {
+                    this.saveToLocalDB(v8);
+                }
+            }
+        }
+        return true;
+    }
 }

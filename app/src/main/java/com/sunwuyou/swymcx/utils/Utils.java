@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.TypedValue;
 
 import com.sunwuyou.swymcx.app.AccountPreference;
+import com.sunwuyou.swymcx.dao.PricesystemDAO;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -21,37 +22,48 @@ import java.util.Locale;
  */
 
 public class Utils {
-    public static String CUSTOMER_CHECK_SELECT;
     public static int DEFAULT_OutDocUNIT;
     public static int DEFAULT_TransferDocUNIT;
+    public static int int_subtotal_change;
+    public static boolean isAutoChangeGoodsDiscountAfterDoc;
+    public static String strCancelWarehouse;
+    public static int DEFAULT_PRICESYSTEM;
+    public static String CUSTOMER_CHECK_SELECT;
+    public static int DEFAULT_UNIT;
     public static String GOODS_CHECK_SELECT;
+    public static boolean IS_ALLOWEDMODIFY_PRINTED;
     public static int NUMBER_DEC = 2;
     public static int PRICE_DEC_NUM = 2;
     public static int RECEIVE_DEC_NUM;
     public static int SUBTOTAL_DEC_NUM = 2;
+    public static int TRANSFER_DEFAULT_UNIT;
+    public static boolean USE_CUSTOMER_PRICE;
     public static String companyName;
     public static int intGenerateBatch;
-    public static int int_subtotal_change;
-    public static boolean isAutoChangeGoodsDiscountAfterDoc;
-    private static List<HashMap<String, String>> listbiz;
+    public static boolean isDownloadCustomerByVisitLine;
+    public static boolean isTuiHuanHuoSamePrice;
+    public static boolean isUploadLocation;
+    public static boolean isUseCurrentPrice;
     public static String pricesystemid;
     public static String strBatchPrefix;
     public static String strBatchSuffix;
-    public static String strCancelWarehouse;
     static AccountPreference ap = new AccountPreference();
-    public static int DEFAULT_PRICESYSTEM;
+    private static List<HashMap<String, String>> listbiz;
 
     static {
         RECEIVE_DEC_NUM = 2;
-        DEFAULT_OutDocUNIT = 0;
-        DEFAULT_TransferDocUNIT = 0;
-        strCancelWarehouse = null;
-        isAutoChangeGoodsDiscountAfterDoc = false;
+        DEFAULT_UNIT = 0;
+        TRANSFER_DEFAULT_UNIT = 0;
+        USE_CUSTOMER_PRICE = false;
+        isUseCurrentPrice = false;
+        isTuiHuanHuoSamePrice = false;
+        IS_ALLOWEDMODIFY_PRINTED = true;
+        isUploadLocation = false;
+        isDownloadCustomerByVisitLine = false;
         companyName = "";
         GOODS_CHECK_SELECT = "id,pinyin,name,barcode";
-        CUSTOMER_CHECK_SELECT = "id,pinyin,name";
+        CUSTOMER_CHECK_SELECT = "pinyin";
         pricesystemid = "";
-        int_subtotal_change = 0;
         init();
     }
 
@@ -114,7 +126,7 @@ public class Utils {
     }
 
     private static String formatDouble(double value, int paramInt) {
-        return formatDouble(value, new String[] { "0", "0.0", "0.00", "0.000", "0.0000" }[paramInt]);
+        return formatDouble(value, new String[]{"0", "0.0", "0.00", "0.000", "0.0000"}[paramInt]);
     }
 
     private static String formatDouble(double value, String paramString) {
@@ -237,63 +249,58 @@ public class Utils {
         return (normalizeDouble(paramDouble1) <= normalizeDouble(paramDouble2));
     }
 
-    // TODO 待补全
     public static void init() {
-        AccountPreference localAccountPreference = new AccountPreference();
-        listbiz = localAccountPreference.getBizInfoMap();
-        // localString1 = localAccountPreference.getValue("goods_check_select");
-        try {
-            int i = 0;
-            // String localString1;
-            if (i <= listbiz.size()) {
-                // 商品 检索方式
-                if (!localAccountPreference.getValue("goods_check_select").isEmpty()) {
-                    GOODS_CHECK_SELECT = localAccountPreference.getValue("goods_check_select");
+        AccountPreference v0 = new AccountPreference();
+        Utils.listbiz = v0.getBizInfoMap();
+        int v1;
+        for (v1 = 0; v1 < Utils.listbiz.size(); ++v1) {
+            if ("intPricePrecision".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.PRICE_DEC_NUM = Integer.parseInt(Utils.listbiz.get(v1).get("valueint"));
+            } else if ("intSubtotalPrecision".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.SUBTOTAL_DEC_NUM = Integer.parseInt(Utils.listbiz.get(v1).get("valueint"));
+            } else if ("intReceivablePrecision".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.RECEIVE_DEC_NUM = Integer.parseInt(Utils.listbiz.get(v1).get("valueint"));
+            } else if ("intOutDocUnit".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.DEFAULT_UNIT = Integer.parseInt(Utils.listbiz.get(v1).get("valueint"));
+            } else if ("intTransferDocUnit".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.TRANSFER_DEFAULT_UNIT = Integer.parseInt(Utils.listbiz.get(v1).get("valueint"));
+            } else if ("isUseCustomerPrice".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.USE_CUSTOMER_PRICE = Boolean.parseBoolean(Utils.listbiz.get(v1).get("valuebool"));
+            } else if ("strPriceSystemCheXiao".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.pricesystemid = Utils.listbiz.get(v1).get("valuestring");
+                if (TextUtils.isEmptyS(Utils.pricesystemid)) {
+                    Utils.pricesystemid = new PricesystemDAO().queryAvailablePricesystem();
                 }
-                // 客户检索方式
-                if (!localAccountPreference.getValue("customer_check_select").isEmpty()) {
-                    CUSTOMER_CHECK_SELECT = localAccountPreference.getValue("customer_check_select");
+            } else if ("isUseCurrentPrice".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.isUseCurrentPrice = Boolean.parseBoolean(Utils.listbiz.get(v1).get("valuebool"));
+            } else if ("isTuiHuanHuoSamePrice".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.isTuiHuanHuoSamePrice = Boolean.parseBoolean(Utils.listbiz.get(v1).get("valuebool"));
+            } else if ("companyname".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.companyName = Utils.listbiz.get(v1).get("valuestring");
+            } else if ("isCheXiaoAllowModifyPrinted".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.IS_ALLOWEDMODIFY_PRINTED = "true".equals(Utils.listbiz.get(v1).get("valuebool"));
+            } else if ("isUploadLocation".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.isUploadLocation = Boolean.parseBoolean(Utils.listbiz.get(v1).get("valuebool"));
+            } else if ("isDownloadCustomerByVisitLine".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.isDownloadCustomerByVisitLine = Boolean.parseBoolean(Utils.listbiz.get(v1).get("valuebool"));
+            } else if ("intGenerateBatch".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.intGenerateBatch = Integer.parseInt(Utils.listbiz.get(v1).get("valueint"));
+            } else if ("strBatchPrefix".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.strBatchPrefix = Utils.listbiz.get(v1).get("valuestring");
+                if (TextUtils.isEmptyS(Utils.strBatchPrefix)) {
+                    Utils.strBatchPrefix = "";
                 }
-            }
-
-            for (i = 0; i < listbiz.size(); i++) {
-                if ("intPricePrecision".equals(listbiz.get(i).get("bpid"))) {
-                    PRICE_DEC_NUM = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("intSubtotalPrecision".equals(listbiz.get(i).get("bpid"))) {
-                    SUBTOTAL_DEC_NUM = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("intReceivablePrecision".equals(listbiz.get(i).get("bpid"))) {
-                    RECEIVE_DEC_NUM = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("intOutDocUnit".equals(listbiz.get(i).get("bpid"))) {// 获取初始化单位
-                    DEFAULT_OutDocUNIT = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("intTransferDocUnit".equals(listbiz.get(i).get("bpid"))) {
-                    DEFAULT_TransferDocUNIT = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("companyname".equals(listbiz.get(i).get("bpid"))) {
-                    companyName = listbiz.get(i).get("valuestring");
-                } else if ("intSubtotalChange".equals(listbiz.get(i).get("bpid"))) {
-                    int_subtotal_change = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("strCancelWarehouse".equals(listbiz.get(i).get("bpid"))) {
-                    strCancelWarehouse = listbiz.get(i).get("valuestring");
-                } else if ("isAutoChangeGoodsDiscountAfterDoc".equals(listbiz.get(i).get("bpid"))) {
-                    isAutoChangeGoodsDiscountAfterDoc = Boolean.parseBoolean(listbiz.get(i).get("valuebool"));
-                } else if ("intGenerateBatch".equals(listbiz.get(i).get("bpid"))) {
-                    intGenerateBatch = Integer.parseInt(listbiz.get(i).get("valueint"));
-                } else if ("strBatchPrefix".equals(listbiz.get(i).get("bpid"))) {
-                    strBatchPrefix = listbiz.get(i).get("valuestring");
-                    if (TextUtils.isEmptyS(strBatchPrefix))
-                        strBatchPrefix = "";
-                } else if ("strBatchSuffix".equals(listbiz.get(i).get("bpid"))) {
-                    strBatchSuffix = listbiz.get(i).get("valuestring");
-                    if (TextUtils.isEmptyS(strBatchSuffix))
-                        strBatchSuffix = "";
-                } else if ("strPriceSystem".equals(listbiz.get(i).get("bpid"))) {
-                    DEFAULT_PRICESYSTEM = Integer.parseInt(listbiz.get(i).get("valuestring"));
+            } else if ("strBatchSuffix".equals(Utils.listbiz.get(v1).get("bpid"))) {
+                Utils.strBatchSuffix = Utils.listbiz.get(v1).get("valuestring");
+                if (TextUtils.isEmptyS(Utils.strBatchSuffix)) {
+                    Utils.strBatchSuffix = "";
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
+        String v2 = TextUtils.isEmptyS(v0.getValue("goods_check_select")) ? "id,pinyin,name,barcode" : v0.getValue("goods_check_select");
+        Utils.GOODS_CHECK_SELECT = v2;
+        v2 = TextUtils.isEmptyS(v0.getValue("customer_check_select")) ? "id,pinyin,name" : v0.getValue("customer_check_select");
+        Utils.CUSTOMER_CHECK_SELECT = v2;
     }
 
     public static double normalize(double paramDouble, int y) {
@@ -357,5 +364,14 @@ public class Utils {
 
     public static int px2dip(Context paramContext, float paramFloat) {
         return (int) (0.5F + paramFloat / paramContext.getResources().getDisplayMetrics().density);
+    }
+
+    public static Long getStartTime() {
+        Calendar v0 = Calendar.getInstance();
+        v0.set(Calendar.HOUR, 0);
+        v0.set(Calendar.MINUTE, 0);
+        v0.set(Calendar.SECOND, 0);
+        v0.set(Calendar.MILLISECOND, 0);
+        return v0.getTime().getTime();
     }
 }

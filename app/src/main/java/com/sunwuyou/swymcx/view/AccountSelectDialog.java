@@ -1,5 +1,6 @@
 package com.sunwuyou.swymcx.view;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,13 +32,13 @@ import java.util.List;
 
 public class AccountSelectDialog extends Dialog {
     private static final String TAGS = AccountSelectDialog.class.getSimpleName();
-    private Context mContext;
+    private Activity mContext;
     private TextView dialogTitle;
     private RecyclerView list;
     private List<AccountSetEntity> entityList;
     private Madapter madapter;
 
-    public AccountSelectDialog(@NonNull Context context) {
+    public AccountSelectDialog(@NonNull Activity context) {
         super(context, R.style.MyDialog_NoTitle);
         mContext = context;
         setContentView(R.layout.dialog_account_list);
@@ -70,6 +71,10 @@ public class AccountSelectDialog extends Dialog {
 
     }
 
+    private void finish(){
+        mContext.finish();
+    }
+
 
     /**
      * 主体的列表
@@ -91,6 +96,7 @@ public class AccountSelectDialog extends Dialog {
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             SystemState.setValue("accountset", JSON.toJSONString(entityList.get(position)));
             mContext.startActivity(new Intent(mContext, LoginAct.class));
+            finish();
         }
     }
 }

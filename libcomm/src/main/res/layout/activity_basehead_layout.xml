@@ -38,22 +38,36 @@
             android:layout_width="@dimen/view_size_50"
             android:layout_height="@dimen/view_size_50"
             android:layout_gravity="right"
-            android:padding="15dp"
-            android:visibility="gone" />
+            tools:src="@mipmap/shop_add" />
+
+        <TextView
+            android:id="@+id/base_nav_right1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/view_size_15"
+            android:paddingRight="@dimen/view_size_15"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/font_size_16"
+            tools:text="菜单" />
 
         <TextView
             android:id="@+id/base_nav_right"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:background="@color/colorWhite"
             android:clickable="true"
             android:focusable="true"
+            android:gravity="center_vertical"
             android:paddingLeft="@dimen/view_size_15"
             android:paddingRight="@dimen/view_size_15"
             android:textColor="@color/color_333333"
             android:textSize="@dimen/font_size_16"
-            android:visibility="gone" />
+            tools:text="菜单" />
 
     </android.support.v7.widget.Toolbar>
 

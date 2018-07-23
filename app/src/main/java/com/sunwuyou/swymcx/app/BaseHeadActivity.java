@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 public abstract class BaseHeadActivity extends BaseActivity {
     protected TextView titleTv;
     protected TextView titleRight;
+    protected TextView titleRight1;
     private ImageView titleBack;
     private ImageView titleMore;
     private Toolbar mToolbar;
@@ -91,7 +92,7 @@ public abstract class BaseHeadActivity extends BaseActivity {
 
     public void setBackVisibility(boolean isShow) {
         if (titleBack != null) {
-            titleBack.setVisibility(isShow?View.VISIBLE:View.INVISIBLE);
+            titleBack.setVisibility(isShow ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
@@ -105,6 +106,7 @@ public abstract class BaseHeadActivity extends BaseActivity {
         titleTv = findViewById(R.id.base_toolbar_title);
         titleBack = findViewById(R.id.base_nav_back);
         titleRight = findViewById(R.id.base_nav_right);
+        titleRight1 = findViewById(R.id.base_nav_right1);
         titleMore = findViewById(R.id.base_nav_right_img);
 
 
@@ -115,9 +117,11 @@ public abstract class BaseHeadActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
         titleRight.setEnabled(true);
+        titleRight1.setEnabled(true);
         BaseTitleClick baseTitleClick = new BaseTitleClick();
         titleBack.setOnClickListener(baseTitleClick);
         titleRight.setOnClickListener(baseTitleClick);
+        titleRight1.setOnClickListener(baseTitleClick);
         titleMore.setOnClickListener(baseTitleClick);
     }
 
@@ -175,16 +179,6 @@ public abstract class BaseHeadActivity extends BaseActivity {
         }
     }
 
-    public void setTitVisible() {
-        mToolbar.setVisibility(View.GONE);
-    }
-
-    /**
-     * 设置返回按钮的可见性
-     */
-    public void setBackVisible() {
-        titleBack.setVisibility(View.GONE);
-    }
 
     /**
      * @param text
@@ -232,6 +226,17 @@ public abstract class BaseHeadActivity extends BaseActivity {
         back();
     }
 
+    protected void onRightClick1() {
+
+    }
+
+    protected void setTitleRight1(String text) {
+        if (titleRight1 != null) {
+            titleRight1.setVisibility(View.VISIBLE);
+            titleRight1.setText(text);
+        }
+    }
+
     /**
      * 标题按钮的点击事件
      */
@@ -245,8 +250,10 @@ public abstract class BaseHeadActivity extends BaseActivity {
                 onRightClick();
             } else if (id == R.id.base_nav_right_img) {
                 onRightClick();
-
+            } else if (id == R.id.base_nav_right1) {
+                onRightClick1();
             }
         }
     }
 }
+

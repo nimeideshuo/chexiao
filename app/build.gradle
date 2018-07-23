@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
+
+
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.sunwuyou.swymcx1"
@@ -10,25 +12,46 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+
+
+        signingConfigs {
+            release {
+                storeFile file('F:/key/123456.jks')
+                storePassword '123456'
+                keyAlias 'key0'
+                keyPassword '123456'
+            }
+            debug {
+                storeFile file('F:/key/123456.jks')
+                storePassword '123456'
+                keyAlias 'key0'
+                keyPassword '123456'
+            }
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     implementation project(':libcomm')
@@ -39,8 +62,6 @@ dependencies {
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.lzy.net:okrx2:2.0.2'
     implementation 'com.lzy.net:okserver:2.0.5'
-
-
     //列表适配
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     //进度条样式
@@ -51,7 +72,8 @@ dependencies {
     implementation 'com.github.chenBingX:SuperTextView:v3.0.0'
     //图片加载库
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-
     //android6.0权限
     implementation 'com.yanzhenjie:permission:1.1.2'
+    //高德地图
+    compile 'com.amap.api:location:latest.integration'
 }

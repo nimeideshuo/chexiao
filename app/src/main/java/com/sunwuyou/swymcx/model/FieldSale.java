@@ -9,6 +9,27 @@ import java.io.Serializable;
  */
 public class FieldSale implements Serializable {
     private String address;
+    private String builderid;
+    private String buildername;
+    private String buildtime;
+    private String customerid;
+    private String customername;
+    private String departmentid;
+    private String departmentname;
+    private long id;
+    private boolean isnewcustomer;
+    private double latitude;
+    private double longitude;
+    private String mobile;
+    private double preference;
+    private String pricesystemid;
+    private double printnum;
+    private String promotionid;
+    private String remark;
+    private String showid;
+    private int status;
+    private String warehouseid;
+    private String warehousename;
 
     public String getAddress() {
         return address == null ? "" : address;
@@ -82,7 +103,7 @@ public class FieldSale implements Serializable {
         this.id = id;
     }
 
-    public boolean isnewcustomer() {
+    public boolean isIsnewcustomer() {
         return isnewcustomer;
     }
 
@@ -185,26 +206,4 @@ public class FieldSale implements Serializable {
     public void setWarehousename(String warehousename) {
         this.warehousename = warehousename;
     }
-
-    private String builderid;
-    private String buildername;
-    private String buildtime;
-    private String customerid;
-    private String customername;
-    private String departmentid;
-    private String departmentname;
-    private long id;
-    private boolean isnewcustomer;
-    private double latitude;
-    private double longitude;
-    private String mobile;
-    private double preference;
-    private String pricesystemid;
-    private double printnum;
-    private String promotionid;
-    private String remark;
-    private String showid;
-    private int status;
-    private String warehouseid;
-    private String warehousename;
 }

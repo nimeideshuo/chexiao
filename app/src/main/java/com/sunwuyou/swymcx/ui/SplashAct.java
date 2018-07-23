@@ -105,6 +105,7 @@ public class SplashAct extends Activity {
                     finish();
                 } else {
                     if (SystemState.getAccountSet() == null) {
+
                         new AccountSelectDialog(SplashAct.this).showDialog("工作账套");
                         return;
                     }

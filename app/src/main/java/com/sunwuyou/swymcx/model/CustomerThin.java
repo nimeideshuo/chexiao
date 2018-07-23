@@ -8,7 +8,7 @@ package com.sunwuyou.swymcx.model;
 
 import java.io.Serializable;
 
-class CustomerThin implements Serializable {
+public class CustomerThin implements Serializable {
     private static final long serialVersionUID = 1L;
     private String address;
     private String contactmoblie;
@@ -38,19 +38,19 @@ class CustomerThin implements Serializable {
         this.address = address;
     }
 
-    public String getContactmoblie() {
+    public String getContactMoblie() {
         return contactmoblie == null ? "" : contactmoblie;
     }
 
-    public void setContactmoblie(String contactmoblie) {
+    public void setContactMoblie(String contactmoblie) {
         this.contactmoblie = contactmoblie;
     }
 
-    public int getExhibitionterm() {
+    public int getExhibitionTerm() {
         return exhibitionterm;
     }
 
-    public void setExhibitionterm(int exhibitionterm) {
+    public void setExhibitionTerm(int exhibitionterm) {
         this.exhibitionterm = exhibitionterm;
     }
 
@@ -70,11 +70,11 @@ class CustomerThin implements Serializable {
         this.isfinish = isfinish;
     }
 
-    public boolean isnew() {
+    public boolean getIsNew() {
         return isnew;
     }
 
-    public void setIsnew(boolean isnew) {
+    public void setIsNew(boolean isnew) {
         this.isnew = isnew;
     }
 
@@ -86,11 +86,11 @@ class CustomerThin implements Serializable {
         this.isusecustomerprice = isusecustomerprice;
     }
 
-    public long getLastexhibition() {
+    public long getLastExhibition() {
         return lastexhibition;
     }
 
-    public void setLastexhibition(long lastexhibition) {
+    public void setLastExhibition(long lastexhibition) {
         this.lastexhibition = lastexhibition;
     }
 
@@ -106,7 +106,7 @@ class CustomerThin implements Serializable {
         return orderno;
     }
 
-    public void setOrderno(int orderno) {
+    public void setOrderNo(int orderno) {
         this.orderno = orderno;
     }
 
@@ -114,7 +114,7 @@ class CustomerThin implements Serializable {
         return promotionid == null ? "" : promotionid;
     }
 
-    public void setPromotionid(String promotionid) {
+    public void setPromotionId(String promotionid) {
         this.promotionid = promotionid;
     }
 

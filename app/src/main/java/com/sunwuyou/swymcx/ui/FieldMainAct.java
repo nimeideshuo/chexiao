@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.ui;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -15,6 +16,7 @@ import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.SystemState;
+import com.sunwuyou.swymcx.dao.GoodsDAO;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
 import com.sunwuyou.swymcx.http.HttpListener;
@@ -23,6 +25,9 @@ import com.sunwuyou.swymcx.popupmenu.MainMenuPopup;
 import com.sunwuyou.swymcx.request.ReqSupQueryDepartment;
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
 import com.sunwuyou.swymcx.service.ServiceSynchronize;
+import com.sunwuyou.swymcx.ui.field.FieldDocOpenAct;
+import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
+import com.sunwuyou.swymcx.ui.field.TruckStockActivity;
 import com.sunwuyou.swymcx.utils.NetUtils;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.SwyUtils;
@@ -127,23 +132,16 @@ public class FieldMainAct extends BaseHeadActivity {
             if (NetUtils.isConnected(this)) {
                 String time = Utils.formatDate(this.ap.getValue("customer_data_updateime", "1990-01-01 00:00:00"), "yyyy-MM-dd");
                 if (!Utils.formatDate(new Date().getTime(), "yyyy-MM-dd").equals(time)) {
-                    toast("今天还未同步客户信息");
-//                    getMaxRVersion();
+                    PDH.show(this, new PDH.ProgressCallBack() {
+                        @Override
+                        public void action() {
+                            getMaxRVersion();
+                        }
+                    });
                 }
             }
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        PDH.show(this, "更新中", new PDH.ProgressCallBack() {
-            @Override
-            public void action() {
-                getMaxRVersion();
-            }
-        });
     }
 
     @OnClick({R.id.field_fields_open, R.id.field_settleup_open, R.id.field_transfer_open, R.id.field_fields_record, R.id.field_settleup_record, R.id.field_transfer_record, R.id.fieldsale_customer, R.id.field_truckstock, R.id.field_local_goods, R.id.root})
@@ -151,6 +149,15 @@ public class FieldMainAct extends BaseHeadActivity {
         switch (view.getId()) {
             case R.id.field_fields_open:
                 //销售
+                if (SystemState.getWarehouse() == null) {
+                    toast("请先设置车销仓库");
+                    return;
+                }
+                if (new GoodsDAO().getTruckGoodsCount() == 0) {
+                    toast("请先装车");
+                    return;
+                }
+                startActivity(new Intent(this, FieldDocOpenAct.class));
                 break;
             case R.id.field_settleup_open:
                 //结算
@@ -171,11 +178,15 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.fieldsale_customer:
                 //客户中心
-
+                startActivity(new Intent(this, TargetCustomerActivity.class));
                 break;
             case R.id.field_truckstock:
+                if (SystemState.getWarehouse() == null) {
+                    toast("请选择仓库");
+                    return;
+                }
                 //库存
-
+                startActivity(new Intent(this, TruckStockActivity.class));
                 break;
             case R.id.field_local_goods:
                 //产品手册
@@ -208,6 +219,12 @@ public class FieldMainAct extends BaseHeadActivity {
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         SystemState.setValue("department", JSON.toJSONString(departmentList.get(position)));
+                        PDH.show(FieldMainAct.this, new PDH.ProgressCallBack() {
+                            @Override
+                            public void action() {
+                                getMaxRVersion();
+                            }
+                        });
                     }
                 }).setCancelables(false).showDialog();
 

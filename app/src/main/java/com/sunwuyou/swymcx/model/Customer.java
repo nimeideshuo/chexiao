@@ -120,7 +120,7 @@ public class Customer
         return exhibitionterm;
     }
 
-    public void setExhibitionterm(int exhibitionterm) {
+    public void setExhibitionTerm(int exhibitionterm) {
         this.exhibitionterm = exhibitionterm;
     }
 
@@ -140,7 +140,7 @@ public class Customer
         this.isfinish = isfinish;
     }
 
-    public boolean isnew() {
+    public boolean getIsNew() {
         return isnew;
     }
 
@@ -160,7 +160,7 @@ public class Customer
         return lastexhibition;
     }
 
-    public void setLastexhibition(long lastexhibition) {
+    public void setLastExhibition(long lastexhibition) {
         this.lastexhibition = lastexhibition;
     }
 
@@ -212,7 +212,7 @@ public class Customer
         this.pricesystemid = pricesystemid;
     }
 
-    public String getPromotionid() {
+    public String getPromotionId() {
         return promotionid == null ? "" : promotionid;
     }
 

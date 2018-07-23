@@ -17,6 +17,10 @@ public class BaseUrl {
     public static final String SUPPORT_QUERYSACCOUNTSET = "/support/querysaccountset";
     //查询部门
     public static final String SUPPORT_QUERYDEPARTMENT = "/support/querydepartment";
+    //查询地区
+    public static final String SUPPORT_QUERYREGION = "/support/queryregion";
+    //查询路线
+    public static final String SUPPORT_QUERYVISITLINE = "/support/queryvisitline";
     //用户登陆
     public static final String USER_USERLOGIN = "/user/userlogin";
 
