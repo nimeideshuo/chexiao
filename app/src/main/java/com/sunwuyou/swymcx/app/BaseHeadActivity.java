@@ -78,6 +78,7 @@ public abstract class BaseHeadActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         initData();
+        setActionBarText();
     }
 
     public abstract int getLayoutID();
@@ -254,6 +255,9 @@ public abstract class BaseHeadActivity extends BaseActivity {
                 onRightClick1();
             }
         }
+    }
+    public void setActionBarText(){
+
     }
 }
 

@@ -1,6 +1,9 @@
 package com.sunwuyou.swymcx.ui.field;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,7 @@ import com.sunwuyou.swymcx.model.FieldSale;
 import com.sunwuyou.swymcx.model.User;
 import com.sunwuyou.swymcx.ui.CustomerSearchAct;
 import com.sunwuyou.swymcx.utils.MLog;
+import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 
@@ -42,6 +46,21 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
     private AMapLocation mLocation;
     private GPS mGps;
     private FieldSale fieldSale;
+    @SuppressLint("HandlerLeak") private Handler handler = new Handler() {
+        public void handleMessage(Message message) {
+            long l = Long.parseLong(message.obj.toString());
+            if (l != -1L) {
+                Intent intent = new Intent(FieldDocOpenAct.this, FieldEditActivity.class).putExtra("fieldsaleid", l);
+                startActivity(intent);
+                if ((customer != null) && (!TextUtils.isEmptyS(customer.getId()))) {
+                    new CustomerDAO().updateCustomerValue(customer.getId(), "isfinish", "1");
+                }
+                finish();
+                return;
+            }
+            toast("操作失败");
+        }
+    };
 
     @Override
     public int getLayoutID() {
@@ -68,6 +87,9 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
         fieldSale = new FieldSale();
         Department v4 = SystemState.getDepartment();
         User user = SystemState.getObject("cu_user", User.class);
+        fieldSale.setCustomerid(this.customer.getId());
+        fieldSale.setCustomername(this.customer.getName());
+        fieldSale.setIsnewcustomer(this.customer.getIsNew());
         fieldSale.setShowid(new FieldSaleDAO().makeShowId());
         fieldSale.setDepartmentid(v4.getDid());
         fieldSale.setDepartmentname(v4.getDname());
@@ -83,7 +105,6 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
         return fieldSale;
     }
 
-
     @OnClick({R.id.btnCustomer, R.id.btnOpenFieldDoc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -91,18 +112,16 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
                 startActivityForResult(new Intent(this, CustomerSearchAct.class), INTENT_CODE_CUSTOMER);
                 break;
             case R.id.btnOpenFieldDoc:
-
-                openDoc();
-
-
+                PDH.show(this, new PDH.ProgressCallBack() {
+                    @Override
+                    public void action() {
+                        FieldSale localFieldSale = makeFieldsaleForm();
+                        long l = new FieldSaleDAO().addFieldsale(localFieldSale);
+                        handler.sendMessage(handler.obtainMessage(0, Long.valueOf(l)));
+                    }
+                });
                 break;
         }
-    }
-
-    private void openDoc() {
-        FieldSale localFieldSale = FieldDocOpenAct.this.makeFieldsaleForm();
-        long l = new FieldSaleDAO().addFieldsale(localFieldSale);
-        FieldDocOpenAct.this.handler.sendMessage(FieldDocOpenAct.this.handler.obtainMessage(0, Long.valueOf(l)));
     }
 
     @Override

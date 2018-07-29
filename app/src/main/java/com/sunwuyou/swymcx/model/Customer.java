@@ -80,7 +80,7 @@ public class Customer
         return bankingaccount == null ? "" : bankingaccount;
     }
 
-    public void setBankingaccount(String bankingaccount) {
+    public void setBankingAccount(String bankingaccount) {
         this.bankingaccount = bankingaccount;
     }
 
@@ -96,7 +96,7 @@ public class Customer
         return contactmoblie == null ? "" : contactmoblie;
     }
 
-    public void setContactmoblie(String contactmoblie) {
+    public void setContactMoblie(String contactmoblie) {
         this.contactmoblie = contactmoblie;
     }
 
@@ -104,7 +104,7 @@ public class Customer
         return customertypeid == null ? "" : customertypeid;
     }
 
-    public void setCustomertypeid(String customertypeid) {
+    public void setCustomerTypeId(String customertypeid) {
         this.customertypeid = customertypeid;
     }
 
@@ -112,7 +112,7 @@ public class Customer
         return depositbank == null ? "" : depositbank;
     }
 
-    public void setDepositbank(String depositbank) {
+    public void setDepositBank(String depositbank) {
         this.depositbank = depositbank;
     }
 
@@ -136,7 +136,7 @@ public class Customer
         return isfinish;
     }
 
-    public void setIsfinish(boolean isfinish) {
+    public void setIsFinish(boolean isfinish) {
         this.isfinish = isfinish;
     }
 
@@ -144,11 +144,11 @@ public class Customer
         return isnew;
     }
 
-    public void setIsnew(boolean isnew) {
+    public void setIsNew(boolean isnew) {
         this.isnew = isnew;
     }
 
-    public boolean isusecustomerprice() {
+    public boolean getIsusecustomerprice() {
         return isusecustomerprice;
     }
 
@@ -192,7 +192,7 @@ public class Customer
         return orderno;
     }
 
-    public void setOrderno(int orderno) {
+    public void setOrderNo(int orderno) {
         this.orderno = orderno;
     }
 
@@ -204,11 +204,11 @@ public class Customer
         this.pinyin = pinyin;
     }
 
-    public String getPricesystemid() {
+    public String getPriceSystemId() {
         return pricesystemid == null ? "" : pricesystemid;
     }
 
-    public void setPricesystemid(String pricesystemid) {
+    public void setPriceSystemId(String pricesystemid) {
         this.pricesystemid = pricesystemid;
     }
 
@@ -216,7 +216,7 @@ public class Customer
         return promotionid == null ? "" : promotionid;
     }
 
-    public void setPromotionid(String promotionid) {
+    public void setPromotionId(String promotionid) {
         this.promotionid = promotionid;
     }
 
@@ -224,7 +224,7 @@ public class Customer
         return regionid == null ? "" : regionid;
     }
 
-    public void setRegionid(String regionid) {
+    public void setRegionId(String regionid) {
         this.regionid = regionid;
     }
 
@@ -248,7 +248,7 @@ public class Customer
         return visitlineid == null ? "" : visitlineid;
     }
 
-    public void setVisitlineid(String visitlineid) {
+    public void setVisitLineId(String visitlineid) {
         this.visitlineid = visitlineid;
     }
 

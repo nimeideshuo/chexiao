@@ -49,7 +49,7 @@ public class FieldSaleItemTotal {
         this.inbasicnum = inbasicnum;
     }
 
-    public boolean isusebatch() {
+    public boolean getIsusebatch() {
         return isusebatch;
     }
 

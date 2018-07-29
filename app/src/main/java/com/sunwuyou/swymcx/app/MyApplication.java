@@ -14,6 +14,7 @@ import com.immo.libcomm.utils.TextUtils;
 import com.lzy.okgo.OkGo;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.ui.SplashAct;
+import com.sunwuyou.swymcx.utils.MLog;
 
 /**
  * @author Administrator
@@ -22,7 +23,6 @@ import com.sunwuyou.swymcx.ui.SplashAct;
  */
 
 public class MyApplication extends MultiDexApplication {
-    private static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication instance = null;
     private ActivityManager activityManager;
 
@@ -42,7 +42,7 @@ public class MyApplication extends MultiDexApplication {
         DialogUIUtils.init(this);
         //设置服务器IP地址
         String serverIp = new AccountPreference().getServerIp();
-        LogUtils.e(TAG, "本地服务器地址>>" + serverIp);
+        MLog.d("本地服务器地址>>" + serverIp);
         BaseUrl.setUrl(serverIp);
     }
 

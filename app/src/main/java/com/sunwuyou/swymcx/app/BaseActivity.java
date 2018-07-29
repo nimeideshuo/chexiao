@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -16,6 +17,14 @@ import butterknife.ButterKnife;
  * 描述： 基础类的封装
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    public boolean isModify;
+    protected Handler mHandler;
+
+    public BaseActivity() {
+        super();
+        this.isModify = true;
+    }
+
     /**
      * toast的提示的封装
      *

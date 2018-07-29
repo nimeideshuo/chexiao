@@ -93,7 +93,7 @@ public class FieldSaleItemThin {
         this.goodsname = goodsname;
     }
 
-    public boolean ispromotion() {
+    public boolean getIspromotion() {
         return ispromotion;
     }
 

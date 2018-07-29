@@ -2,116 +2,109 @@ package com.sunwuyou.swymcx.model;
 
 import java.io.Serializable;
 
-/**
- * Created by liupiao on
- * 2018/7/11.
- * content
- */
 public class GoodsThin implements Serializable {
-    private String barcode;
-    private String biginitnumber;
-    private String bigstocknumber;
-    private String id;
-    private double initnumber;
-    private boolean isusebatch;
-    private String name;
-    private String pinyin;
-    private String specification;
-    private double stocknumber;
 
-    public String getBarcode() {
-        return barcode == null ? "" : barcode;
-    }
 
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
-    }
+	private String barcode;
+	private String biginitnumber;
+	private String bigstocknumber;
+	private String id;
+	private double initnumber;
+	private boolean isusebatch;
+	private String name;
+	private String pinyin;
+	private static final long serialVersionUID = 1;
+	private String specification;
+	private double stocknumber;
 
-    public String getBiginitnumber() {
-        return biginitnumber == null ? "" : biginitnumber;
-    }
 
-    public void setBiginitnumber(String biginitnumber) {
-        this.biginitnumber = biginitnumber;
-    }
+	public GoodsThin() {
+		super();
+	}
 
-    public String getBigstocknumber() {
-        return bigstocknumber == null ? "" : bigstocknumber;
-    }
+	public String getBarcode() {
+		return this.barcode;
+	}
 
-    public void setBigstocknumber(String bigstocknumber) {
-        this.bigstocknumber = bigstocknumber;
-    }
+	public String getBiginitnumber() {
+		return this.biginitnumber;
+	}
 
-    public String getId() {
-        return id == null ? "" : id;
-    }
+	public String getBigstocknumber() {
+		return this.bigstocknumber;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getId() {
+		return this.id;
+	}
 
-    public double getInitnumber() {
-        return initnumber;
-    }
+	public double getInitnumber() {
+		return this.initnumber;
+	}
 
-    public void setInitnumber(double initnumber) {
-        this.initnumber = initnumber;
-    }
+	public boolean getIsusebatch() {
+		return this.isusebatch;
+	}
 
-    public boolean isusebatch() {
-        return isusebatch;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public void setIsusebatch(boolean isusebatch) {
-        this.isusebatch = isusebatch;
-    }
+	public String getPinyin() {
+		return this.pinyin;
+	}
 
-    public String getName() {
-        return name == null ? "" : name;
-    }
+	public static long getSerialversionuid() {
+		return 1;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getSpecification() {
+		return this.specification;
+	}
 
-    public String getPinyin() {
-        return pinyin == null ? "" : pinyin;
-    }
+	public double getStocknumber() {
+		return this.stocknumber;
+	}
 
-    public void setPinyin(String pinyin) {
-        this.pinyin = pinyin;
-    }
+	public void setBarcode(String arg1) {
+		this.barcode = arg1;
+	}
 
-    public String getSpecification() {
-        return specification == null ? "" : specification;
-    }
+	public void setBiginitnumber(String arg1) {
+		this.biginitnumber = arg1;
+	}
 
-    public void setSpecification(String specification) {
-        this.specification = specification;
-    }
+	public void setBigstocknumber(String arg1) {
+		this.bigstocknumber = arg1;
+	}
 
-    public double getStocknumber() {
-        return stocknumber;
-    }
+	public void setId(String arg1) {
+		this.id = arg1;
+	}
 
-    public void setStocknumber(double stocknumber) {
-        this.stocknumber = stocknumber;
-    }
+	public void setInitnumber(double arg1) {
+		this.initnumber = arg1;
+	}
 
-    @Override
-    public String toString() {
-        return "GoodsThin{" +
-                "barcode='" + barcode + '\'' +
-                ", biginitnumber='" + biginitnumber + '\'' +
-                ", bigstocknumber='" + bigstocknumber + '\'' +
-                ", id='" + id + '\'' +
-                ", initnumber=" + initnumber +
-                ", isusebatch=" + isusebatch +
-                ", name='" + name + '\'' +
-                ", pinyin='" + pinyin + '\'' +
-                ", specification='" + specification + '\'' +
-                ", stocknumber=" + stocknumber +
-                '}';
-    }
+	public void setIsusebatch(boolean arg1) {
+		this.isusebatch = arg1;
+	}
+
+	public void setName(String arg1) {
+		this.name = arg1;
+	}
+
+	public void setPinyin(String arg1) {
+		this.pinyin = arg1;
+	}
+
+	public void setSpecification(String arg1) {
+		this.specification = arg1;
+	}
+
+	public void setStocknumber(double arg1) {
+		this.stocknumber = arg1;
+	}
+
+
 }

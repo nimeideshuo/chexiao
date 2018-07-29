@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/lieSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="10.0dip">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5.0dip"
+            android:gravity="center|left"
+            android:text=""
+            android:textSize="@dimen/list_label" />
+
+        <com.sunwuyou.swymcx.view.AutoTextView
+            android:id="@id/atvSearch"
+            android:layout_width="0.0dip"
+            android:layout_height="30.0dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/search_input"
+            android:drawableLeft="@drawable/search"
+            android:hint="@string/hint_actin_bar_search"
+            android:imeOptions="actionDone"
+            android:popupBackground="@drawable/write_bg"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/qianlanse"
+            android:textSize="@dimen/list_edit" />
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="50.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginLeft="5.0dip"
+            android:background="@drawable/btn_operation_selector"
+            android:gravity="center"
+            android:text="添加"
+            android:textSize="@dimen/list_button" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/top"
+        android:layout_width="match_parent"
+        android:layout_height="2.0dip"
+        android:layout_marginTop="@dimen/view_size_1"
+        android:background="@drawable/btn_dialog_nor"
+        android:gravity="center_vertical"
+        android:orientation="vertical" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="40.0dip"
+            android:divider="@drawable/divider_1" />
+
+        <LinearLayout
+            android:id="@+id/rlSum"
+            android:layout_width="match_parent"
+            android:layout_height="40.0dip"
+            android:layout_gravity="bottom"
+            android:background="@drawable/btn_dialog_nor"
+            android:orientation="horizontal"
+            android:paddingLeft="5.0dip">
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSumAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.0dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center|left"
+                    android:textSize="@dimen/list_edit" />
+
+                <TextView
+                    android:id="@+id/tvReceivablePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.0dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center|left"
+                    android:textSize="@dimen/list_edit" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvPreference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.0dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center|left"
+                    android:textSize="@dimen/list_edit" />
+
+                <TextView
+                    android:id="@+id/tvReceivedPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.0dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center|left"
+                    android:textSize="@dimen/list_edit" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnDocSaleInfo"
+                android:layout_width="60.0dip"
+                android:layout_height="40.0dip"
+                android:layout_marginRight="5.0dip"
+                android:background="@drawable/btn_6_selector"
+                android:gravity="center"
+                android:text="汇总"
+                android:textSize="@dimen/list_button" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

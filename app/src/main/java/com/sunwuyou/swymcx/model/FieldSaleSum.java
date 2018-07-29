@@ -35,11 +35,11 @@ public class FieldSaleSum {
         this.givenum = givenum;
     }
 
-    public boolean ispromotion() {
+    public boolean getIsPromotion() {
         return ispromotion;
     }
 
-    public void setIspromotion(boolean ispromotion) {
+    public void setIsPromotion(boolean ispromotion) {
         this.ispromotion = ispromotion;
     }
 

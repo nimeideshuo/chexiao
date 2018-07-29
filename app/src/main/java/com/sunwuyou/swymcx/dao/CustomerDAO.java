@@ -1,5 +1,6 @@
 package com.sunwuyou.swymcx.dao;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -30,23 +31,23 @@ public class CustomerDAO {
                 customer.setId(cursor.getString(0));
                 customer.setName(cursor.getString(1));
                 customer.setPinyin(cursor.getString(2));
-                customer.setOrderno(cursor.getInt(3));
+                customer.setOrderNo(cursor.getInt(3));
                 customer.setContact(cursor.getString(4));
-                customer.setContactmoblie(cursor.getString(5));
+                customer.setContactMoblie(cursor.getString(5));
                 customer.setTelephone(cursor.getString(6));
-                customer.setRegionid(cursor.getString(7));
-                customer.setCustomertypeid(cursor.getString(8));
-                customer.setVisitlineid(cursor.getString(9));
-                customer.setDepositbank(cursor.getString(10));
-                customer.setBankingaccount(cursor.getString(11));
-                customer.setPromotionid(cursor.getString(12));
+                customer.setRegionId(cursor.getString(7));
+                customer.setCustomerTypeId(cursor.getString(8));
+                customer.setVisitLineId(cursor.getString(9));
+                customer.setDepositBank(cursor.getString(10));
+                customer.setBankingAccount(cursor.getString(11));
+                customer.setPromotionId(cursor.getString(12));
                 customer.setAddress(cursor.getString(13));
-                customer.setPricesystemid(cursor.getString(14));
+                customer.setPriceSystemId(cursor.getString(14));
                 customer.setLongitude(cursor.getDouble(15));
                 customer.setLatitude(cursor.getDouble(16));
                 customer.setRemark(cursor.getString(17));
-                customer.setIsnew(cursor.getInt(18) == 1);
-                customer.setIsfinish(cursor.getInt(19) == 1);
+                customer.setIsNew(cursor.getInt(18) == 1);
+                customer.setIsFinish(cursor.getInt(19) == 1);
                 customer.setExhibitionTerm(cursor.getInt(20));
                 customer.setLastExhibition(cursor.getLong(21));
                 customer.setIsusecustomerprice(cursor.getInt(22) == 1);
@@ -76,23 +77,23 @@ public class CustomerDAO {
                 customer.setId(cursor.getString(0));
                 customer.setName(cursor.getString(1));
                 customer.setPinyin(cursor.getString(2));
-                customer.setOrderno(cursor.getInt(3));
+                customer.setOrderNo(cursor.getInt(3));
                 customer.setContact(cursor.getString(4));
-                customer.setContactmoblie(cursor.getString(5));
+                customer.setContactMoblie(cursor.getString(5));
                 customer.setTelephone(cursor.getString(6));
-                customer.setRegionid(cursor.getString(7));
-                customer.setCustomertypeid(cursor.getString(8));
-                customer.setVisitlineid(cursor.getString(9));
-                customer.setDepositbank(cursor.getString(10));
-                customer.setBankingaccount(cursor.getString(11));
-                customer.setPromotionid(cursor.getString(12));
+                customer.setRegionId(cursor.getString(7));
+                customer.setCustomerTypeId(cursor.getString(8));
+                customer.setVisitLineId(cursor.getString(9));
+                customer.setDepositBank(cursor.getString(10));
+                customer.setBankingAccount(cursor.getString(11));
+                customer.setPromotionId(cursor.getString(12));
                 customer.setAddress(cursor.getString(13));
-                customer.setPricesystemid(cursor.getString(14));
+                customer.setPriceSystemId(cursor.getString(14));
                 customer.setLongitude(cursor.getDouble(15));
                 customer.setLatitude(cursor.getDouble(16));
                 customer.setRemark(cursor.getString(17));
-                customer.setIsnew(cursor.getInt(18) == 1);
-                customer.setIsfinish(cursor.getInt(19) == 1);
+                customer.setIsNew(cursor.getInt(18) == 1);
+                customer.setIsFinish(cursor.getInt(19) == 1);
                 customer.setExhibitionTerm(cursor.getInt(20));
                 customer.setLastExhibition(cursor.getLong(21));
                 customer.setIsusecustomerprice(cursor.getInt(22) == 1);
@@ -214,6 +215,63 @@ public class CustomerDAO {
             }
         }
         return 0;
+    }
+
+    public Customer getCustomer(String id, boolean isnew) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            String sql = "select id, name, pinyin, orderno, contact, contactmoblie, telephone, regionid, customertypeid, visitlineid, depositbank,  bankingaccount, promotionid, address, pricesystemid, longitude, latitude, remark, isnew, isfinish, exhibitionterm, lastexhibition,  isusecustomerprice from cu_customer where id = ? and isnew = ?";
+            Cursor cursor = this.db.rawQuery(sql, new String[]{id, isnew ? "1" : "0"});
+            if (cursor.moveToNext()) {
+                Customer customer = new Customer();
+                customer.setId(cursor.getString(0));
+                customer.setName(cursor.getString(1));
+                customer.setPinyin(cursor.getString(2));
+                customer.setOrderNo(cursor.getInt(3));
+                customer.setContact(cursor.getString(4));
+                customer.setContactMoblie(cursor.getString(5));
+                customer.setTelephone(cursor.getString(6));
+                customer.setRegionId(cursor.getString(7));
+                customer.setCustomerTypeId(cursor.getString(8));
+                customer.setVisitLineId(cursor.getString(9));
+                customer.setDepositBank(cursor.getString(10));
+                customer.setBankingAccount(cursor.getString(11));
+                customer.setPromotionId(cursor.getString(12));
+                customer.setAddress(cursor.getString(13));
+                customer.setPriceSystemId(cursor.getString(14));
+                customer.setLongitude(cursor.getDouble(15));
+                customer.setLatitude(cursor.getDouble(16));
+                customer.setRemark(cursor.getString(17));
+                customer.setIsNew(cursor.getInt(18) == 1);
+                customer.setIsFinish(cursor.getInt(19) == 1);
+                customer.setExhibitionTerm(cursor.getInt(20));
+                customer.setLastExhibition(cursor.getLong(21));
+                customer.setIsusecustomerprice(cursor.getInt(22) == 1);
+                return customer;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return null;
+    }
+
+
+    public boolean updateCustomerValue(String arg9, String arg10, String arg11) {
+        boolean v1 = true;
+        this.db = this.helper.getWritableDatabase();
+        ContentValues v0 = new ContentValues();
+        v0.put(arg10, arg11);
+        if (this.db.update("cu_customer", v0, "id=?", new String[]{String.valueOf(arg9)}) != 1) {
+            v1 = false;
+        }
+        return v1;
     }
 
 }

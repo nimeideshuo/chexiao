@@ -72,6 +72,7 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
     <style name="style_function_menu">
         <item name="android:gravity">center</item>
         <item name="android:orientation">vertical</item>
@@ -79,6 +80,7 @@
         <item name="android:padding">5.0dip</item>
         <item name="android:onClick">onClick</item>
     </style>
+
     <style name="buttom_in_out" parent="@android:style/Animation">
         <item name="android:windowEnterAnimation">@anim/buttom_in</item>
         <item name="android:windowExitAnimation">@anim/buttom_out</item>
@@ -95,6 +97,14 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_width">0.0dip</item>
         <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <style name="m_order_title">
+        <item name="android:textSize">@dimen/list_item_title</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableLeft">@drawable/title_divider</item>
         <item name="android:layout_weight">1.0</item>
     </style>
 

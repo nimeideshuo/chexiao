@@ -28,7 +28,7 @@ public class AutoTextView extends AppCompatAutoCompleteTextView {
         }
 
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-           beforeTextChange = s.toString();
+            beforeTextChange = s.toString();
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -36,7 +36,9 @@ public class AutoTextView extends AppCompatAutoCompleteTextView {
                 AutoTextView.this.isItemClick = false;
                 return;
             }
-           changeListener.onChanged(AutoTextView.this, s.toString());
+            if (changeListener != null) {
+                changeListener.onChanged(AutoTextView.this, s.toString());
+            }
         }
     };
 

@@ -40,7 +40,7 @@ public class FieldSaleItemBatch {
         this.goodsid = goodsid;
     }
 
-    public boolean isout() {
+    public boolean getIsout() {
         return isout;
     }
 

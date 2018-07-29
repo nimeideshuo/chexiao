@@ -38,7 +38,7 @@ public class FieldSaleItemSource extends FieldSaleItem {
         this.goodsname = goodsname;
     }
 
-    public boolean isusebatch() {
+    public boolean getIsusebatch() {
         return isusebatch;
     }
 

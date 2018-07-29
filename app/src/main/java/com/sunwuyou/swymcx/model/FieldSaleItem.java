@@ -133,7 +133,7 @@ public class FieldSaleItem {
         this.goodsid = goodsid;
     }
 
-    public boolean isexhibition() {
+    public boolean isIsexhibition() {
         return isexhibition;
     }
 
@@ -141,7 +141,7 @@ public class FieldSaleItem {
         this.isexhibition = isexhibition;
     }
 
-    public boolean ispromotion() {
+    public boolean isIspromotion() {
         return ispromotion;
     }
 

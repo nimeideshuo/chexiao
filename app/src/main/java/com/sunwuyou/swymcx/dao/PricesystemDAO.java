@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class PricesystemDAO {
     private SQLiteDatabase db;
     private DBOpenHelper helper;
+    private Cursor cursor;
 
     public PricesystemDAO() {
         super();
@@ -38,5 +39,27 @@ public class PricesystemDAO {
         }
         return "";
     }
+
+    public boolean isPricesystemidExists(String arg8) {
+        this.db = this.helper.getReadableDatabase();
+        String sql = "select 1 from sz_pricesystem where psid=?";
+        try {
+            cursor = this.db.rawQuery(sql, new String[]{arg8});
+            if (cursor.getCount() == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return false;
+    }
+
 
 }

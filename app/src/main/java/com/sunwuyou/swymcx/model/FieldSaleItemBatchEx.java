@@ -39,7 +39,7 @@ public class FieldSaleItemBatchEx extends FieldSaleItemBatch {
         this.goodsname = goodsname;
     }
 
-    public boolean isusebatch() {
+    public boolean getIsusebatch() {
         return isusebatch;
     }
 

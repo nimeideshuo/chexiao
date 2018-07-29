@@ -194,21 +194,18 @@ public class Utils {
         return formatDouble(paramDouble, PRICE_DEC_NUM);
     }
 
-    public static String getRecvableMoney(double paramDouble) {
-        return "";
-        // double d;
-        // int i = RECEIVE_DEC_NUM;
-        // if (i == 0) {
-        // d = paramDouble % 10.0D;
-        // if (d < 5.0D)
-        // }
-        // for (int j = 10;; j = 0) {
-        // paramDouble += j - d;
-        // i = 0;
-        // if (i >= 1)
-        // ;
-        // return formatDouble(paramDouble, --i);
-        // }
+    public static String getRecvableMoney(double arg5) {
+        int v0 = Utils.RECEIVE_DEC_NUM;
+        if (v0 == 0) {
+            double v1 = arg5 % 10;
+            int v3 = v1 >= 5 ? 10 : 0;
+            arg5 += (((double) v3)) - v1;
+            v0 = 0;
+        }
+        if (v0 >= 1) {
+            --v0;
+        }
+        return Utils.formatDouble(arg5, v0);
     }
 
     public static String getServiceAddress(String paramString1, String paramString2) {
@@ -373,5 +370,10 @@ public class Utils {
         v0.set(Calendar.SECOND, 0);
         v0.set(Calendar.MILLISECOND, 0);
         return v0.getTime().getTime();
+    }
+
+    public static double getRecvable(double arg5) {
+        int v0 = ((int) Math.pow(10, ((double) (Utils.RECEIVE_DEC_NUM - 1))));
+        return (((double) Math.round((((double) v0)) * arg5))) / (((double) v0));
     }
 }
