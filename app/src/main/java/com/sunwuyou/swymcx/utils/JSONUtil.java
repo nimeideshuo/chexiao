@@ -75,4 +75,8 @@ public class JSONUtil {
     public static String object2Json(Object object) {
         return JSON.toJSONString(object);
     }
+
+    public static <T> T readValue(String content, Class<T> valueType) {
+        return JSON.parseObject(content,valueType);
+    }
 }

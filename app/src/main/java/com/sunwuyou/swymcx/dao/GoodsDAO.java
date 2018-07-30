@@ -50,7 +50,7 @@ public class GoodsDAO {
 
     public int getTruckGoodsCount() {
         this.db = this.helper.getWritableDatabase();
-        Cursor cursor = this.db.rawQuery("select count(*) from sz_goods where initnumber is not null and initnumber != 0", null);
+        cursor = this.db.rawQuery("select count(*) from sz_goods where initnumber is not null and initnumber != 0", null);
         try {
             if (cursor.moveToNext()) {
                 return cursor.getInt(0);

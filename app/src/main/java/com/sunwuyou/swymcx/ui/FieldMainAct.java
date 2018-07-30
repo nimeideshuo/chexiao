@@ -26,8 +26,11 @@ import com.sunwuyou.swymcx.request.ReqSupQueryDepartment;
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
 import com.sunwuyou.swymcx.service.ServiceSynchronize;
 import com.sunwuyou.swymcx.ui.field.FieldDocOpenAct;
+import com.sunwuyou.swymcx.ui.field.FieldLocalRecordActivity;
 import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
 import com.sunwuyou.swymcx.ui.field.TruckStockActivity;
+import com.sunwuyou.swymcx.ui.settleup.SettleupOpenAct;
+import com.sunwuyou.swymcx.ui.transfer.TransferLocalRecordActivity;
 import com.sunwuyou.swymcx.utils.NetUtils;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.SwyUtils;
@@ -52,11 +55,13 @@ import butterknife.OnClick;
  */
 
 public class FieldMainAct extends BaseHeadActivity {
-    @BindView(R.id.root) TableLayout root;
+    @BindView(R.id.root)
+    TableLayout root;
     private MainMenuPopup menuPopup;
     private AccountPreference ap;
     private ProgressDialog progressDialog;
-    @SuppressLint("HandlerLeak") Handler handler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
                 case 0:
@@ -72,7 +77,8 @@ public class FieldMainAct extends BaseHeadActivity {
         ;
     };
     // 数据更新
-    @SuppressLint("HandlerLeak") private Handler handlerProgress = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler handlerProgress = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.what) {
 
@@ -164,17 +170,19 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.field_transfer_open:
                 //调拨
+                startActivity(new Intent(this, TransferLocalRecordActivity.class));
                 break;
             case R.id.field_fields_record:
                 //我的销售
+                startActivity(new Intent(this, FieldLocalRecordActivity.class));
                 break;
             case R.id.field_settleup_record:
                 //我的结算
-
+                startActivity(new Intent(this, SettleupOpenAct.class));
                 break;
             case R.id.field_transfer_record:
                 //我的调拨
-
+                startActivity(new Intent(this, TransferLocalRecordActivity.class));
                 break;
             case R.id.fieldsale_customer:
                 //客户中心

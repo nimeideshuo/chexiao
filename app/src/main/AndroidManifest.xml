@@ -81,28 +81,79 @@
         <activity
             android:name=".ui.RegisterPadAct"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.login.LoginAct" />
-        <activity android:name=".ui.login.LoginPassword" />
-        <activity android:name=".ui.field.TruckStockActivity" />
-        <activity android:name=".ui.field.FieldDocOpenAct" />
-        <activity android:name=".ui.field.FieldAddMoreGoodsAct" />
-        <activity android:name=".ui.CustomerSearchAct" />
-        <activity android:name=".ui.field.TargetCustomerActivity" />
-        <activity android:name=".ui.CustomerSearchOnLineAct" />
-        <activity android:name=".ui.RegionListAct" />
-        <activity android:name=".ui.GoodsSearchAct" />
-        <activity android:name=".ui.field.VisitLineListAct" />
+        <activity
+            android:name=".ui.login.LoginAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.LoginPassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.TruckStockActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldDocOpenAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldAddMoreGoodsAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CustomerSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.TargetCustomerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CustomerSearchOnLineAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RegionListAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.GoodsSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.VisitLineListAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldLocalRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.settleup.SettleupOpenAct"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.field.FieldEditActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ui.field.CustomerGoodsActivity" />
-        <activity android:name=".ui.field.FieldItemTotalAct" />
-        <activity android:name=".ui.field.FieldPayTypeAct" />
-        <activity android:name=".ui.field.PicturesActivity" />
-        <activity android:name=".ui.field.FieldAddGoodAct" />
-        <activity android:name=".ui.NewCustomerAddAct" />
-        <activity android:name=".ui.WritePadAct" />
+        <activity
+            android:name=".ui.field.CustomerGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldItemTotalAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldPayTypeAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.PicturesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldAddGoodAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.NewCustomerAddAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.transfer.TransferLocalRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.AllGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.transfer.TransferEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.WritePadAct"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.FieldMainAct"
             android:windowSoftInputMode="adjustPan" />

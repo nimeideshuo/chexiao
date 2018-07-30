@@ -91,7 +91,7 @@ public class TransferDoc {
         this.isposted = isposted;
     }
 
-    public boolean isupload() {
+    public boolean isIsupload() {
         return isupload;
     }
 
