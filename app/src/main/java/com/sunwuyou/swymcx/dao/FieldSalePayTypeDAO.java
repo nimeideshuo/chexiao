@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.sunwuyou.swymcx.model.FieldSalePayType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by admin
  * 2018/7/24.
@@ -22,10 +25,10 @@ public class FieldSalePayTypeDAO {
     public long save(FieldSalePayType arg6) {
         this.db = this.helper.getWritableDatabase();
         ContentValues v1 = new ContentValues();
-        v1.put("fieldsaleid", Long.valueOf(arg6.getFieldsaleid()));
+        v1.put("fieldsaleid", arg6.getFieldsaleid());
         v1.put("paytypeid", arg6.getPaytypeid());
         v1.put("paytypename", arg6.getPaytypename());
-        v1.put("amount", Double.valueOf(arg6.getAmount()));
+        v1.put("amount", arg6.getAmount());
         try {
             return db.insert("kf_fieldsalepaytype", null, v1);
         } catch (Exception e) {
@@ -80,5 +83,45 @@ public class FieldSalePayTypeDAO {
         }
         return 0;
     }
+
+    public List<FieldSalePayType> queryPayTypes(long fieldsaleid) {
+        this.db = this.helper.getReadableDatabase();
+        String sql = "select serialid,fieldsaleid,paytypeid,paytypename,amount from kf_fieldsalepaytype where fieldsaleid=?";
+        ArrayList<FieldSalePayType> payTypes = new ArrayList<FieldSalePayType>();
+        try {
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(fieldsaleid)});
+            while (cursor.moveToNext()) {
+                FieldSalePayType payType = new FieldSalePayType();
+                payType.setSerialid(cursor.getLong(0));
+                payType.setFieldsaleid(cursor.getLong(1));
+                payType.setPaytypeid(cursor.getString(2));
+                payType.setPaytypename(cursor.getString(3));
+                payType.setAmount(cursor.getDouble(4));
+                payTypes.add(payType);
+            }
+            return payTypes;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean update(FieldSalePayType arg13) {
+        this.db = this.helper.getWritableDatabase();
+        ContentValues v1 = new ContentValues();
+        v1.put("fieldsaleid", arg13.getFieldsaleid());
+        v1.put("paytypeid", arg13.getPaytypeid());
+        v1.put("paytypename", arg13.getPaytypename());
+        v1.put("amount", arg13.getAmount());
+        return this.db.update("kf_fieldsalepaytype", v1, "serialid=?", new String[]{String.valueOf(arg13.getSerialid())}) == 1;
+    }
+
 
 }

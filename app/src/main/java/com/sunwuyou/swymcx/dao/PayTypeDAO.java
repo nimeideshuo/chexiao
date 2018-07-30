@@ -32,13 +32,14 @@ public class PayTypeDAO {
         }
         try {
             cursor = this.db.rawQuery(v4, null);
-            ArrayList<PayType> v2 = new ArrayList();
+            ArrayList<PayType> v2 = new ArrayList<>();
             while (cursor.moveToNext()) {
                 PayType payType = new PayType();
                 payType.setId(cursor.getString(0));
                 payType.setName(cursor.getString(1));
                 v2.add(payType);
             }
+            return v2;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

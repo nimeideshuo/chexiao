@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="40.0dip"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvPaytypeName"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:gravity="center|left"
+        android:textSize="@dimen/dialog_label" />
+
+    <com.sunwuyou.swymcx.view.EditButtonView
+        android:id="@+id/etPayAmount"
+        android:layout_width="0.0dip"
+        android:layout_height="40.0dip"
+        android:background="@drawable/login_panel_edit_bg"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_weight="4.0"
+        android:imeOptions="actionDone"
+        android:tag="@integer/number_negative"
+        android:textSize="@dimen/dialog_edit" />
+</LinearLayout>

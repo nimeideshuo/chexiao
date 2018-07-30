@@ -26,7 +26,6 @@ import com.sunwuyou.swymcx.request.ReqSupQueryDepartment;
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
 import com.sunwuyou.swymcx.service.ServiceSynchronize;
 import com.sunwuyou.swymcx.ui.field.FieldDocOpenAct;
-import com.sunwuyou.swymcx.ui.field.FieldLocalRecordActivity;
 import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
 import com.sunwuyou.swymcx.ui.field.TruckStockActivity;
 import com.sunwuyou.swymcx.ui.settleup.SettleupOpenAct;
@@ -174,7 +173,7 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.field_fields_record:
                 //我的销售
-                startActivity(new Intent(this, FieldLocalRecordActivity.class));
+//                startActivity(new Intent(this, FieldLocalRecordActivity.class));
                 break;
             case R.id.field_settleup_record:
                 //我的结算

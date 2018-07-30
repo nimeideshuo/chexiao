@@ -29,7 +29,7 @@ public class DocRemarkDialog extends Dialog {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (Boolean.parseBoolean(msg.obj.toString())) {
-                DocRemarkDialog.this.dismiss();
+               dismiss();
                 PDH.showSuccess("修改成功");
             } else {
                 PDH.showFail("修改失败，请退出重试");
@@ -43,12 +43,12 @@ public class DocRemarkDialog extends Dialog {
         setContentView(R.layout.dia_doc_remark);
 //        this.setTitleText("单据备注");
         this.etRemark = this.findViewById(R.id.etRemark);
-        this.fieldSale = new FieldSaleDAO().getFieldsale(Long.valueOf(activity.getIntent().getLongExtra("fieldsaleid", -1)));
+        this.fieldSale = new FieldSaleDAO().getFieldsale(activity.getIntent().getLongExtra("fieldsaleid", -1));
     }
 
     public void show() {
         super.show();
-        this.fieldSale = new FieldSaleDAO().getFieldsale(Long.valueOf(this.fieldSale.getId()));
+        this.fieldSale = new FieldSaleDAO().getFieldsale(this.fieldSale.getId());
         this.etRemark.setText(this.fieldSale.getRemark());
     }
 

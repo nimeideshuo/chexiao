@@ -181,13 +181,13 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                                 if (new FieldSaleItemDAO().getCount(fieldSale.getId()) == 0) {
                                     v0 = 1;
                                 }
-                                if (v0 == 0 || FieldEditMenuPopup.this.fieldSale.getPreference() == 0) {
-                                    if (v0 != 0 && (new FieldSalePayTypeDAO().isHasPay(FieldEditMenuPopup.this.fieldSale.getId()))) {
+                                if (v0 == 0 || fieldSale.getPreference() == 0) {
+                                    if (v0 != 0 && (new FieldSalePayTypeDAO().isHasPay(fieldSale.getId()))) {
                                         PDH.showMessage("空单据不允许收款，请清除收款记录");
                                         return;
                                     }
 
-                                    new FieldSaleDAO().updateDocValue(FieldEditMenuPopup.this.fieldSale.getId(), "status", "1");
+                                    new FieldSaleDAO().updateDocValue(fieldSale.getId(), "status", "1");
                                     PDH.showSuccess("处理成功");
                                     if (v0 != 0) {
                                         activity.finish();

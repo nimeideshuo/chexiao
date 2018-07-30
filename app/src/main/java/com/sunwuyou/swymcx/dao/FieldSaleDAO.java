@@ -52,20 +52,19 @@ public class FieldSaleDAO {
         v5.put("remark", arg10.getRemark());
         v5.put("warehouseid", arg10.getWarehouseid());
         v5.put("warehousename", arg10.getWarehousename());
-        v5.put("preference", Double.valueOf(arg10.getPreference()));
-        v5.put("status", Integer.valueOf(arg10.getStatus()));
+        v5.put("preference", arg10.getPreference());
+        v5.put("status", arg10.getStatus());
         v5.put("buildtime", arg10.getBuildtime());
-        v5.put("longitude", Double.valueOf(arg10.getLongitude()));
-        v5.put("latitude", Double.valueOf(arg10.getLatitude()));
+        v5.put("longitude", arg10.getLongitude());
+        v5.put("latitude", arg10.getLatitude());
         v5.put("address", arg10.getAddress());
         long v2 = this.db.insert("kf_fieldsale", null, v5);
         List<PayType> v4 = new PayTypeDAO().getPaytypes(TextUtils.isEmptyS(arg10.getCustomerid()));
-        int v1;
-        for (v1 = 0; v1 < v4.size(); ++v1) {
+        for (int i = 0; i < v4.size(); i++) {
             FieldSalePayType v0 = new FieldSalePayType();
             v0.setFieldsaleid(v2);
-            v0.setPaytypeid(v4.get(v1).getId());
-            v0.setPaytypename(v4.get(v1).getName());
+            v0.setPaytypeid(v4.get(i).getId());
+            v0.setPaytypename(v4.get(i).getName());
             v0.setAmount(0);
             new FieldSalePayTypeDAO().save(v0);
         }
