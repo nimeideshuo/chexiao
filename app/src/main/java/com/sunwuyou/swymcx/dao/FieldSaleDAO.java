@@ -9,6 +9,7 @@ import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.model.FieldSale;
 import com.sunwuyou.swymcx.model.FieldSalePayType;
+import com.sunwuyou.swymcx.model.FieldSaleThin;
 import com.sunwuyou.swymcx.model.PayType;
 import com.sunwuyou.swymcx.request.ReqDocAddCheXiao;
 import com.sunwuyou.swymcx.utils.TextUtils;
@@ -253,6 +254,40 @@ public class FieldSaleDAO {
             db.close();
         }
         return true;
+    }
+
+    public List<FieldSaleThin> queryAllFields() {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select doc.id, doc.showid, doc.customerid, doc.customername, doc.buildtime, doc.preference, doc.status, doc.isnewcustomer, (select sum(salenum*saleprice) from kf_fieldsaleitem where fieldsaleid = doc.id) as saleamount, (select sum(num*price) from kf_fieldsaleitembatch where fieldsaleid = doc.id and isout = \'0\') as cancelamount, (select sum(amount) from kf_fieldsalepaytype where fieldsaleid = doc.id) as receivedamount from kf_fieldsale as doc order by doc.id desc ", null);
+            ArrayList<FieldSaleThin> arrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                FieldSaleThin saleThin = new FieldSaleThin();
+                saleThin.setId(cursor.getLong(0));
+                saleThin.setShowid(cursor.getString(1));
+                saleThin.setCustomerid(cursor.getString(2));
+                saleThin.setCustomername(cursor.getString(3));
+                saleThin.setBuildtime(cursor.getString(4));
+                saleThin.setPreference(cursor.getDouble(5));
+                saleThin.setStatus(cursor.getInt(6));
+                saleThin.setIsnewcustomer(cursor.getInt(7) == 1);
+                saleThin.setSaleamount(cursor.getDouble(8));
+                saleThin.setCancelamount(cursor.getDouble(9));
+                saleThin.setReceivedamount(cursor.getDouble(10));
+                arrayList.add(saleThin);
+            }
+            return arrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
     }
 
 }

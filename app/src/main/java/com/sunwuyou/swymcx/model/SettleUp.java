@@ -1,5 +1,7 @@
 package com.sunwuyou.swymcx.model;
 
+import com.sunwuyou.swymcx.utils.Utils;
+
 /**
  * Created by liupiao on
  * 2018/7/11.
@@ -22,6 +24,7 @@ public class SettleUp {
     private String type;
 
     public SettleUp() {
+        super();
     }
 
     public SettleUp(String builderid, String buildername, String buildtime, String departmentid, String departmentname, long id, String isnewobject, boolean issubmit, String objectid, String objectname, String objectoperator, double preference, String remark, String type) {
@@ -40,116 +43,115 @@ public class SettleUp {
         this.remark = remark;
         this.type = type;
     }
-
-    public String getBuilderid() {
-        return builderid == null ? "" : builderid;
+    public String getBuildTime() {
+        return this.buildtime;
     }
 
-    public void setBuilderid(String builderid) {
-        this.builderid = builderid;
+    public String getBuilderId() {
+        return this.builderid;
     }
 
-    public String getBuildername() {
-        return buildername == null ? "" : buildername;
+    public String getBuilderName() {
+        return this.buildername;
     }
 
-    public void setBuildername(String buildername) {
-        this.buildername = buildername;
+    public String getDepartmentId() {
+        return this.departmentid;
     }
 
-    public String getBuildtime() {
-        return buildtime == null ? "" : buildtime;
-    }
-
-    public void setBuildtime(String buildtime) {
-        this.buildtime = buildtime;
-    }
-
-    public String getDepartmentid() {
-        return departmentid == null ? "" : departmentid;
-    }
-
-    public void setDepartmentid(String departmentid) {
-        this.departmentid = departmentid;
-    }
-
-    public String getDepartmentname() {
-        return departmentname == null ? "" : departmentname;
-    }
-
-    public void setDepartmentname(String departmentname) {
-        this.departmentname = departmentname;
+    public String getDepartmentName() {
+        return this.departmentname;
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public boolean getIsSubmit() {
+        return this.issubmit;
     }
 
     public String getIsnewobject() {
-        return isnewobject == null ? "" : isnewobject;
+        return this.isnewobject;
     }
 
-    public void setIsnewobject(String isnewobject) {
-        this.isnewobject = isnewobject;
+    public String getObjectId() {
+        return this.objectid;
     }
 
-    public boolean issubmit() {
-        return issubmit;
+    public String getObjectName() {
+        return this.objectname;
     }
 
-    public void setIssubmit(boolean issubmit) {
-        this.issubmit = issubmit;
-    }
-
-    public String getObjectid() {
-        return objectid == null ? "" : objectid;
-    }
-
-    public void setObjectid(String objectid) {
-        this.objectid = objectid;
-    }
-
-    public String getObjectname() {
-        return objectname == null ? "" : objectname;
-    }
-
-    public void setObjectname(String objectname) {
-        this.objectname = objectname;
-    }
-
-    public String getObjectoperator() {
-        return objectoperator == null ? "" : objectoperator;
-    }
-
-    public void setObjectoperator(String objectoperator) {
-        this.objectoperator = objectoperator;
+    public String getObjectOperator() {
+        return this.objectoperator;
     }
 
     public double getPreference() {
-        return preference;
-    }
-
-    public void setPreference(double preference) {
-        this.preference = preference;
+        return this.preference;
     }
 
     public String getRemark() {
-        return remark == null ? "" : remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
+        return this.remark;
     }
 
     public String getType() {
-        return type == null ? "" : type;
+        return this.type;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void set0bjectId(String arg1) {
+        this.objectid = arg1;
+    }
+
+    public void setBuildTime(String arg1) {
+        this.buildtime = arg1;
+    }
+
+    public void setBuilderId(String arg1) {
+        this.builderid = arg1;
+    }
+
+    public void setBuilderName(String arg1) {
+        this.buildername = arg1;
+    }
+
+    public void setDepartmentId(String arg1) {
+        this.departmentid = arg1;
+    }
+
+    public void setDepartmentName(String arg1) {
+        this.departmentname = arg1;
+    }
+
+    public void setId(long arg1) {
+        this.id = arg1;
+    }
+
+    public void setIsSubmit(boolean arg1) {
+        this.issubmit = arg1;
+    }
+
+    public void setIsnewobject(String arg1) {
+        this.isnewobject = arg1;
+    }
+
+    public void setObjectName(String arg1) {
+        this.objectname = arg1;
+    }
+
+    public void setObjectOperator(String arg1) {
+        this.objectoperator = arg1;
+    }
+
+    public void setPreference(double arg3) {
+        this.preference = Utils.normalizeDouble(arg3);
+    }
+
+    public void setRemark(String arg1) {
+        this.remark = arg1;
+    }
+
+    public void setType(String arg1) {
+        this.type = arg1;
     }
 }

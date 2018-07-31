@@ -155,6 +155,15 @@
             android:name=".ui.WritePadAct"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.DepartmentSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.DocTypeListAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.settleup.SettleupDocsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.FieldMainAct"
             android:windowSoftInputMode="adjustPan" />
         <activity

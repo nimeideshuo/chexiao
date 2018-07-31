@@ -92,6 +92,7 @@ public class CustomerSearchAct extends BaseHeadActivity implements AutoTextView.
                 if (i < this.customers.size()) {
                     arrayOfString1 = Utils.CUSTOMER_CHECK_SELECT.split(",");
                 }
+                assert arrayOfString1 != null;
                 for (int j = 0; j < arrayOfString1.length; j++) {
                     if (arrayOfString1[j].equals("id")) {
                         localString = (customers.get(k)).getId();

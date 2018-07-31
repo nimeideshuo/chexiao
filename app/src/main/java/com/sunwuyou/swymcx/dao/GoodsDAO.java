@@ -32,7 +32,7 @@ public class GoodsDAO {
 
     public int getCount() {
         this.db = this.helper.getReadableDatabase();
-        Cursor cursor = this.db.rawQuery("select count(*) from sz_goods", null);
+        cursor = this.db.rawQuery("select count(*) from sz_goods", null);
         try {
             if (cursor.moveToNext()) {
                 return cursor.getInt(0);

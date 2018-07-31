@@ -17,17 +17,18 @@ import java.util.List;
 public class DepartmentDAO {
     private SQLiteDatabase db;
     private DBOpenHelper helper;
+    private Cursor cursor;
 
     public DepartmentDAO() {
         super();
         this.helper = new DBOpenHelper();
     }
+
     public List<Department> getAllDepartment() {
         this.db = this.helper.getReadableDatabase();
-        Cursor cursor = this.db.rawQuery(
+        cursor = this.db.rawQuery(
                 "select did, dname, warehouseid, warehousename from sz_department where isavailable='1'", null);
         List<Department> localArrayList = new ArrayList<Department>();
-
         try {
             while (cursor.moveToNext()) {
                 Department localDepartment = new Department();
@@ -46,5 +47,21 @@ public class DepartmentDAO {
                 this.db.close();
         }
         return localArrayList;
+    }
+
+    public boolean isExist() {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            Cursor v0 = this.db.rawQuery("select 1 from sz_department", null);
+            if (v0.moveToNext()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (this.db != null)
+                this.db.close();
+        }
+        return false;
     }
 }

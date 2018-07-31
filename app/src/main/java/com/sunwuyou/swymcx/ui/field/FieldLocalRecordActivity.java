@@ -1,7 +1,11 @@
 package com.sunwuyou.swymcx.ui.field;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,6 +16,10 @@ import android.widget.ListView;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.dao.FieldSaleDAO;
+import com.sunwuyou.swymcx.model.FieldSaleThin;
+import com.sunwuyou.swymcx.utils.PDH;
+
+import java.util.List;
 
 /**
  * Created by liupiao on
@@ -22,14 +30,14 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
     AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            if (menuPopup == null || !menuPopup.isShowing()) {
-//                startActivity(new Intent(FieldLocalRecordActivity.this, FieldEditActivity.class).putExtra("fieldsaleid", tasks.get(position).getId()));
-//            } else {
-//                menuPopup.dismiss();
-//                WindowManager.LayoutParams v1 = getWindow().getAttributes();
-//                v1.alpha = 1f;
-//                getWindow().setAttributes(v1);
-//            }
+            //            if (menuPopup == null || !menuPopup.isShowing()) {
+            //                startActivity(new Intent(FieldLocalRecordActivity.this, FieldEditActivity.class).putExtra("fieldsaleid", tasks.get(position).getId()));
+            //            } else {
+            //                menuPopup.dismiss();
+            //                WindowManager.LayoutParams v1 = getWindow().getAttributes();
+            //                v1.alpha = 1f;
+            //                getWindow().setAttributes(v1);
+            //            }
         }
     };
     private View root;
@@ -37,6 +45,17 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
     private FieldLocalRecordAdapter adapter;
     private ProgressDialog progressDialog;
     private FieldSaleDAO fieldSaleDAO;
+    private List<FieldSaleThin> tasks;
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            adapter.setData(tasks);
+            listView.setAdapter(adapter);
+//            refreshUI();
+        }
+    };
 
     @Override
     public int getLayoutID() {
@@ -53,8 +72,8 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
         this.listView.setAdapter(this.adapter);
         this.listView.setOnItemClickListener(itemClickListener);
         this.listView.setChoiceMode(3);
-//        this.listView.setMultiChoiceModeListener(this.muliChoiceModeLisener);
-//        this.refresh();
+        //        this.listView.setMultiChoiceModeListener(this.muliChoiceModeLisener);
+        //        this.refresh();
         progressDialog = new ProgressDialog(this);
         this.progressDialog.setProgressStyle(1);
         this.progressDialog.setMessage("正在上传中...");
@@ -68,6 +87,20 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
 
     }
 
+    protected void onResume() {
+        super.onResume();
+        this.refresh();
+    }
+
+    public void refresh() {
+        PDH.show(this, new PDH.ProgressCallBack() {
+            public void action() {
+                tasks = new FieldSaleDAO().queryAllFields();
+                handler.sendEmptyMessage(0);
+            }
+        });
+    }
+
     @Override
     public void setActionBarText() {
         setTitle("我的销售");
@@ -75,12 +108,12 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-//        if (menuPopup != null && (FmenuPopup.isShowing())) {
-//            menuPopup.dismiss();
-//            WindowManager.LayoutParams v0 = getWindow().getAttributes();
-//            v0.alpha = 1f;
-//            getWindow().setAttributes(v0);
-//        }
+        //        if (menuPopup != null && (FmenuPopup.isShowing())) {
+        //            menuPopup.dismiss();
+        //            WindowManager.LayoutParams v0 = getWindow().getAttributes();
+        //            v0.alpha = 1f;
+        //            getWindow().setAttributes(v0);
+        //        }
         return false;
     }
 }
