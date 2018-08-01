@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60.0dip"
+    android:orientation="vertical"
+    android:paddingBottom="5.0dip"
+    android:paddingTop="5.0dip">
+
+    <TextView
+        android:id="@+id/tvDocShowid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="2.0dip"
+        android:gravity="center|left"
+        android:textSize="@dimen/list_item_inner_title" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="2.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDocTime"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center|left"
+            android:textSize="@dimen/list_item_inner_info" />
+
+        <TextView
+            android:id="@+id/tvReceiveablePrice"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center|left"
+            android:textSize="@dimen/list_item_inner_info" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="2.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvReceivedLeftPrice"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center|left"
+            android:textSize="@dimen/list_item_inner_info" />
+
+        <TextView
+            android:id="@+id/tvthisTrueReceivedPrice"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:gravity="center|left"
+            android:textSize="@dimen/list_item_inner_info" />
+    </LinearLayout>
+</LinearLayout>

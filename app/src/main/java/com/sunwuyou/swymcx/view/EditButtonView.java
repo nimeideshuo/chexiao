@@ -19,5 +19,9 @@ public class EditButtonView extends android.support.v7.widget.AppCompatEditText{
         super(context, attrs);
     }
 
+    public void setDecNum(int decNum) {
+    }
 
+    public void setMode(int mode) {
+    }
 }

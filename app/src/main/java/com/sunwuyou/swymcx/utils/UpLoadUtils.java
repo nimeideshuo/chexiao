@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.sunwuyou.swymcx.app.RequestHelper;
 import com.sunwuyou.swymcx.dao.TransferDocDAO;
 import com.sunwuyou.swymcx.dao.TransferItemDAO;
+import com.sunwuyou.swymcx.model.FieldSaleThin;
 import com.sunwuyou.swymcx.model.TransferDoc;
 import com.sunwuyou.swymcx.request.ReqDocAddTransferDoc;
 import com.sunwuyou.swymcx.request.ReqDocAddTransferItem;
@@ -54,5 +55,10 @@ public class UpLoadUtils {
             }
         }
         return v12;
+    }
+
+    public String uploadCheXiao(FieldSaleThin arg46) {
+
+        return "";
     }
 }

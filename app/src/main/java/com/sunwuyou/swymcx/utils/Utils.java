@@ -376,4 +376,38 @@ public class Utils {
         int v0 = ((int) Math.pow(10, ((double) (Utils.RECEIVE_DEC_NUM - 1))));
         return (((double) Math.round((((double) v0)) * arg5))) / (((double) v0));
     }
+
+    public static double getSubtotal(double arg5) {
+        int v0 = ((int) Math.pow(10, ((double) Utils.SUBTOTAL_DEC_NUM)));
+        return (((double) Math.round((((double) v0)) * arg5))) / (((double) v0));
+    }
+
+    public static boolean validNAMAndShow(String arg10, int arg11, double[] arg12) {
+        boolean v5 = false;
+        try {
+            double v3 = Double.parseDouble(arg10);
+            for (double anArg12 : arg12) {
+                if (v3 == anArg12) {
+                    PDH.showError("不能为" + v3);
+                    return false;
+                }
+            }
+            if (v3 > 100000000) {
+                PDH.showError("输入的值过大");
+                return false;
+            }
+
+            if (v3 < -100000000) {
+                PDH.showError("输入的值过小");
+                return false;
+            }
+            if (arg10.split("\\.").length > 1 && arg10.split("\\.")[1].length() > arg11) {
+                PDH.showError("小数位过多,只能输入" + arg11 + "位小数");
+                return false;
+            }
+        } catch (NumberFormatException v0) {
+            PDH.showError("输入不正确");
+        }
+        return true;
+    }
 }

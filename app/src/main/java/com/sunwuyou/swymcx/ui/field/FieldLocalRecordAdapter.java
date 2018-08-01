@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.ui.field;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class FieldLocalRecordAdapter extends BaseAdapter {
     private Context context;
     private List<FieldSaleThin> listItems;
     private boolean multichoice = false;
-    private HashMap<Integer, Boolean> statusMap = new HashMap<Integer, Boolean>();
+    private HashMap<Integer, Boolean> statusMap = new HashMap<>();
 
     public FieldLocalRecordAdapter(Context context) {
         this.context = context;
@@ -64,18 +65,7 @@ public class FieldLocalRecordAdapter extends BaseAdapter {
     }
 
     public int getSelectCount() {
-        int v0 = 0;
-        if (this.statusMap != null) {
-            //            Iterator v3 = this.statusMap.keySet().iterator();
-            //            while(v3.hasNext()) {
-            //                if(!this.statusMap.get(v3.next())) {
-            //                    continue;
-            //                }
-            //                ++v0;
-            //            }
-            return statusMap.size();
-        }
-        return v0;
+        return statusMap==null?0:statusMap.size();
     }
 
     public List<FieldSaleThin> getSelectList() {
@@ -111,7 +101,7 @@ public class FieldLocalRecordAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         RemoteLocalItem v0;
         if (convertView == null) {
-            convertView = LayoutInflater.from(this.context).inflate(R.layout.item_field_local_record, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_field_local_record, null);
             v0 = new RemoteLocalItem(convertView);
             convertView.setTag(v0);
         } else {

@@ -5,13 +5,13 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@id/listView"
+        android:id="@+id/listView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginBottom="@dimen/order_operation_height" />
 
     <LinearLayout
-        android:id="@id/buttom"
+        android:id="@+id/buttom"
         style="@style/m_table_buttom"
         android:layout_alignParentBottom="true">
 
@@ -27,7 +27,7 @@
                 android:layout_weight="1.0">
 
                 <TextView
-                    android:id="@id/tv_sumamount"
+                    android:id="@+id/tv_sumamount"
                     android:layout_width="0.0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5.0dip"
@@ -36,7 +36,7 @@
                     android:textSize="@dimen/list_edit" />
 
                 <TextView
-                    android:id="@id/tv_preference"
+                    android:id="@+id/tv_preference"
                     android:layout_width="0.0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5.0dip"
@@ -51,7 +51,7 @@
                 android:layout_weight="1.0">
 
                 <TextView
-                    android:id="@id/tv_settle_shidhou"
+                    android:id="@+id/tv_settle_shidhou"
                     android:layout_width="0.0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5.0dip"
@@ -60,7 +60,7 @@
                     android:textSize="@dimen/list_edit" />
 
                 <TextView
-                    android:id="@id/tv_settle_jiesuan"
+                    android:id="@+id/tv_settle_jiesuan"
                     android:layout_width="0.0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5.0dip"

@@ -88,10 +88,25 @@ public class SettleUpDAO {
             if (cursor != null) {
                 cursor.close();
             }
-            if (this.db != null)
+            if (this.db != null) {
                 this.db.close();
+            }
         }
         return null;
+    }
+
+    public boolean update(long arg9, String arg11, String arg12) {
+        boolean v0 = true;
+        this.db = this.helper.getWritableDatabase();
+        ContentValues v1 = new ContentValues();
+        v1.put(arg11, arg12);
+        if(this.db.update("cw_settleup", v1, "id=?", new String[]{String.valueOf(arg9)}) != 1) {
+            v0 = false;
+        }
+        if(this.db != null) {
+            this.db.close();
+        }
+        return v0;
     }
 
 

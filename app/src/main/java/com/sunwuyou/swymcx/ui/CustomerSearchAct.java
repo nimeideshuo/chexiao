@@ -30,9 +30,12 @@ import butterknife.ButterKnife;
  */
 
 public class CustomerSearchAct extends BaseHeadActivity implements AutoTextView.OnTextChangeListener, AdapterView.OnItemClickListener {
-    @BindView(R.id.etSearch) AutoTextView etSearch;
-    @BindView(R.id.tvTop) TextView tvTop;
-    @BindView(R.id.listview) ListView listview;
+    @BindView(R.id.etSearch)
+    AutoTextView etSearch;
+    @BindView(R.id.tvTop)
+    TextView tvTop;
+    @BindView(R.id.listview)
+    ListView listview;
     List<Customer> temp;
     private List<Customer> customers;
     private ArrayList<Customer> list;
@@ -109,18 +112,13 @@ public class CustomerSearchAct extends BaseHeadActivity implements AutoTextView.
                     }
                 }
             }
-            String[] arrayOfString2 = new String[list.size()];
-            if (list.size() > 0) {
-
-                for (int i = 0; i < list.size(); i++) {
-                    arrayOfString2[i] = list.get(i).getName();
-                }
+            String[] items = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                items[i] = list.get(i).getName();
             }
-            ArrayAdapter<String> localArrayAdapter = new ArrayAdapter<String>(CustomerSearchAct.this,
-                    android.R.layout.simple_list_item_1, arrayOfString2);
-            listview.setAdapter(localArrayAdapter);
-            localArrayAdapter.notifyDataSetChanged();
-
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+            listview.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
     }
 

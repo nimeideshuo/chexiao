@@ -274,4 +274,78 @@ public class CustomerDAO {
         return v1;
     }
 
+    public void addCustomer(Customer arg9) {
+        this.db = this.helper.getWritableDatabase();
+        String v0 = "insert into cu_customer (id, name, pinyin, orderno, contact,  contactmoblie, telephone, regionid, customertypeid, visitlineid, depositbank,  bankingaccount, promotionid, address, pricesystemid, longitude,  latitude, remark, isnew, isfinish, isavailable, isusecustomerprice)  values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,1,?)";
+        SQLiteDatabase v4 = this.db;
+        Object[] v5 = new Object[21];
+        v5[0] = arg9.getId();
+        v5[1] = arg9.getName();
+        v5[2] = arg9.getPinyin();
+        v5[3] = arg9.getOrderNo();
+        v5[4] = arg9.getContact();
+        v5[5] = arg9.getContactMoblie();
+        v5[6] = arg9.getTelephone();
+        v5[7] = arg9.getRegionId();
+        v5[8] = arg9.getCustomerTypeId();
+        v5[9] = arg9.getVisitLineId();
+        v5[10] = arg9.getDepositBank();
+        v5[11] = arg9.getBankingAccount();
+        v5[12] = arg9.getPromotionId();
+        v5[13] = arg9.getAddress();
+        v5[14] = arg9.getPriceSystemId();
+        v5[15] = arg9.getLongitude();
+        v5[16] = arg9.getLatitude();
+        v5[17] = arg9.getRemark();
+        v5[18] = arg9.getIsNew() ? 1 : 0;
+        v5[19] = arg9.getIsFinish() ? 1 : 0;
+        if (!arg9.getIsusecustomerprice()) {
+            v5[20] = 0;
+        }
+        v4.execSQL(v0, v5);
+        if (this.db != null) {
+            this.db.close();
+        }
+    }
+    public void updateCustomer(String arg8, Customer arg9) {
+        this.db = this.helper.getWritableDatabase();
+        ContentValues v0 = new ContentValues();
+        v0.put("id", arg9.getId());
+        v0.put("name", arg9.getName());
+        v0.put("pinyin", arg9.getPinyin());
+        v0.put("orderno", arg9.getOrderNo());
+        v0.put("contact", arg9.getContact());
+        v0.put("contactmoblie", arg9.getContactMoblie());
+        v0.put("telephone", arg9.getTelephone());
+        v0.put("regionid", arg9.getRegionId());
+        v0.put("customertypeid", arg9.getCustomerTypeId());
+        v0.put("visitlineid", arg9.getVisitLineId());
+        v0.put("depositbank", arg9.getDepositBank());
+        v0.put("bankingaccount", arg9.getBankingAccount());
+        v0.put("promotionid", arg9.getPromotionId());
+        v0.put("address", arg9.getAddress());
+        v0.put("pricesystemid", arg9.getPriceSystemId());
+        v0.put("longitude", arg9.getLongitude());
+        v0.put("latitude", arg9.getLatitude());
+        v0.put("remark", arg9.getRemark());
+        v0.put("isnew", true);
+        v0.put("isfinish", arg9.getIsFinish());
+        SQLiteDatabase v2 = this.db;
+        String v3 = "cu_customer";
+        String v4 = "id=? and isnew=?";
+        String[] v5 = new String[2];
+        v5[0] = arg8;
+        String v1 = arg9.getIsNew() ? "1" : "0";
+        v5[1] = v1;
+        v2.update(v3, v0, v4, v5);
+        if(this.db != null) {
+            this.db.close();
+        }
+    }
+    public void updateCustomerDocs(String arg12, String arg13) {
+        Customer v0 = this.getCustomer(arg13, true);
+        this.db = this.helper.getWritableDatabase();
+        this.db.execSQL("update kf_fieldsale set customerid=?,customername=? where customerid=? and isnewcustomer=?", new String[]{v0.getId(), v0.getName(), arg12, "1"});
+        this.db.execSQL("update cw_settleup set objectid=?,objectname=? where objectid=? and isnewobject=?", new String[]{v0.getId(), v0.getName(), arg12, "1"});
+    }
 }

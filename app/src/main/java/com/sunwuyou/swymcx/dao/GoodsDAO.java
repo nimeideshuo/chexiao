@@ -141,8 +141,9 @@ public class GoodsDAO {
             if (cursor != null) {
                 cursor.close();
             }
-            if (this.db != null)
+            if (this.db != null) {
                 this.db.close();
+            }
         }
 
         return null;
@@ -151,7 +152,7 @@ public class GoodsDAO {
     // 从 SQL 中 取 数据 匹配
     public ArrayList<GoodsThin> queryGoods(String id, long arg14) {
         AccountPreference v0 = new AccountPreference();
-        String v8 = "select g.id,g.name,g.pinyin,g.barcode,g.specification,g.isusebatch,stocknumber,bigstocknumber,initnumber,biginitnumber from sz_goods g where g.isavailable = \'1\' and g.id not in (select f.goodsid from kf_fieldsaleitem f where f.fieldsaleid=?) and (";
+        String v8 = "select g.id,g.name,g.pinyin,g.barcode,g.specification,g.isusebatch,stocknumber,bigstocknumber,initnumber,biginitnumber from sz_goods g where g.isavailable = \'1\' and g.id not in (select f.goodsid from kf_fieldsaleitem f where f.fieldsaleid=?) and '('";
         if ("1".equals(v0.getValue("goods_result_select", "0"))) {
             v8 = String.valueOf(v8) + " g.stocknumber>0.0 and (";
         }

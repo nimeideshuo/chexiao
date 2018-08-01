@@ -153,4 +153,25 @@ public class FieldSaleItemBatchDAO {
         }
         return true;
     }
+
+    public double getCancelAmount(String arg8) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select sum(num*price) from kf_fieldsale as doc, kf_fieldsaleitembatch as itembatch  where doc.id = itembatch.fieldsaleid and doc.status != 0 and itembatch.goodsid = ? and itembatch.isout = \'0\'", new String[]{arg8});
+            if (cursor.moveToNext()) {
+                return cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return 0;
+    }
+
 }

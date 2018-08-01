@@ -1,11 +1,13 @@
 package com.sunwuyou.swymcx.model;
 
+import java.io.Serializable;
+
 /**
  * Created by liupiao on
  * 2018/7/11.
  * content
  */
-public class Account {
+public class Account implements Serializable {
     private String aid;
     private String aname;
 

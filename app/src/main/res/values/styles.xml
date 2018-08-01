@@ -107,5 +107,26 @@
         <item name="android:drawableLeft">@drawable/title_divider</item>
         <item name="android:layout_weight">1.0</item>
     </style>
-
+    <style name="m_table_buttom">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_dialog_nor</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/order_operation_height</item>
+    </style>
+    <style name="m_add_customer_text">
+        <item name="android:textSize">@dimen/dialog_label</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10.0dip</item>
+    </style>
+    <style name="m_add_customer_edit">
+        <item name="android:textSize">@dimen/dialog_edit</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:background">@drawable/login_panel_edit_bg</item>
+        <item name="android:paddingLeft">10.0dip</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10.0dip</item>
+    </style>
 </resources>

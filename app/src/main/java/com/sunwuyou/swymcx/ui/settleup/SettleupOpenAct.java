@@ -14,9 +14,13 @@ import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.dao.DepartmentDAO;
 import com.sunwuyou.swymcx.dao.ServerDocDAO;
+import com.sunwuyou.swymcx.dao.SettleUpDAO;
+import com.sunwuyou.swymcx.dao.SettleUpItemDAO;
 import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.model.Department;
+import com.sunwuyou.swymcx.model.ServerDoc;
 import com.sunwuyou.swymcx.model.SettleUp;
+import com.sunwuyou.swymcx.model.SettleUpItem;
 import com.sunwuyou.swymcx.model.User;
 import com.sunwuyou.swymcx.ui.CustomerSearchAct;
 import com.sunwuyou.swymcx.ui.DepartmentSearchAct;
@@ -41,6 +45,25 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
     private String docType;
     private EditText etObjectPeople;
     private String docTypeNmae = "收款单";
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                if (docType.equals("63")) {
+                    startActivity(new Intent(SettleupOpenAct.this, SettleupDocsActivity.class).putExtra("settleupid", msg.obj.toString()));
+                } else {
+                    startActivity(new Intent(SettleupOpenAct.this, OtherSettleupDocActivity.class).putExtra("settleupid", msg.obj.toString()));
+                }
+
+                finish();
+            } else {
+                PDH.showFail(msg.obj.toString());
+                btnOpenSettleupDoc.setOnClickListener(onClickListener);
+            }
+        }
+    };
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -52,41 +75,40 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
                 PDH.show(SettleupOpenAct.this, "正在开单...", new PDH.ProgressCallBack() {
                     @Override
                     public void action() {
-                        List v5 = null;
+                        List<ServerDoc> v5 = null;
                         if (docType.equals("63")) {
                             v5 = new ServerDocDAO().getCusServerdocs(customer.getId());
                             if (v5.size() == 0) {
                                 handler.sendMessage(handler.obtainMessage(1, "此客户不存在可结算的业务单据"));
                                 btnOpenSettleupDoc.setOnClickListener(onClickListener);
                             } else {
-
+                                long v1 = new SettleUpDAO().AddSettleUp(makeForm());
+                                if (v1 == -1) {
+                                    handler.sendMessage(handler.obtainMessage(1, "开单失败"));
+                                    btnOpenSettleupDoc.setOnClickListener(onClickListener);
+                                } else {
+                                    SettleUpItemDAO v7 = new SettleUpItemDAO();
+                                    for (int i = 0; i < v5.size(); i++) {
+                                        ServerDoc serverDoc = v5.get(i);
+                                        SettleUpItem upItem = new SettleUpItem();
+                                        upItem.setDocid(serverDoc.getDocid());
+                                        upItem.setDocshowid(serverDoc.getDocshowid());
+                                        upItem.setDoctime(serverDoc.getDoctime());
+                                        upItem.setDoctype(serverDoc.getDoctype());
+                                        upItem.setDoctypename(serverDoc.getDoctypename());
+                                        upItem.setReceivableamount(serverDoc.getReceivableamount());
+                                        upItem.setReceivedamount(serverDoc.getReceivedamount());
+                                        upItem.setThisamount(serverDoc.getLeftamount());
+                                        upItem.setLeftamount(serverDoc.getLeftamount());
+                                        upItem.setSettleupid(v1);
+                                        v7.AddSettleUpItem(upItem);
+                                    }
+                                    handler.sendMessage(handler.obtainMessage(0, v1));
+                                }
                             }
                         }
-
-
                     }
                 });
-            }
-        }
-    };
-    @SuppressLint("HandlerLeak")
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what == 0) {
-                if(SettleupOpenAct.this.docType.equals("63")) {
-                    SettleupOpenAct.this.startActivity(new Intent(SettleupOpenAct.this, SettleupDocsActivity.class).putExtra("settleupid", msg.obj.toString()));
-                }
-                else {
-                    SettleupOpenAct.this.startActivity(new Intent(SettleupOpenAct.this, OtherSettleupDocActivity.class).putExtra("settleupid", msg.obj.toString()));
-                }
-
-                SettleupOpenAct.this.finish();
-            }
-            else {
-                PDH.showFail(msg.obj.toString());
-                SettleupOpenAct.this.btnOpenSettleupDoc.setOnClickListener(SettleupOpenAct.this.onClickListener);
             }
         }
     };
@@ -115,8 +137,6 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
             this.btnDepartment.setText(this.department.getDname());
             this.btnDocType.setText(this.docTypeNmae);
         }
-
-
     }
 
     @Override

@@ -8,7 +8,9 @@ import com.amap.api.location.AMapLocation;
 import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.model.FieldSale;
+import com.sunwuyou.swymcx.model.FieldSaleMoneyStat;
 import com.sunwuyou.swymcx.model.FieldSalePayType;
+import com.sunwuyou.swymcx.model.FieldSaleStat;
 import com.sunwuyou.swymcx.model.FieldSaleThin;
 import com.sunwuyou.swymcx.model.PayType;
 import com.sunwuyou.swymcx.request.ReqDocAddCheXiao;
@@ -290,4 +292,97 @@ public class FieldSaleDAO {
         return new ArrayList<>();
     }
 
+    public List<FieldSaleStat> queryGoodsSaleStat() {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            Cursor v0 = this.db.rawQuery("select item.goodsid, g.name goodsname, g.barcode, sum(item.salenum*gus.ratio+item.givenum*gug.ratio) as salebasenum,  sum(cancelbasenum) as cancelbasenum, sum(item.salenum*item.saleprice) as saleamount  from kf_fieldsale as doc inner join kf_fieldsaleitem as item on doc.id = item.fieldsaleid  \tleft outer join sz_goods as g on item.goodsid = g.id  \tleft outer join sz_goodsunit as gus on item.goodsid = gus.goodsid and item.saleunitid = gus.unitid  \tleft outer join sz_goodsunit as gug on item.goodsid = gug.goodsid and item.giveunitid = gug.unitid  where doc.status != 0 group by item.goodsid, g.name, g.barcode order by g.pinyin ", null);
+            ArrayList<FieldSaleStat> v7 = new ArrayList<>();
+            FieldSaleItemBatchDAO v3 = new FieldSaleItemBatchDAO();
+            while (v0.moveToNext()) {
+                FieldSaleStat v4 = new FieldSaleStat();
+                v4.setGoodsid(v0.getString(0));
+                v4.setGoodsname(v0.getString(1));
+                v4.setBarcode(v0.getString(2));
+                v4.setSalebasenum(v0.getDouble(3));
+                v4.setCancelbasenum(v0.getDouble(4));
+                v4.setNetsalebasenum(v4.getSalebasenum() - v4.getCancelbasenum());
+                v4.setSaleamount(v0.getDouble(5));
+                v4.setCancelamount(v3.getCancelAmount(v4.getGoodsid()));
+                v4.setNetsaleamount(v4.getSaleamount() - v4.getCancelamount());
+                v7.add(v4);
+            }
+            Cursor v1 = this.db.rawQuery("select item.giftgoodsid, g.name goodsname, g.barcode, sum(item.giftnum*gu.ratio) as salebasenum  from kf_fieldsale as doc inner join kf_fieldsaleitem as item on doc.id = item.fieldsaleid  \tleft outer join sz_goods as g on item.giftgoodsid = g.id  \tleft outer join sz_goodsunit as gu on item.giftgoodsid = gu.goodsid and item.giftunitid = gu.unitid  where doc.status != 0 and item.ispromotion = 1 and item.promotiontype = 1  group by item.giftgoodsid, g.name, g.barcode order by g.pinyin ", null);
+            while (v1.moveToNext()) {
+                String v5 = v1.getString(0);
+                for (int i = 0; i < v7.size(); i++) {
+                    if (v5.equals(v7.get(i).getGoodsid())) {
+                        FieldSaleStat saleStat = v7.get(i);
+                        saleStat.setSalebasenum(saleStat.getSalebasenum() + v1.getDouble(3));
+                        saleStat.setNetsalebasenum(saleStat.getSalebasenum() - saleStat.getCancelbasenum());
+                        break;
+                    }
+                }
+            }
+            return v7;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public List<FieldSaleMoneyStat> querySaleMoneyStat() {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select doc.customerid, doc.customername,  \tsum((select sum(salenum*saleprice) from kf_fieldsaleitem where fieldsaleid = doc.id)-ifnull((select sum(num*price) from kf_fieldsaleitembatch where fieldsaleid = doc.id and isout = \'0\'), 0)) as netsaleamout,  \tsum(doc.preference) as preference, sum((select sum(amount) from kf_fieldsalepaytype where fieldsaleid = doc.id)) as received  from kf_fieldsale as doc left outer join cu_customer as cu on doc.customerid = cu.id where doc.status != 0 group by doc.customerid, doc.customername order by cu.pinyin ", null);
+            ArrayList<FieldSaleMoneyStat> arrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                FieldSaleMoneyStat moneyStat = new FieldSaleMoneyStat();
+                moneyStat.setCustomerid(cursor.getString(0));
+                moneyStat.setCustomername(cursor.getString(1));
+                moneyStat.setNetsaleamount(cursor.getDouble(2));
+                moneyStat.setPreference(cursor.getDouble(3));
+                moneyStat.setReceivable(moneyStat.getNetsaleamount() - moneyStat.getPreference());
+                moneyStat.setReceived(cursor.getDouble(4));
+                arrayList.add(moneyStat);
+            }
+            return arrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public String getZeroSalePriceGoods(long arg9) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select g.name from kf_fieldsaleitem item, sz_goods g where item.goodsid = g.id and item.fieldsaleid = ? and item.salenum > 0 and item.saleprice = 0", new String[]{String.valueOf(arg9)});
+            if (cursor.moveToNext()) {
+                return cursor.getString(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return "";
+    }
 }

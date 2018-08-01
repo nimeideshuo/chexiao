@@ -3,33 +3,30 @@ package com.sunwuyou.swymcx.dao;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.sunwuyou.swymcx.model.VisitLine;
+import com.sunwuyou.swymcx.model.Customertype;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by admin
- * 2018/7/20.
+ * Created by liupiao on
+ * 2018/8/1.
  * content
  */
-
-public class VisitLineDAO {
-
-    private final DBOpenHelper helper;
+public class CustomerTypeDAO {
     private SQLiteDatabase db;
+    private DBOpenHelper helper;
     private Cursor cursor;
 
-    public VisitLineDAO() {
+    public CustomerTypeDAO() {
         super();
-        helper = new DBOpenHelper();
+        this.helper = new DBOpenHelper();
     }
 
-    public String getVisitLineName(String id) {
-        db = this.helper.getReadableDatabase();
+    public String getCTPriceSystemID(String id) {
+        this.db = this.helper.getReadableDatabase();
         try {
-            String sql = "select name from sz_visitline where id=?";
-            cursor = this.db.rawQuery(sql, new String[]{id});
+            cursor = this.db.rawQuery("select pricesystemid from cu_customertype where id=?", new String[]{id});
             if (cursor.moveToNext()) {
                 return cursor.getString(0);
             }
@@ -46,18 +43,19 @@ public class VisitLineDAO {
         return "";
     }
 
-    public List<VisitLine> getAllVisitLines() {
+    public List<Customertype> queryAllcuCustomertypes() {
         this.db = this.helper.getReadableDatabase();
         try {
-            cursor = this.db.rawQuery("select id,name from sz_visitline where isavailable = \'1\'", null);
-            ArrayList<VisitLine> v3 = new ArrayList<>();
+            cursor = this.db.rawQuery("select id,name,pricesystemid from cu_customertype where isavailable = \'1\'", null);
+            ArrayList<Customertype> v2 = new ArrayList<>();
             while (cursor.moveToNext()) {
-                VisitLine v2 = new VisitLine();
-                v2.setId(cursor.getString(0));
-                v2.setName(cursor.getString(1));
-                v3.add(v2);
+                Customertype v1 = new Customertype();
+                v1.setId(cursor.getString(0));
+                v1.setName(cursor.getString(1));
+                v1.setPricesystemid(cursor.getString(2));
+                v2.add(v1);
             }
-            return v3;
+            return v2;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -70,4 +68,5 @@ public class VisitLineDAO {
         }
         return new ArrayList<>();
     }
+
 }

@@ -58,7 +58,7 @@ public class FieldSaleThin {
         this.id = id;
     }
 
-    public boolean isnewcustomer() {
+    public boolean isIsnewcustomer() {
         return isnewcustomer;
     }
 

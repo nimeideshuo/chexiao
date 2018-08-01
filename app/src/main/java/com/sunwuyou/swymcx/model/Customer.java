@@ -8,9 +8,8 @@ package com.sunwuyou.swymcx.model;
 
 import java.io.Serializable;
 
-public class Customer
-        implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Customer implements Serializable {
+    private static final long serialVersionUID = 1;
     private String address;
     private String bankingaccount;
     private String contact;
@@ -36,6 +35,7 @@ public class Customer
     private String visitlineid;
 
     public Customer() {
+        super();
     }
 
     public Customer(String address, String bankingaccount, String contact, String contactmoblie, String customertypeid, String depositbank, int exhibitionterm, String id, boolean isfinish, boolean isnew, boolean isusecustomerprice, long lastexhibition, double latitude, double longitude, String name, int orderno, String pinyin, String pricesystemid, String promotionid, String regionid, String remark, String telephone, String visitlineid) {
@@ -64,188 +64,184 @@ public class Customer
         this.visitlineid = visitlineid;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public String getAddress() {
+        return this.address;
     }
 
-    public String getAddress() {
-        return address == null ? "" : address;
+    public String getBankingAccount() {
+        return this.bankingaccount;
+    }
+
+    public String getContact() {
+        return this.contact;
+    }
+
+    public String getContactMoblie() {
+        return this.contactmoblie;
+    }
+
+    public String getCustomerTypeId() {
+        return this.customertypeid;
+    }
+
+    public String getDepositBank() {
+        return this.depositbank;
+    }
+
+    public int getExhibitionTerm() {
+        return this.exhibitionterm;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public boolean getIsFinish() {
+        return this.isfinish;
+    }
+
+    public boolean getIsNew() {
+        return this.isnew;
+    }
+
+    public boolean getIsusecustomerprice() {
+        return this.isusecustomerprice;
+    }
+
+    public long getLastExhibition() {
+        return this.lastexhibition;
+    }
+
+    public double getLatitude() {
+        return this.latitude;
+    }
+
+    public double getLongitude() {
+        return this.longitude;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getOrderNo() {
+        return this.orderno;
+    }
+
+    public String getPinyin() {
+        return this.pinyin;
+    }
+
+    public String getPriceSystemId() {
+        return this.pricesystemid;
+    }
+
+    public String getPromotionId() {
+        return this.promotionid;
+    }
+
+    public String getRegionId() {
+        return this.regionid;
+    }
+
+    public String getRemark() {
+        return this.remark;
+    }
+
+    public String getTelephone() {
+        return this.telephone;
+    }
+
+    public String getVisitLineId() {
+        return this.visitlineid;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getBankingaccount() {
-        return bankingaccount == null ? "" : bankingaccount;
-    }
-
     public void setBankingAccount(String bankingaccount) {
         this.bankingaccount = bankingaccount;
     }
 
-    public String getContact() {
-        return contact == null ? "" : contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
-
-    public String getContactmoblie() {
-        return contactmoblie == null ? "" : contactmoblie;
+    public void setContact(String arg1) {
+        this.contact = arg1;
     }
 
     public void setContactMoblie(String contactmoblie) {
         this.contactmoblie = contactmoblie;
     }
 
-    public String getCustomertypeid() {
-        return customertypeid == null ? "" : customertypeid;
-    }
-
     public void setCustomerTypeId(String customertypeid) {
         this.customertypeid = customertypeid;
-    }
-
-    public String getDepositbank() {
-        return depositbank == null ? "" : depositbank;
     }
 
     public void setDepositBank(String depositbank) {
         this.depositbank = depositbank;
     }
 
-    public int getExhibitionterm() {
-        return exhibitionterm;
-    }
-
     public void setExhibitionTerm(int exhibitionterm) {
         this.exhibitionterm = exhibitionterm;
-    }
-
-    public String getId() {
-        return id == null ? "" : id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public boolean isfinish() {
-        return isfinish;
-    }
-
     public void setIsFinish(boolean isfinish) {
         this.isfinish = isfinish;
-    }
-
-    public boolean getIsNew() {
-        return isnew;
     }
 
     public void setIsNew(boolean isnew) {
         this.isnew = isnew;
     }
 
-    public boolean getIsusecustomerprice() {
-        return isusecustomerprice;
-    }
-
     public void setIsusecustomerprice(boolean isusecustomerprice) {
         this.isusecustomerprice = isusecustomerprice;
     }
 
-    public long getLastexhibition() {
-        return lastexhibition;
-    }
-
-    public void setLastExhibition(long lastexhibition) {
-        this.lastexhibition = lastexhibition;
-    }
-
-    public double getLatitude() {
-        return latitude;
+    public void setLastExhibition(long arg1) {
+        this.lastexhibition = arg1;
     }
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public String getName() {
-        return name == null ? "" : name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getOrderno() {
-        return orderno;
+    public void setName(String arg1) {
+        this.name = arg1;
     }
 
     public void setOrderNo(int orderno) {
         this.orderno = orderno;
     }
 
-    public String getPinyin() {
-        return pinyin == null ? "" : pinyin;
-    }
-
     public void setPinyin(String pinyin) {
         this.pinyin = pinyin;
-    }
-
-    public String getPriceSystemId() {
-        return pricesystemid == null ? "" : pricesystemid;
     }
 
     public void setPriceSystemId(String pricesystemid) {
         this.pricesystemid = pricesystemid;
     }
 
-    public String getPromotionId() {
-        return promotionid == null ? "" : promotionid;
-    }
-
     public void setPromotionId(String promotionid) {
         this.promotionid = promotionid;
-    }
-
-    public String getRegionid() {
-        return regionid == null ? "" : regionid;
     }
 
     public void setRegionId(String regionid) {
         this.regionid = regionid;
     }
 
-    public String getRemark() {
-        return remark == null ? "" : remark;
-    }
-
     public void setRemark(String remark) {
         this.remark = remark;
     }
 
-    public String getTelephone() {
-        return telephone == null ? "" : telephone;
-    }
-
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public String getVisitlineid() {
-        return visitlineid == null ? "" : visitlineid;
     }
 
     public void setVisitLineId(String visitlineid) {

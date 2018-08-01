@@ -1,134 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:scrollbars="none">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40.0dip"
+        android:layout_marginRight="40.0dip"
+        android:layout_marginTop="10.0dip"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40.0dip"
-            android:layout_marginRight="40.0dip"
-            android:layout_marginTop="10.0dip"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.0dip"
-                android:layout_weight="1.0">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5.0dip"
-                    android:text="合计："
-                    android:textSize="@dimen/dialog_label" />
-
-                <TextView
-                    android:id="@+id/tvSubtotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/dialog_edit" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0.0dip"
-                android:layout_weight="1.0">
-
-                <TextView
-                    android:id="@+id/tvReceiveableTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5.0dip"
-                    android:text="应收："
-                    android:textSize="@dimen/dialog_label" />
-
-                <TextView
-                    android:id="@+id/tvReceiveableprice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/dialog_edit" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10.0dip"
-            android:layout_marginTop="10.0dip"
-            android:background="@drawable/divider_1" />
-
-        <LinearLayout
-            android:id="@+id/linPreference"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40.0dip"
-            android:layout_marginRight="40.0dip">
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10.0dip"
-                android:text="优惠"
+                android:layout_marginRight="5.0dip"
+                android:text="合计："
                 android:textSize="@dimen/dialog_label" />
 
-            <com.sunwuyou.swymcx.view.EditButtonView
-                android:id="@+id/etPreference"
-                android:layout_width="match_parent"
-                android:layout_height="40.0dip"
-                android:background="@drawable/login_panel_edit_bg"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:tag="@integer/number_negative"
+            <TextView
+                android:id="@+id/tvSubtotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textSize="@dimen/dialog_edit" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearDivider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10.0dip"
-            android:layout_marginTop="10.0dip"
-            android:background="@drawable/divider_1"
-            android:orientation="vertical" />
+            android:layout_width="fill_parent"
+            android:layout_height="0.0dip"
+            android:layout_weight="1.0">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:layout_marginRight="10.0dip"
-            android:background="@drawable/btn_select_white_nor">
+            <TextView
+                android:id="@+id/tvReceiveableTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5.0dip"
+                android:text="应收："
+                android:textSize="@dimen/dialog_label" />
 
-            <ListView
-                android:id="@+id/listview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10.0dip"
-                android:layout_marginRight="10.0dip" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="10.0dip"
-            android:layout_marginLeft="2.0dip"
-            android:layout_marginRight="2.0dip"
-            android:layout_marginTop="10.0dip">
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="match_parent"
-                android:layout_height="36.0dip"
-                android:background="@drawable/btn_1_selector"
-                android:text="保存"
-                android:textSize="@dimen/dialog_button" />
+            <TextView
+                android:id="@+id/tvReceiveableprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dialog_edit" />
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:background="@drawable/divider_1" />
+
+    <LinearLayout
+        android:id="@+id/linPreference"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40.0dip"
+        android:layout_marginRight="40.0dip">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10.0dip"
+            android:text="优惠"
+            android:textSize="@dimen/dialog_label" />
+
+        <com.sunwuyou.swymcx.view.EditButtonView
+            android:id="@+id/etPreference"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:imeOptions="actionDone"
+            android:tag="@integer/number_negative"
+            android:textSize="@dimen/dialog_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:background="@drawable/divider_1" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:background="@drawable/btn_select_white_nor">
+
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10.0dip"
+        android:layout_marginLeft="2.0dip"
+        android:layout_marginRight="2.0dip"
+        android:layout_marginTop="10.0dip">
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="fill_parent"
+            android:layout_height="36.0dip"
+            android:background="@drawable/btn_1_selector"
+            android:text="保存"
+            android:textSize="@dimen/dialog_button" />
+    </LinearLayout>
+</LinearLayout>

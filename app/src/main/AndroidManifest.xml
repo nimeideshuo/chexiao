@@ -164,6 +164,33 @@
             android:name=".ui.settleup.SettleupDocsActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.settleup.OtherSettleupDocActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.settleup.SettleupAccountSelectAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.settleup.SettleupAccountAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.settleup.SettleupPayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldSaleGoodsStatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.FieldSaleCustomerStatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.CustomerTypeSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RegionSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.VisitLineSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.FieldMainAct"
             android:windowSoftInputMode="adjustPan" />
         <activity

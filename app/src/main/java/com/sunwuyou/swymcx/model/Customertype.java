@@ -1,12 +1,16 @@
 package com.sunwuyou.swymcx.model;
 
+import java.io.Serializable;
+
 /**
  * Created by liupiao on
  * 2018/7/11.
  * content
  */
-public class Customertype {
+public class Customertype implements Serializable {
     private String id;
+    private String name;
+    private String pricesystemid;
 
     public String getId() {
         return id == null ? "" : id;
@@ -31,7 +35,4 @@ public class Customertype {
     public void setPricesystemid(String pricesystemid) {
         this.pricesystemid = pricesystemid;
     }
-
-    private String name;
-    private String pricesystemid;
 }
