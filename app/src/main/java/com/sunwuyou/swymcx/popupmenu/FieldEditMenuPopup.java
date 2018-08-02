@@ -282,7 +282,8 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 this.activity.print();
                 break;
             case R.id.btnSettle:
-                this.activity.startActivity(new Intent().setClass(this.activity, FieldPayTypeAct.class).putExtra("fieldsaleid", this.fieldSale.getId()));
+                //收款
+                this.activity.startActivity(new Intent(activity, FieldPayTypeAct.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
             case R.id.btnDocInfo:
                 if (remarkDialog == null) {
@@ -291,15 +292,15 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 this.remarkDialog.show();
                 break;
             case R.id.btnWritePad:
+                //签名
                 this.activity.startActivity(new Intent().setClass(this.activity, WritePadAct.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
-
             case R.id.btnBatchDetail:
+                // 库存处理  批次明细
                 this.activity.startActivity(new Intent().setClass(this.activity, FieldItemTotalAct.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
-
             case R.id.btnPicture:
-                this.activity.startActivity(new Intent().setClass(this.activity, PicturesActivity.class).putExtra("fieldsaleid", this.fieldSale.getId()));
+                this.activity.startActivity(new Intent(this.activity, PicturesActivity.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
             case R.id.btnLocation:
                 this.loadingDialog.show("正在获取位置信息");
@@ -315,7 +316,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
     }
 
     public void show(View paramView, long paramLong) {
-        this.fieldSale = new FieldSaleDAO().getFieldsale(Long.valueOf(paramLong));
+        this.fieldSale = new FieldSaleDAO().getFieldsale(paramLong);
         int v7 = View.VISIBLE;
         int v5 = View.GONE;
         if (this.fieldSale.getStatus() == 0) {

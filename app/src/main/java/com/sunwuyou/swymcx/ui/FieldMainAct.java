@@ -29,6 +29,7 @@ import com.sunwuyou.swymcx.ui.field.FieldDocOpenAct;
 import com.sunwuyou.swymcx.ui.field.FieldLocalRecordActivity;
 import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
 import com.sunwuyou.swymcx.ui.field.TruckStockActivity;
+import com.sunwuyou.swymcx.ui.settleup.SettletupActivity;
 import com.sunwuyou.swymcx.ui.settleup.SettleupOpenAct;
 import com.sunwuyou.swymcx.ui.transfer.TransferLocalRecordActivity;
 import com.sunwuyou.swymcx.utils.NetUtils;

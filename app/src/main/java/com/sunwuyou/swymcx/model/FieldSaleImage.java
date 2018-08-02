@@ -28,7 +28,7 @@ public class FieldSaleImage {
         this.imagepath = imagepath;
     }
 
-    public boolean issignature() {
+    public boolean isIssignature() {
         return issignature;
     }
 

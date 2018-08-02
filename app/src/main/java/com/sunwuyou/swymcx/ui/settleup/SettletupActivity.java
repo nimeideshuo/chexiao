@@ -136,7 +136,7 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
                 //                            listView.setItemChecked(i, true);
                 //                        }
                 //                    }
-                return true;
+//                return true;
             }
 
 

@@ -19,6 +19,7 @@ import com.sunwuyou.swymcx.dao.FieldSalePayTypeDAO;
 import com.sunwuyou.swymcx.model.FieldSale;
 import com.sunwuyou.swymcx.model.FieldSalePayType;
 import com.sunwuyou.swymcx.utils.ClickUtils;
+import com.sunwuyou.swymcx.utils.MLog;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.EditButtonView;
 
@@ -49,6 +50,7 @@ public class FieldPayTypeAct extends BaseHeadActivity implements View.OnClickLis
 
     @Override
     public void initView() {
+        setTitleRight("保存", null);
         fieldSale = new FieldSaleDAO().getFieldsale(this.getIntent().getLongExtra("fieldsaleid", -1));
         listview = this.findViewById(R.id.listview);
         btnSave = this.findViewById(R.id.btnSave);
@@ -69,20 +71,35 @@ public class FieldPayTypeAct extends BaseHeadActivity implements View.OnClickLis
         this.tvSubtotal.setText(Utils.getRecvableMoney(this.subtotal));
         this.tvReceiveableprice.setText(Utils.getRecvableMoney(this.subtotal - this.fieldSale.getPreference()));
     }
-    // 重新绘制 item高度
-    public void setHeight(ListView listView, Adapter adapter) {
-        int height = 0;
-        int count = adapter.getCount();
-        for (int i = 0; i < count; i++) {
-            View temp = adapter.getView(i, null, listView);
-            temp.measure(0, 0);
-            height += temp.getMeasuredHeight();
+
+    @Override
+    protected void onRightClick() {
+        super.onRightClick();
+        if (!ClickUtils.isFastDoubleClick()) {
+            for (int i = 0; i < listview.getCount(); i++) {
+                EditButtonView etPayAmount = listview.getChildAt(i).findViewById(R.id.etPayAmount);
+                this.fieldSalePayTypes.get(i).setAmount(Utils.getDouble(etPayAmount.getText().toString()));
+                new FieldSalePayTypeDAO().update(this.fieldSalePayTypes.get(i));
+            }
+            new FieldSaleDAO().updateDocValue(this.fieldSale.getId(), "preference", this.etPreference.getText().toString());
+            this.finish();
         }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        params.height = height;
-        listView.setLayoutParams(params);
+
     }
+    //    // 重新绘制 item高度
+//    public void setHeight(ListView listView, Adapter adapter) {
+//        int height = 0;
+//        int count = adapter.getCount();
+//        for (int i = 0; i < count; i++) {
+//            View temp = adapter.getView(i, null, listView);
+//            temp.measure(0, 0);
+//            height += temp.getMeasuredHeight();
+//        }
+//        ViewGroup.LayoutParams params = listView.getLayoutParams();
+//        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//        params.height = height;
+//        listView.setLayoutParams(params);
+//    }
 
 
     @Override
@@ -91,20 +108,20 @@ public class FieldPayTypeAct extends BaseHeadActivity implements View.OnClickLis
         adapter = new ItemAdapter(this);
         this.adapter.setData(this.fieldSalePayTypes);
         this.listview.setAdapter(this.adapter);
-        setHeight(listview, adapter);
+//        setHeight(listview, adapter);
     }
 
     @Override
     public void onClick(View v) {
-        if (!ClickUtils.isFastDoubleClick()) {
-            for (int i = 0; i < listview.getCount(); i++) {
-                EditText etPayAmount = listview.getChildAt(i).findViewById(R.id.etPayAmount);
-                this.fieldSalePayTypes.get(i).setAmount(Utils.getDouble(etPayAmount.getText().toString()));
-                new FieldSalePayTypeDAO().update(this.fieldSalePayTypes.get(i));
-            }
-            new FieldSaleDAO().updateDocValue(this.fieldSale.getId(), "preference", this.etPreference.getText().toString());
-            this.finish();
-        }
+//        if (!ClickUtils.isFastDoubleClick()) {
+//            for (int i = 0; i < listview.getCount(); i++) {
+//                EditText etPayAmount = listview.getChildAt(i).findViewById(R.id.etPayAmount);
+//                this.fieldSalePayTypes.get(i).setAmount(Utils.getDouble(etPayAmount.getText().toString()));
+//                new FieldSalePayTypeDAO().update(this.fieldSalePayTypes.get(i));
+//            }
+//            new FieldSaleDAO().updateDocValue(this.fieldSale.getId(), "preference", this.etPreference.getText().toString());
+//            this.finish();
+//        }
     }
 
     @Override
@@ -170,8 +187,8 @@ public class FieldPayTypeAct extends BaseHeadActivity implements View.OnClickLis
                 super();
                 this.tvPaytypeName = arg4.findViewById(R.id.tvPaytypeName);
                 this.etPayAmount = arg4.findViewById(R.id.etPayAmount);
-//                this.etPayAmount.setDecNum(Utils.NUMBER_DEC);
-//                this.etPayAmount.setMode(1);
+                this.etPayAmount.setDecNum(Utils.NUMBER_DEC);
+                this.etPayAmount.setMode(1);
                 if (fieldSale.getStatus() == 2) {
                     this.etPayAmount.setEnabled(false);
                 }

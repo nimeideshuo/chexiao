@@ -50,6 +50,7 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
         public void handleMessage(Message message) {
             long l = Long.parseLong(message.obj.toString());
             if (l != -1L) {
+                //TODO
                 Intent intent = new Intent(FieldDocOpenAct.this, FieldEditActivity.class).putExtra("fieldsaleid", l);
                 startActivity(intent);
                 if ((customer != null) && (!TextUtils.isEmptyS(customer.getId()))) {
@@ -117,7 +118,7 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
                     public void action() {
                         FieldSale localFieldSale = makeFieldsaleForm();
                         long l = new FieldSaleDAO().addFieldsale(localFieldSale);
-                        handler.sendMessage(handler.obtainMessage(0, Long.valueOf(l)));
+                        handler.sendMessage(handler.obtainMessage(0, l));
                     }
                 });
                 break;

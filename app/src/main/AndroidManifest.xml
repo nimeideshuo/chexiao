@@ -132,6 +132,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.field.FieldPayTypeAct"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.field.PicturesActivity"
@@ -189,6 +190,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.VisitLineSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.field.CameraActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.FieldMainAct"

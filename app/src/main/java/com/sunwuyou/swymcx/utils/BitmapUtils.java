@@ -1,6 +1,7 @@
 package com.sunwuyou.swymcx.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Environment;
 import android.util.Base64;
 
@@ -53,5 +54,33 @@ public class BitmapUtils {
         ByteArrayOutputStream v0 = new ByteArrayOutputStream();
         arg6.compress(Bitmap.CompressFormat.PNG, 100, v0);
         return Base64.encodeToString(v0.toByteArray(), 0);
+    }
+    public Bitmap rotate(Bitmap arg9, int arg10) {
+        float v3 = 2f;
+        if(arg10 != 0 && arg9 != null) {
+            Matrix v5 = new Matrix();
+            v5.setRotate(((float)arg10), (((float)arg9.getWidth())) / v3, (((float)arg9.getHeight())) / v3);
+            try {
+                Bitmap v7 = Bitmap.createBitmap(arg9, 0, 0, arg9.getWidth(), arg9.getHeight(), v5, true);
+                if(arg9 == v7) {
+                    return arg9;
+                }
+
+                arg9.recycle();
+                arg9 = v7;
+            }
+            catch(OutOfMemoryError v0) {
+            }
+        }
+
+        return arg9;
+    }
+    public Bitmap reverseBitmap(Bitmap arg10) {
+        float[] v8 = new float[]{-1f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 1f};
+        Matrix v5 = new Matrix();
+        v5.setValues(v8);
+        Bitmap v7 = Bitmap.createBitmap(arg10, 0, 0, arg10.getWidth(), arg10.getHeight(), v5, true);
+        arg10.recycle();
+        return v7;
     }
 }

@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /**
  * Created by liupiao on
@@ -67,5 +69,27 @@ public class FileUtils {
 
     public Bitmap getPictureBitmap(String arg3) {
         return BitmapFactory.decodeFile(String.valueOf(this.getPicDir()) + "/" + arg3);
+    }
+
+    public boolean savePicture(Bitmap arg7, String arg8) {
+        boolean v4;
+        File v1 = new File(this.getPicDir());
+        if (!v1.exists()) {
+            v1.mkdir();
+        }
+
+        File v3 = new File(v1, arg8);
+        try {
+            v3.createNewFile();
+            FileOutputStream v2 = new FileOutputStream(v3);
+            arg7.compress(Bitmap.CompressFormat.JPEG, 80, v2);
+            v2.flush();
+            v2.close();
+            v4 = true;
+        } catch (Exception v0) {
+            v4 = false;
+        }
+
+        return v4;
     }
 }

@@ -17,6 +17,7 @@
         android:id="@+id/etPayAmount"
         android:layout_width="0.0dip"
         android:layout_height="40.0dip"
+        android:inputType="numberDecimal"
         android:background="@drawable/login_panel_edit_bg"
         android:layout_marginLeft="10.0dip"
         android:layout_marginRight="10.0dip"
