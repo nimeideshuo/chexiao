@@ -111,5 +111,18 @@ public class TransferDocDAO {
         }
         return v0;
     }
+    public boolean deletetransferDoc(long arg8) {
+        boolean v0 = true;
+        this.db = this.helper.getWritableDatabase();
+        if(this.db.delete("kf_transferitem", "transferdocid=?", new String[]{String.valueOf(arg8)}) == -1 || this.db.delete("kf_transferdoc", "id=?", new String[]{String.valueOf(arg8)}) != 1) {
+            v0 = false;
+        }
+
+        if(this.db != null) {
+            this.db.close();
+        }
+
+        return v0;
+    }
 
 }

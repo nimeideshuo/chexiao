@@ -8,7 +8,10 @@ import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.model.PayType;
 import com.sunwuyou.swymcx.model.SettleUp;
 import com.sunwuyou.swymcx.model.SettleUpPayType;
+import com.sunwuyou.swymcx.model.SettleupThin;
+import com.sunwuyou.swymcx.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,13 +103,122 @@ public class SettleUpDAO {
         this.db = this.helper.getWritableDatabase();
         ContentValues v1 = new ContentValues();
         v1.put(arg11, arg12);
-        if(this.db.update("cw_settleup", v1, "id=?", new String[]{String.valueOf(arg9)}) != 1) {
+        if (this.db.update("cw_settleup", v1, "id=?", new String[]{String.valueOf(arg9)}) != 1) {
             v0 = false;
         }
-        if(this.db != null) {
+        if (this.db != null) {
             this.db.close();
         }
         return v0;
+    }
+
+    public List<SettleupThin> getSettleUps() {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select c.id,c.objectid,c.objectname,c.preference,c.issubmit,c.type from cw_settleup c order by c.id desc ", null);
+            ArrayList<SettleupThin> arrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                SettleupThin settleupThin = new SettleupThin();
+                settleupThin.setId(cursor.getLong(0));
+                settleupThin.setObjectid(cursor.getString(1));
+                settleupThin.setObjectname(cursor.getString(2));
+                settleupThin.setPreference(cursor.getDouble(3));
+                settleupThin.setIssubmit(cursor.getInt(4) == 1);
+                settleupThin.setType(cursor.getString(5));
+                double v3 = cursor.getString(5).equals("63") ? new SettleUpItemDAO().getSettleupAmount(cursor.getLong(0)) : new OtherSettleUpItemDAO().getOtherSettleupAmount(cursor.getLong(0));
+                settleupThin.setReceivableamount(v3 - settleupThin.getPreference());
+                settleupThin.setReceivedamount(new SettleUpPayTypeDAO().getSettleupPaysAmount(cursor.getLong(0)));
+                arrayList.add(settleupThin);
+            }
+            return arrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean deleteSettleUp(long arg10) {
+        boolean v0 = true;
+        SettleUp v1 = this.getSettleUp(arg10);
+        this.db = this.helper.getWritableDatabase();
+        this.db.delete("cw_settleuppaytype", "settleupid=?", new String[]{new StringBuilder(String.valueOf(arg10)).toString()});
+        if (v1.getType().equals("63")) {
+            this.db.delete("cw_settleupitem", "settleupid=?", new String[]{new StringBuilder(String.valueOf(arg10)).toString()});
+        } else {
+            this.db.delete("cw_othersettleupitem", "othersettleupid=?", new String[]{new StringBuilder(String.valueOf(arg10)).toString()});
+        }
+
+        if (this.db.delete("cw_settleup", "id=?", new String[]{String.valueOf(arg10)}) != 1) {
+            v0 = false;
+        }
+
+        if (this.db != null) {
+            this.db.close();
+        }
+        return v0;
+    }
+
+    public boolean isEmpty(long arg9, boolean arg11) {
+        this.db = this.helper.getWritableDatabase();
+        String v3 = arg11 ? "select 1 from cw_othersettleupitem where othersettleupid=?" : "select 1 from cw_settleupitem where settleupid=?";
+        try {
+            cursor = this.db.rawQuery(v3, new String[]{String.valueOf(arg9)});
+            if (cursor.moveToNext()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return false;
+    }
+
+    public boolean isSettleup(long arg9, boolean arg11) {
+        double v0;
+        double v2 = 0;
+        if (arg11) {
+            v0 = new OtherSettleUpItemDAO().getOtherSettleupAmount(arg9);
+        } else {
+            v0 = new SettleUpItemDAO().getSettleupAmount(arg9);
+            v2 = this.getPreference(arg9);
+        }
+        return Utils.equals(v0 - v2, new SettleUpPayTypeDAO().getSettleupPaysAmount(arg9));
+    }
+
+    public double getPreference(long arg10) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select preference from cw_settleup where id=?", new String[]{String.valueOf(arg10)});
+            if (cursor.moveToNext()) {
+                return cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return 0;
+    }
+    public boolean submit(long arg3) {
+        return this.update(arg3, "issubmit", String.valueOf(1));
     }
 
 

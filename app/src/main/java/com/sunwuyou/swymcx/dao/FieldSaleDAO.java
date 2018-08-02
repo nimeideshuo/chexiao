@@ -385,4 +385,8 @@ public class FieldSaleDAO {
         }
         return "";
     }
+
+    public boolean submit(long arg3) {
+        return this.updateDocValue(arg3, "status", String.valueOf(2));
+    }
 }

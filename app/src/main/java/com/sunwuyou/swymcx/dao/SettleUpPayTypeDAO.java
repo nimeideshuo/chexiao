@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sunwuyou.swymcx.model.SettleUpPayType;
+import com.sunwuyou.swymcx.request.ReqDocUpdatePayType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,31 @@ public class SettleUpPayTypeDAO {
             this.db.close();
         }
         return v0;
+    }
+
+    public List<ReqDocUpdatePayType> getPayTypeForUpload(long arg10) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select paytypeid, amount from cw_settleuppaytype where settleupid = ? ", new String[]{String.valueOf(arg10)});
+            ArrayList<ReqDocUpdatePayType> typeArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                ReqDocUpdatePayType payType = new ReqDocUpdatePayType();
+                payType.setPayTypeId(cursor.getString(0));
+                payType.setAmount(cursor.getDouble(1));
+                typeArrayList.add(payType);
+            }
+            return typeArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
     }
 
 }

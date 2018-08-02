@@ -170,8 +170,8 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
         SettleUp v0 = new SettleUp();
         v0.set0bjectId(this.customer.getId());
         v0.setObjectName(this.customer.getName());
-        v0.setBuilderId(((User) v1).getId());
-        v0.setBuilderName(((User) v1).getName());
+        v0.setBuilderId(v1.getId());
+        v0.setBuilderName(v1.getName());
         v0.setBuildTime(Utils.formatDate(Utils.getCurrentTime(true)));
         v0.setDepartmentId(this.department.getDid());
         v0.setDepartmentName(this.department.getDname());

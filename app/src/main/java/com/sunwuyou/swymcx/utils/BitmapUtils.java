@@ -2,9 +2,12 @@ package com.sunwuyou.swymcx.utils;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /**
  * Created by admin
@@ -44,5 +47,11 @@ public class BitmapUtils {
         } catch (Exception localException) {
         }
         return false;
+    }
+
+    public String bitmaptoString(Bitmap arg6) {
+        ByteArrayOutputStream v0 = new ByteArrayOutputStream();
+        arg6.compress(Bitmap.CompressFormat.PNG, 100, v0);
+        return Base64.encodeToString(v0.toByteArray(), 0);
     }
 }

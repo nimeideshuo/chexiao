@@ -23,7 +23,7 @@ public class SettleupThin {
         this.id = id;
     }
 
-    public boolean issubmit() {
+    public boolean isIssubmit() {
         return issubmit;
     }
 

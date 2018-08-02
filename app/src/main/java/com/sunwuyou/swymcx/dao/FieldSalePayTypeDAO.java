@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sunwuyou.swymcx.model.FieldSalePayType;
+import com.sunwuyou.swymcx.request.ReqDocUpdatePayType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,5 +124,29 @@ public class FieldSalePayTypeDAO {
         return this.db.update("kf_fieldsalepaytype", v1, "serialid=?", new String[]{String.valueOf(arg13.getSerialid())}) == 1;
     }
 
+    public List<ReqDocUpdatePayType> getPayTypeForUpload(long arg10) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select paytypeid, amount from kf_fieldsalepaytype where fieldsaleid = ? and amount != 0 order by paytypeid asc", new String[]{String.valueOf(arg10)});
+            ArrayList<ReqDocUpdatePayType> typeArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                ReqDocUpdatePayType v2 = new ReqDocUpdatePayType();
+                v2.setPayTypeId(cursor.getString(0));
+                v2.setAmount(cursor.getDouble(1));
+                typeArrayList.add(v2);
+            }
+            return typeArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList();
+    }
 
 }

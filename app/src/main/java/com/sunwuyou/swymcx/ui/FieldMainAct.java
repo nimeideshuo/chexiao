@@ -178,7 +178,8 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.field_settleup_record:
                 //我的结算
-                startActivity(new Intent(this, SettleupOpenAct.class));
+//                startActivity(new Intent(this, SettleupOpenAct.class));
+                startActivity(new Intent(this,  SettletupActivity.class));
                 break;
             case R.id.field_transfer_record:
                 //我的调拨

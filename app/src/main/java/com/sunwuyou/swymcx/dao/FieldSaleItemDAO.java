@@ -6,11 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.loc.d;
 import com.sunwuyou.swymcx.app.AccountPreference;
+import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.model.FieldSaleItem;
 import com.sunwuyou.swymcx.model.FieldSaleItemSource;
 import com.sunwuyou.swymcx.model.FieldSaleItemThin;
 import com.sunwuyou.swymcx.model.FieldSaleItemTotal;
 import com.sunwuyou.swymcx.model.FieldSaleSum;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoItem;
 import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 
@@ -380,24 +382,73 @@ public class FieldSaleItemDAO {
         return v0;
     }
 
-    public List queryFieldItemTotal(long arg19, boolean arg21) {
-//        boolean v13_1;
-//        FieldSaleItemTotal v8;
-//        FieldSaleItemBatchDAO v5;
-//        Cursor v2;
-//        ArrayList v10 = new ArrayList();
-//        this.db = this.helper.getReadableDatabase();
-//        Cursor v3 = null;
-//        String sql = "select item.goodsid,g.name as goodsname,g.barcode,g.isusebatch, (item.salenum * gs.ratio + item.givenum * gg.ratio) as outbasicnum, item.cancelbasenum as inbasicnum from kf_fieldsaleitem item left join sz_goods g on g.id = item.goodsid left join sz_goodsunit gs on gs.goodsid = item.goodsid and gs.unitid = item.saleunitid left join sz_goodsunit gg on gg.goodsid = item.goodsid and gg.unitid = item.giveunitid where item.fieldsaleid=? and (item.salenum > 0 or item.givenum > 0 or item.cancelbasenum > 0)";
-//        v2 = this.db.rawQuery(sql, new String[]{String.valueOf(arg19)});
-//        v5 = new FieldSaleItemBatchDAO();
-//        while (v2.moveToNext()){
-//
-//
-//
-//
-//
-        return null;
+    public List<ReqDocAddCheXiaoItem> getFieldSaleItemForUpload(long arg12, int arg14, int arg15) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select goodsid, salenum, saleprice, saleunitid, givenum, giveunitid, cancelbasenum, saleremark, giftremark, cancelremark, giveremark, ispromotion, promotiontype, giftgoodsid, giftunitid, giftnum, isexhibition from kf_fieldsaleitem where fieldsaleid = ? limit ? offset ?", new String[]{String.valueOf(arg12), String.valueOf(arg14), String.valueOf(arg15)});
+            ArrayList<ReqDocAddCheXiaoItem> xiaoItemArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                ReqDocAddCheXiaoItem xiaoItem = new ReqDocAddCheXiaoItem();
+                xiaoItem.setGoodsId(cursor.getString(0));
+                xiaoItem.setSaleNum(cursor.getDouble(1));
+                xiaoItem.setSalePrice(cursor.getDouble(2));
+                xiaoItem.setSaleUnitId(cursor.getString(3));
+                xiaoItem.setGiveNum(cursor.getDouble(4));
+                xiaoItem.setGiveUnitId(cursor.getString(5));
+                xiaoItem.setCancelNum(cursor.getDouble(6));
+                xiaoItem.setSaleremark(cursor.getString(7));
+                xiaoItem.setGiftremark(cursor.getString(8));
+                xiaoItem.setCancelremark(cursor.getString(9));
+                xiaoItem.setGiveremark(cursor.getString(10));
+                xiaoItem.setIsPromotion(cursor.getInt(11) == 1);
+                xiaoItem.setPromotionType(cursor.getInt(12));
+                xiaoItem.setGiftGoodsId(cursor.getString(13));
+                xiaoItem.setGiftUnitId(cursor.getString(14));
+                xiaoItem.setGiftNum(cursor.getDouble(15));
+                xiaoItem.setIsexhibition(cursor.getInt(16) == 1);
+                xiaoItem.setWarehouseId(SystemState.getWarehouse().getId());
+                xiaoItemArrayList.add(xiaoItem);
+            }
+            return xiaoItemArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public double getGoodsOutSumNum(long arg12, String arg14, int arg15) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            Cursor cursor = this.db.rawQuery("select item.goodsid, (item.salenum*gus.ratio + item.givenum*gug.ratio) as salebasicnum,  item.giftgoodsid, item.giftnum*gugift.ratio as giftbasicnum from kf_fieldsaleitem as item \t\tleft outer join sz_goodsunit as gus on item.goodsid = gus.goodsid and item.saleunitid = gus.unitid \t\tleft outer join sz_goodsunit as gug on item.goodsid = gug.goodsid and item.giveunitid = gug.unitid \t\tleft outer join sz_goodsunit as gugift on item.giftgoodsid = gugift.goodsid and item.giftunitid = gugift.unitid where fieldsaleid = ? limit ? offset ?", new String[]{String.valueOf(arg12), String.valueOf(arg15 - 1), String.valueOf(0)});
+            double v3 = 0;
+            while (cursor.moveToNext()) {
+                if (arg14.equals(cursor.getString(0))) {
+                    v3 += ((double) cursor.getInt(1));
+                }
+                if (arg14.equals(cursor.getString(2))) {
+                    v3 += ((double) cursor.getInt(3));
+                }
+
+            }
+            return v3;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return 0;
     }
 
 }

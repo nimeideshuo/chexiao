@@ -21,7 +21,6 @@ import com.sunwuyou.swymcx.model.SettleUpItem;
 import com.sunwuyou.swymcx.utils.ClickUtils;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.Utils;
-import com.sunwuyou.swymcx.view.SelectDialog;
 
 import java.util.List;
 
@@ -119,18 +118,29 @@ public class SettleupDocsActivity extends BaseHeadActivity {
         this.tv_settle_shidhou.setText("应收：" + Utils.getRecvableMoney(v0 - v2));
         this.tv_settle_jiesuan.setText("已收：" + Utils.getRecvableMoney(v4));
     }
-//    public void operationResult( boolean arg3) {
-//        this.mHandler.post(new Runnable(arg3) {
-//            public void run() {
-//                if (arg3) {
-//                    PDH.showSuccess("操作成功");
-//                    refreshUI();
-//                } else {
-//                    PDH.showFail("操作失败");
-//                }
-//            }
-//        });
-//    }
+
+    public void operationResult(final boolean b) {
+        this.mHandler.post(new Runnable() {
+            public void run() {
+                if (b) {
+                    PDH.showSuccess("操作成功");
+                    refreshUI();
+                    return;
+                }
+                PDH.showFail("操作失败");
+            }
+        });
+    }
+
+    public void settlepay(View view) {
+        if (!ClickUtils.isFastDoubleClick()) {
+            this.startActivity(new Intent().setClass(this, SettleupPayActivity.class).putExtra("settleupid", this.settleUp.getId()));
+        }
+    }
+
+    public void setActionBarText() {
+        setTitle("收款【" + this.settleUp.getObjectName() + "】");
+    }
 
     private class ItemAdapter extends BaseAdapter {
         private List<SettleUpItem> listItems;
@@ -230,15 +240,6 @@ public class SettleupDocsActivity extends BaseHeadActivity {
                 this.tvReceiveedLeftPrice.setText("待收：" + Utils.getRecvableMoney(arg5.getLeftamount()));
             }
         }
-    }
-
-    public void settlepay(View view) {
-        if(!ClickUtils.isFastDoubleClick()) {
-            this.startActivity(new Intent().setClass(this, SettleupPayActivity.class).putExtra("settleupid", this.settleUp.getId()));
-        }
-    }
-    public void setActionBarText() {
-       setTitle("收款【" + this.settleUp.getObjectName() + "】");
     }
 
 }

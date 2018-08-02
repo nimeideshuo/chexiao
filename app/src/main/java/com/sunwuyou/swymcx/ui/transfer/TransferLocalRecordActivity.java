@@ -139,7 +139,7 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
                     });
                     break;
                 }
-//                case R.id.btnSelectAll:
+                //                case R.id.btnSelectAll:
                 //                    break;
             }
 
@@ -158,11 +158,36 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
         }
     };
 
-    private void deleteSelected(List arg3) {
-        if (arg3.size() == 0) {
+    private void deleteSelected(final List<TransferDoc> docList) {
+        if (docList.size() == 0) {
             PDH.showMessage("请选择要删除的项");
         } else {
-            //            DialogUIUtils.showMdMultiChoose(this,"提示",arg3,)
+            new MessageDialog(this).showDialog("提示", "确定删除选中单据？", null, null, new MessageDialog.CallBack() {
+                @Override
+                public void btnOk(View view) {
+                    PDH.show(TransferLocalRecordActivity.this, "正在删除...", new PDH.ProgressCallBack() {
+                        @Override
+                        public void action() {
+                            TransferDocDAO docDAO = new TransferDocDAO();
+                            for (int i = 0; i < docList.size(); i++) {
+                                docDAO.deletetransferDoc(docList.get(i).getId());
+                            }
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    refresh();
+                                }
+                            });
+
+                        }
+                    });
+                }
+
+                @Override
+                public void btnCancel(View view) {
+
+                }
+            }).showDialog();
         }
     }
 
@@ -216,9 +241,7 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
             }
             this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, v4));
         } else {
-
-
-
+            //TODO 等待测试
             int v0 = 0;
             for (int v2 = arg14.size() - 1; v2 >= 0; --v2) {
                 v1 = arg14.get(v2);

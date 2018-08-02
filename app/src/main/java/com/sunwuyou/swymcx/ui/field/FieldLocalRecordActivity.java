@@ -47,19 +47,6 @@ import java.util.List;
  * content
  */
 public class FieldLocalRecordActivity extends BaseHeadActivity implements View.OnTouchListener {
-    AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //            if (menuPopup == null || !menuPopup.isShowing()) {
-            //                startActivity(new Intent(FieldLocalRecordActivity.this, FieldEditActivity.class).putExtra("fieldsaleid", tasks.get(position).getId()));
-            //            } else {
-            //                menuPopup.dismiss();
-            //                WindowManager.LayoutParams v1 = getWindow().getAttributes();
-            //                v1.alpha = 1f;
-            //                getWindow().setAttributes(v1);
-            //            }
-        }
-    };
     private View root;
     private ListView listView;
     private FieldLocalRecordAdapter adapter;
@@ -78,6 +65,19 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
         }
     };
     private FieldLocalRecordMenuPopup menuPopup;
+    AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (menuPopup == null || !menuPopup.isShowing()) {
+                startActivity(new Intent(FieldLocalRecordActivity.this, FieldEditActivity.class).putExtra("fieldsaleid", tasks.get(position).getId()));
+            } else {
+                menuPopup.dismiss();
+                WindowManager.LayoutParams v1 = getWindow().getAttributes();
+                v1.alpha = 1f;
+                getWindow().setAttributes(v1);
+            }
+        }
+    };
     private List<FieldSaleThin> selectItmes;
     @SuppressLint("HandlerLeak")
     private Handler handlerProgress = new Handler() {
@@ -216,12 +216,11 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
             }
             handlerUpdate.sendMessage(handlerUpdate.obtainMessage(0, v16));
         } else {
-
-            //TODO 循环递减 此处必须修改
-
+            int v8 = 0;
             for (int i = 0; i < arg19.size(); i++) {
                 FieldSaleThin saleThin = arg19.get(i);
                 if ((new FieldSaleItemDAO().getFieldSaleItems(saleThin.getId()).size() != 0 || new FieldSalePayTypeDAO().getPayTypeAmount(saleThin.getId()) == 0) && 1 == saleThin.getStatus()) {
+                    v8 = i;
                     String v13 = v12.getZeroSalePriceGoods(saleThin.getId());
                     if (v13 != null) {
                         this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(0, "上传失败，客户【" + saleThin.getCustomername() + " 】存在【" + v13 + "】等商品销售价格为零"));
@@ -229,44 +228,37 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
                     }
                 }
             }
-            //TODO 循环递减 此处必须修改
-            this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, 0));
+            this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, v8));
             for (int i = 0; i < arg19.size(); i++) {
                 FieldSaleThin saleThin = arg19.get(i);
                 if (1 == saleThin.getStatus()) {
+                    Customer v9 = null;
                     if (!TextUtils.isEmptyS(saleThin.getCustomerid())) {
-                        Customer v9 = v10.getCustomer(saleThin.getCustomerid(), saleThin.isIsnewcustomer());
-                        if (v9 != null && (v9.getIsNew())) {
-                            v16 = new ServiceCustomer().cu_AddCustomer(v10.getCustomer(v9.getId(), v9.getIsNew()), SystemState.getObject("cu_user", User.class).getId(), true, false, false, false);
-                            if (RequestHelper.isSuccess(v16)) {
-                                v10.updateCustomerValue(saleThin.getCustomerid(), "isnew", "0");
-                            } else {
-                                MLog.d("新增客户失败");
-                                this.customerindex = i;
-                                this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(10, v16));
-                                return;
-                            }
-                        }
-                        v16 = v17.uploadCheXiao(saleThin);
-                        //TODO 循环递减 此处必须修改
-                        if(v8 == 1) {
-                            if(v16 != null) {
-                                this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(0, v16));
-                            }
-                            else {
-                                this.handlerUpdate.sendEmptyMessage(1);
-                            }
-                        }
-
+                        v9 = v10.getCustomer(saleThin.getCustomerid(), saleThin.isIsnewcustomer());
                     }
+                    if (v9 != null && (v9.getIsNew())) {
+                        v16 = new ServiceCustomer().cu_AddCustomer(v10.getCustomer(v9.getId(), v9.getIsNew()), SystemState.getObject("cu_user", User.class).getId(), true, false, false, false);
+                        if (RequestHelper.isSuccess(v16)) {
+                            v10.updateCustomerValue(saleThin.getCustomerid(), "isnew", "0");
+                        } else {
+                            MLog.d("新增客户失败");
+                            this.customerindex = i;
+                            this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(10, v16));
+                            return;
+                        }
+                    }
+                    v16 = v17.uploadCheXiao(saleThin);
+                    if (v8 == 1) {
+                        if (v16 != null) {
+                            this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(0, v16));
+                        } else {
+                            this.handlerUpdate.sendEmptyMessage(1);
+                        }
+                    }
+                    this.handlerProgress.sendEmptyMessage(i);
                 }
-
-
             }
-
-
-
-
+            this.handlerUpdate.sendEmptyMessage(2);
         }
     }
 
@@ -337,7 +329,9 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
         if (this.menuPopup != null && (this.menuPopup.isShowing())) {
             return;
         }
-        menuPopup = new FieldLocalRecordMenuPopup(this);
+        if (menuPopup == null) {
+            menuPopup = new FieldLocalRecordMenuPopup(this);
+        }
         this.menuPopup.showAtLocation(this.root, 80, 0, 0);
         WindowManager.LayoutParams v0 = this.getWindow().getAttributes();
         v0.alpha = 0.8f;

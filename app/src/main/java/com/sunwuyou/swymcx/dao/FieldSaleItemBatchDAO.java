@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.model.FieldSaleItemBatchEx;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoBatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +174,39 @@ public class FieldSaleItemBatchDAO {
             }
         }
         return 0;
+    }
+
+    public List<ReqDocAddCheXiaoBatch> getFieldSaleItemBatchForUpload(long arg12, String arg14) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select ib.goodsid, ib.batch, case when ib.isout=\'1\' then gu.unitid else ib.unitid end as unitid,  \tib.price, ib.productiondate, case when ib.isout=\'1\' then ib.num*gu.ratio else ib.num end as num,  \tib.isout from kf_fieldsaleitembatch as ib left outer join sz_goodsunit as gu on ib.goodsid = gu.goodsid and ib.unitid = gu.unitid  where ib.fieldsaleid=? and ib.goodsid=? order by ib.batch asc", new String[]{new StringBuilder(String.valueOf(arg12)).toString(), arg14});
+            ArrayList<ReqDocAddCheXiaoBatch> batchArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                ReqDocAddCheXiaoBatch xiaoBatch = new ReqDocAddCheXiaoBatch();
+                xiaoBatch.setGoodsid(cursor.getString(0));
+                xiaoBatch.setBatch(cursor.getString(1));
+                xiaoBatch.setUnitid(cursor.getString(2));
+                xiaoBatch.setPrice(cursor.getDouble(3));
+                xiaoBatch.setProductiondate(cursor.getString(4));
+                xiaoBatch.setNum(cursor.getDouble(5));
+                xiaoBatch.setIsout(cursor.getInt(6) == 1);
+                if (TextUtils.isEmptyS(xiaoBatch.getProductiondate())) {
+                    xiaoBatch.setProductiondate(null);
+                }
+                batchArrayList.add(xiaoBatch);
+            }
+            return batchArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
     }
 
 }

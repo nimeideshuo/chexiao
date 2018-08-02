@@ -127,7 +127,7 @@ public class SearchGoodsAdpater extends BaseAdapter implements Filterable {
             v0.tvStock.setVisibility(View.GONE);
         }
         v0.checkBox.setOnCheckedChangeListener(this.changeListener);
-        v0.checkBox.setTag(Integer.valueOf(position));
+        v0.checkBox.setTag(position);
         v0.checkBox.setChecked(this.selected.get(position));
         return convertView;
     }

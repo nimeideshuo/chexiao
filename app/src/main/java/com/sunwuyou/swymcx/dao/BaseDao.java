@@ -53,4 +53,16 @@ public class BaseDao {
         this.db.execSQL("delete from kf_transferitem");
         this.db.execSQL("delete from kf_transferdoc");
     }
+    //    try {
+    //
+    //    }catch (Exception e){
+    //        e.printStackTrace();
+    //    } finally {
+    //        if (cursor != null) {
+    //            cursor.close();
+    //        }
+    //        if (this.db != null) {
+    //            this.db.close();
+    //        }
+    //    }
 }

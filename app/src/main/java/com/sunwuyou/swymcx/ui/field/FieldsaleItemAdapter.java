@@ -52,7 +52,6 @@ public class FieldsaleItemAdapter extends BaseAdapter {
         return this.items.get(arg3).getSerialid();
     }
 
-    //    public View getView(int position, View convertView, ViewGroup parent) {
     @Override
     public View getView(int arg5, View arg6, ViewGroup arg7) {
         FieldGoodsItem v0;
@@ -64,7 +63,7 @@ public class FieldsaleItemAdapter extends BaseAdapter {
             v0 = (FieldGoodsItem) arg6.getTag();
         }
         v0.setValue(this.items.get(arg5));
-        v0.tvSerialid.setText(new StringBuilder(String.valueOf(arg5 + 1)).toString());
+        v0.tvSerialid.setText(String.valueOf(arg5 + 1));
         return arg6;
     }
 

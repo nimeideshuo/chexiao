@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sunwuyou.swymcx.model.SettleUpItem;
+import com.sunwuyou.swymcx.request.ReqDocAddSettleUpItem;
 import com.sunwuyou.swymcx.utils.Utils;
 
 import java.util.ArrayList;
@@ -98,6 +99,37 @@ public class SettleUpItemDAO {
             }
         }
         return new ArrayList<>();
+    }
+
+    public List<ReqDocAddSettleUpItem> getSettleUpForUpload(long arg10) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select doctime, docid, docshowid, doctype, doctypename, receivableamount, leftamount, thisamount from cw_settleupitem where settleupid = ? ", new String[]{String.valueOf(arg10)});
+            ArrayList<ReqDocAddSettleUpItem> itemArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                ReqDocAddSettleUpItem upItem = new ReqDocAddSettleUpItem();
+                upItem.setDocTime(cursor.getString(0));
+                upItem.setDocId(cursor.getLong(1));
+                upItem.setDocShowId(cursor.getString(2));
+                upItem.setDocType(cursor.getString(3));
+                upItem.setDocTypeName(cursor.getString(4));
+                upItem.setReceivableAmount(cursor.getDouble(5));
+                upItem.setLeftAmount(cursor.getDouble(6));
+                upItem.setThisAmount(cursor.getDouble(7));
+                itemArrayList.add(upItem);
+            }
+            return itemArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList();
     }
 
 }

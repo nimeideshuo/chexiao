@@ -1,16 +1,41 @@
 package com.sunwuyou.swymcx.utils;
 
-import com.alibaba.fastjson.JSON;
+import android.util.Base64;
+
 import com.sunwuyou.swymcx.app.RequestHelper;
+import com.sunwuyou.swymcx.dao.FieldSaleDAO;
+import com.sunwuyou.swymcx.dao.FieldSaleImageDAO;
+import com.sunwuyou.swymcx.dao.FieldSaleItemBatchDAO;
+import com.sunwuyou.swymcx.dao.FieldSaleItemDAO;
+import com.sunwuyou.swymcx.dao.FieldSalePayTypeDAO;
+import com.sunwuyou.swymcx.dao.OtherSettleUpItemDAO;
+import com.sunwuyou.swymcx.dao.SettleUpDAO;
+import com.sunwuyou.swymcx.dao.SettleUpItemDAO;
+import com.sunwuyou.swymcx.dao.SettleUpPayTypeDAO;
 import com.sunwuyou.swymcx.dao.TransferDocDAO;
 import com.sunwuyou.swymcx.dao.TransferItemDAO;
 import com.sunwuyou.swymcx.model.FieldSaleThin;
+import com.sunwuyou.swymcx.model.SettleUp;
 import com.sunwuyou.swymcx.model.TransferDoc;
+import com.sunwuyou.swymcx.request.CheXiaoDocID;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiao;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoBatch;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoItem;
+import com.sunwuyou.swymcx.request.ReqDocAddOtherSettleUp;
+import com.sunwuyou.swymcx.request.ReqDocAddSettleUp;
 import com.sunwuyou.swymcx.request.ReqDocAddTransferDoc;
 import com.sunwuyou.swymcx.request.ReqDocAddTransferItem;
+import com.sunwuyou.swymcx.request.ReqDocUpdatePayType;
+import com.sunwuyou.swymcx.request.ReqVstAddVisitCustomerJobImage;
+import com.sunwuyou.swymcx.request.RespStockProcessReParaEntity;
 import com.sunwuyou.swymcx.response.RespDocAddEntity;
 import com.sunwuyou.swymcx.service.ServiceDocUpload;
+import com.sunwuyou.swymcx.service.ServiceVisit;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,12 +78,173 @@ public class UpLoadUtils {
             } else {
                 MLog.d("上传成功，但过账失败");
             }
+
         }
         return v12;
     }
-
+    //TODO 未完成
     public String uploadCheXiao(FieldSaleThin arg46) {
+        String v9_1 = null;
+        ServiceDocUpload v3 = new ServiceDocUpload();
+        ServiceVisit v43 = new ServiceVisit();
+        FieldSaleDAO v25 = new FieldSaleDAO();
+        FieldSaleItemDAO v26 = new FieldSaleItemDAO();
+        FieldSaleItemBatchDAO v24 = new FieldSaleItemBatchDAO();
+        FieldSaleImageDAO v23 = new FieldSaleImageDAO();
+        CheXiaoDocID v4 = new CheXiaoDocID();
+        ReqDocAddCheXiao v5 = v25.getFieldSaleForUpload(arg46.getId());
+        int v21 = v26.getCount(arg46.getId());
+        if (v21 > 0) {
+            int v39 = 20;
+            int v10 = v21 / v39;
+            int v9 = v21 % v39 > 0 ? 1 : 0;
+            int v38 = v10 + v9;
+            for (int i = 0; i < v38; i++) {
+                if (i >= v38) {
+                    break;
+                }
+                List<ReqDocAddCheXiaoItem> v6 = v26.getFieldSaleItemForUpload(arg46.getId(), v39, i * v39);
+                ArrayList<String> v34 = new ArrayList<>();
+                for (int j = 0; j < v6.size(); j++) {
+                    ReqDocAddCheXiaoItem v31 = v6.get(j);
+                    if (!v34.contains(v31.getGoodsId())) {
+                        v34.add(v31.getGoodsId());
+                    }
+                    if ((v31.getIsPromotion()) && v31.getPromotionType() == 1 && !v34.contains(v31.getGiftGoodsId())) {
+                        v34.add(v31.getGiftGoodsId());
+                    }
+                }
+                ArrayList<ReqDocAddCheXiaoBatch> v7 = new ArrayList<>();
+                for (int e = 0; e < v34.size(); e++) {
+                    double v18 = 0;
+                    if (i > 0) {
+                        v18 = v26.getGoodsOutSumNum(arg46.getId(), v34.get(e), i * v39);
+                    }
+                    List<ReqDocAddCheXiaoBatch> v36 = v24.getFieldSaleItemBatchForUpload(arg46.getId(), v34.get(e));
+                    for (int j = 0; j < v36.size(); j++) {
+                        ReqDocAddCheXiaoBatch xiaoBatch = v36.get(j);
+                        if (!xiaoBatch.isIsout() || v18 == 0) {
+                            v7.add(xiaoBatch);
+                        } else if (v18 >= xiaoBatch.getNum()) {
+                            v18 -= xiaoBatch.getNum();
+                        } else {
+                            xiaoBatch.setNum(xiaoBatch.getNum() - v18);
+                            v18 = 0;
+                            v7.add(xiaoBatch);
+                        }
+                    }
 
-        return "";
+                }
+                List<ReqDocUpdatePayType> v8 = null;
+                if (i == 0) {
+                    v8 = new FieldSalePayTypeDAO().getPayTypeForUpload(arg46.getId());
+                }
+                String v42 = v3.doc_UploadCheXiao(v4, v5, v6, v7, v8);
+                if (RequestHelper.isSuccess(v42)) {
+                    CheXiaoDocID v4_1 = JSONUtil.readValue(v42, CheXiaoDocID.class);
+                    return v42;
+                }
+            }
+        } else {
+            String v42 = v3.doc_UploadCheXiao(v4, v5, null, null, null);
+            if (RequestHelper.isSuccess(v42)) {
+                CheXiaoDocID v4_1 = JSONUtil.readValue(v42, CheXiaoDocID.class);
+                return v42;
+            }
+        }
+        List<ReqVstAddVisitCustomerJobImage> v35 = v23.getFieldSaleImageForUpload(arg46.getId());
+        if (v35 != null && v35.size() > 0) {
+            FileUtils v27 = new FileUtils();
+            for (int v33 = 0; v33 < v35.size(); ++v33) {
+                ReqVstAddVisitCustomerJobImage v32 = v35.get(v33);
+                v32.setVisitJobId(v4.getVisitItemId());
+                File v40 = v27.findPicture(v32.getImagePath());
+                if (v40 != null) {
+                    try {
+                        int v44 = ((int) v40.length());
+                        byte[] v20 = new byte[v44];
+                        new FileInputStream(v40).read(v20, 0, v44);
+                        v32.setImageFile(Base64.encodeToString(v20, 0));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    String v42 = v43.vst_UploadVisitImage(v32);
+                    if (!RequestHelper.isSuccess(v42)) {
+                        MLog.d(v42);
+                        return v42;
+                    }
+                    arg46.setStatus(2);
+                    v25.submit(arg46.getId());
+                    if ("success".equals(v42)) {
+                        MLog.d("上传成功");
+                        return null;
+                    }
+                    RespStockProcessReParaEntity v41 = JSONUtil.readValue(v42, RespStockProcessReParaEntity.class);
+                    if (!v41.getIsSubmitSuccess()) {
+                        MLog.d("上传成功，但过账失败");
+                        v9_1 = "上传成功，但" + v41.getInfo();
+                    } else {
+                        MLog.d("上传成功，且过账成功");
+                        return null;
+                    }
+                    v42 = v3.doc_SubmitCheXiao(v4.getVisitId(), v4.getOutDocId(), v4.getInDocId(), v5.getSaleAmount());
+                    return v42;
+                }
+
+            }
+        }
+        return null;
     }
+
+    public String uploadSettleUp(SettleUp arg13) {
+        ServiceDocUpload v5 = new ServiceDocUpload();
+        SettleUpDAO v6 = new SettleUpDAO();
+        String v4 = v5.doc_UploadSettleUp(new ReqDocAddSettleUp(arg13), new SettleUpItemDAO().getSettleUpForUpload(arg13.getId()), new SettleUpPayTypeDAO().getPayTypeForUpload(arg13.getId()));
+        if (RequestHelper.isSuccess(v4)) {
+            v6.submit(arg13.getId());
+            if ("success".equals(v4)) {
+                MLog.d("上传成功");
+                v4 = null;
+            } else {
+                Object v3 = JSONUtil.readValue(v4, RespStockProcessReParaEntity.class);
+                if (!((RespStockProcessReParaEntity) v3).getIsSubmitSuccess()) {
+                    MLog.d("上传成功，但过账失败");
+                    v4 = "上传成功，但" + ((RespStockProcessReParaEntity) v3).getInfo();
+                } else {
+                    MLog.d("上传成功，过账成功");
+                    v4 = null;
+                }
+            }
+        } else {
+            MLog.d(v4);
+        }
+
+        return v4;
+    }
+
+    public String uploadOtherSettleUp(SettleUp arg13) {
+        ServiceDocUpload v6 = new ServiceDocUpload();
+        SettleUpDAO v7 = new SettleUpDAO();
+        String v5 = v6.doc_UploadOtherSettleUp(new ReqDocAddOtherSettleUp(arg13), new OtherSettleUpItemDAO().getOtherSettleUpForUpload(arg13.getId()), new SettleUpPayTypeDAO().getPayTypeForUpload(arg13.getId()));
+        if (RequestHelper.isSuccess(v5)) {
+            v7.submit(arg13.getId());
+            if ("success".equals(v5)) {
+                MLog.d("上传成功");
+                v5 = null;
+            } else {
+                RespStockProcessReParaEntity v4 = JSONUtil.readValue(v5, RespStockProcessReParaEntity.class);
+                if (!v4.getIsSubmitSuccess()) {
+                    MLog.d("上传成功，但过账失败");
+                    v5 = "上传成功，但" + v4.getInfo();
+                } else {
+                    MLog.d("上传成功，过账成功");
+                    v5 = null;
+                }
+            }
+        } else {
+            MLog.d(v5);
+        }
+        return v5;
+    }
+
 }

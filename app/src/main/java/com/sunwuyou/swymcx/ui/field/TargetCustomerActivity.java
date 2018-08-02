@@ -26,6 +26,7 @@ import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.TargetCustomerMenuPopup;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -123,9 +124,11 @@ public class TargetCustomerActivity extends BaseHeadActivity {
     private class Madapter extends BaseQuickAdapter<CustomerThin, BaseViewHolder> {
 
         public boolean issort=true;
+        private  HashMap<Integer,Boolean> status;
 
         Madapter() {
             super(R.layout.item_field_customer, customers);
+            status = new HashMap<Integer, Boolean>();
         }
 
         @Override
@@ -169,7 +172,7 @@ public class TargetCustomerActivity extends BaseHeadActivity {
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                 status.put(Integer.valueOf(buttonView.getTag(2131296314).toString()),isChecked);
                 }
             });
         }

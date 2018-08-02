@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.sunwuyou.swymcx.model.OtherSettleUpItem;
+import com.sunwuyou.swymcx.request.ReqDocAddOtherSettleUpItem;
 import com.sunwuyou.swymcx.utils.Utils;
 
 import java.util.ArrayList;
@@ -103,6 +104,7 @@ public class OtherSettleUpItemDAO {
         }
         return v0;
     }
+
     public long save(OtherSettleUpItem arg7) {
         this.db = this.helper.getWritableDatabase();
         ContentValues v2 = new ContentValues();
@@ -111,9 +113,35 @@ public class OtherSettleUpItemDAO {
         v2.put("accountname", arg7.getAccountname());
         v2.put("amount", arg7.getAmount());
         long v0 = this.db.insert("cw_othersettleupitem", null, v2);
-        if(this.db != null) {
+        if (this.db != null) {
             this.db.close();
         }
         return v0;
     }
+
+    public List<ReqDocAddOtherSettleUpItem> getOtherSettleUpForUpload(long arg10) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select accountid, amount from cw_othersettleupitem where othersettleupid = ? ", new String[]{String.valueOf(arg10)});
+            ArrayList<ReqDocAddOtherSettleUpItem> vsettles = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                ReqDocAddOtherSettleUpItem upItem = new ReqDocAddOtherSettleUpItem();
+                upItem.setAccountId(cursor.getString(0));
+                upItem.setAmount(cursor.getDouble(1));
+                vsettles.add(upItem);
+            }
+            return vsettles;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
 }
