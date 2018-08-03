@@ -12,6 +12,7 @@ import com.blankj.utilcode.util.Utils;
 import com.dou361.dialogui.DialogUIUtils;
 import com.immo.libcomm.utils.TextUtils;
 import com.lzy.okgo.OkGo;
+import com.squareup.leakcanary.LeakCanary;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.ui.SplashAct;
 import com.sunwuyou.swymcx.utils.MLog;
@@ -40,6 +41,7 @@ public class MyApplication extends MultiDexApplication {
         OkGo.getInstance().init(this);
         Utils.init(this);
         DialogUIUtils.init(this);
+        LeakCanary.install(this);
         //设置服务器IP地址
         String serverIp = new AccountPreference().getServerIp();
         MLog.d("本地服务器地址>>" + serverIp);

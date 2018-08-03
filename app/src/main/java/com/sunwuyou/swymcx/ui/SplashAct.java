@@ -119,11 +119,6 @@ public class SplashAct extends Activity {
                     }
                 }
             }
-        }, new HttpErrorConnnet() {
-            @Override
-            public void loadHttpError(int i) {
-                loading.setText("无网络连接");
-            }
         }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, map, null, null, true, 0);
 
 

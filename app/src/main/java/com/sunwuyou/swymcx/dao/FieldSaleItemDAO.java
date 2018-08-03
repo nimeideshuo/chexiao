@@ -451,4 +451,15 @@ public class FieldSaleItemDAO {
         return 0;
     }
 
+    public boolean goodsIsAdded(long arg6, String arg8) {
+        this.db = this.helper.getReadableDatabase();
+        Cursor v0 = this.db.rawQuery("select 1 from kf_fieldsaleitem where fieldsaleid=? and goodsid=?", null);
+        if (!v0.moveToNext()) {
+            return true;
+        }
+        v0.close();
+        db.close();
+        return false;
+    }
+
 }

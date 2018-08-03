@@ -26,7 +26,8 @@ import butterknife.BindView;
  */
 
 public class RegionListAct extends BaseHeadActivity {
-    @BindView(R.id.base_list) RecyclerView baseList;
+    @BindView(R.id.base_list)
+    RecyclerView baseList;
     private Madapter madapter;
     private List<IDNameEntity> entityList;
 
@@ -37,7 +38,6 @@ public class RegionListAct extends BaseHeadActivity {
 
     @Override
     public void initView() {
-        setTitle("地区");
         baseList.setLayoutManager(new LinearLayoutManager(this));
         madapter = new Madapter();
         madapter.bindToRecyclerView(baseList);
@@ -58,6 +58,10 @@ public class RegionListAct extends BaseHeadActivity {
                 madapter.setNewData(entityList);
             }
         }).jsonPost(BaseUrl.getUrl(BaseUrl.SUPPORT_QUERYREGION), this, null, null, null, true, 0);
+    }
+
+    public void setActionBarText() {
+        setTitle("地区");
     }
 
     private class Madapter extends BaseQuickAdapter<IDNameEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener {
@@ -81,5 +85,4 @@ public class RegionListAct extends BaseHeadActivity {
             finish();
         }
     }
-
 }

@@ -86,20 +86,6 @@ public class FieldPayTypeAct extends BaseHeadActivity implements View.OnClickLis
         }
 
     }
-    //    // 重新绘制 item高度
-//    public void setHeight(ListView listView, Adapter adapter) {
-//        int height = 0;
-//        int count = adapter.getCount();
-//        for (int i = 0; i < count; i++) {
-//            View temp = adapter.getView(i, null, listView);
-//            temp.measure(0, 0);
-//            height += temp.getMeasuredHeight();
-//        }
-//        ViewGroup.LayoutParams params = listView.getLayoutParams();
-//        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//        params.height = height;
-//        listView.setLayoutParams(params);
-//    }
 
 
     @Override
@@ -108,20 +94,19 @@ public class FieldPayTypeAct extends BaseHeadActivity implements View.OnClickLis
         adapter = new ItemAdapter(this);
         this.adapter.setData(this.fieldSalePayTypes);
         this.listview.setAdapter(this.adapter);
-//        setHeight(listview, adapter);
     }
 
     @Override
     public void onClick(View v) {
-//        if (!ClickUtils.isFastDoubleClick()) {
-//            for (int i = 0; i < listview.getCount(); i++) {
-//                EditText etPayAmount = listview.getChildAt(i).findViewById(R.id.etPayAmount);
-//                this.fieldSalePayTypes.get(i).setAmount(Utils.getDouble(etPayAmount.getText().toString()));
-//                new FieldSalePayTypeDAO().update(this.fieldSalePayTypes.get(i));
-//            }
-//            new FieldSaleDAO().updateDocValue(this.fieldSale.getId(), "preference", this.etPreference.getText().toString());
-//            this.finish();
-//        }
+        if (!ClickUtils.isFastDoubleClick()) {
+            for (int i = 0; i < listview.getCount(); i++) {
+                EditButtonView etPayAmount = listview.getChildAt(i).findViewById(R.id.etPayAmount);
+                this.fieldSalePayTypes.get(i).setAmount(Utils.getDouble(etPayAmount.getText().toString()));
+                new FieldSalePayTypeDAO().update(this.fieldSalePayTypes.get(i));
+            }
+            new FieldSaleDAO().updateDocValue(this.fieldSale.getId(), "preference", this.etPreference.getText().toString());
+            this.finish();
+        }
     }
 
     @Override

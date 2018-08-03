@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/8/2.
  * content
  */
@@ -136,7 +136,7 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
                 //                            listView.setItemChecked(i, true);
                 //                        }
                 //                    }
-//                return true;
+                //                return true;
             }
 
 
@@ -307,6 +307,10 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
             intent.setClass(SettletupActivity.this, OtherSettleupDocActivity.class);
         }
         startActivity(intent);
+    }
+
+    public void setActionBarText() {
+        setTitle("我的结算");
     }
 
     public class SettleupAdapter extends BaseAdapter {

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/8/2.
  * content
  */
@@ -95,4 +95,45 @@ public class FieldSaleImageDAO {
         }
     }
 
+    public boolean delete(long arg8) {
+        boolean v0 = true;
+        this.db = this.helper.getWritableDatabase();
+        if (this.db.delete("kf_fieldsaleimage", "serialid=?", new String[]{String.valueOf(arg8)}) != 1) {
+            v0 = false;
+        }
+
+        if (this.db != null) {
+            this.db.close();
+        }
+
+        return v0;
+    }
+
+    public List<FieldSaleImage> queryJobImage(long arg11) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select serialid, fieldsaleid, issignature, imagepath, remark from kf_fieldsaleimage where fieldsaleid=? and issignature=\'0\'", new String[]{String.valueOf(arg11)});
+            ArrayList<FieldSaleImage> arrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                FieldSaleImage saleImage = new FieldSaleImage();
+                saleImage.setSerialid(cursor.getLong(0));
+                saleImage.setFieldsaleid(cursor.getLong(1));
+                saleImage.setIssignature(cursor.getInt(2) == 1);
+                saleImage.setImagepath(cursor.getString(3));
+                saleImage.setRemark(cursor.getString(4));
+                arrayList.add(saleImage);
+            }
+            return arrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
 }

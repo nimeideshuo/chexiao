@@ -1,7 +1,7 @@
 package com.sunwuyou.swymcx.model;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/7/11.
  * content
  */

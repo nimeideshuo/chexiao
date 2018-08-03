@@ -3,6 +3,8 @@ package com.sunwuyou.swymcx.dao;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.sunwuyou.swymcx.model.Promotion;
+
 /**
  * Created by admin
  * 2018/7/22.
@@ -12,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class PromotionDAO {
     private SQLiteDatabase db;
     private DBOpenHelper helper;
+    private Cursor cursor;
 
     public PromotionDAO() {
         super();
@@ -28,4 +31,28 @@ public class PromotionDAO {
         return false;
     }
 
+    public Promotion getPromotion(String arg9) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select id, name, begintime, endtime from sz_promotion where id=?", new String[]{arg9});
+            if (cursor.moveToNext()) {
+                Promotion v3 = new Promotion();
+                v3.setId(cursor.getString(0));
+                v3.setName(cursor.getString(1));
+                v3.setBeginTime(cursor.getString(2));
+                v3.setEndtime(cursor.getString(3));
+                return v3;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return null;
+    }
 }

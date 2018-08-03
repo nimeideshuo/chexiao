@@ -71,7 +71,7 @@ public class CustomerSearchAct extends BaseHeadActivity implements AutoTextView.
         }
         String[] arrayOfString = new String[customers.size()];
         for (int i = 0; i < customers.size(); i++) {
-            arrayOfString[i] = ((Customer) this.customers.get(i)).getName();
+            arrayOfString[i] = this.customers.get(i).getName();
         }
         ArrayAdapter<String> localArrayAdapter = new ArrayAdapter<String>(CustomerSearchAct.this,
                 android.R.layout.simple_list_item_1, arrayOfString);
@@ -88,14 +88,11 @@ public class CustomerSearchAct extends BaseHeadActivity implements AutoTextView.
         if (!TextUtils.isEmptyS(str)) {
             this.temp.addAll(customers);
             for (int k = 0; k < temp.size(); k++) {
-
                 String localString = "";
-                int i = 0;
                 String[] arrayOfString1 = null;
-                if (i < this.customers.size()) {
+                if (0 < this.customers.size()) {
                     arrayOfString1 = Utils.CUSTOMER_CHECK_SELECT.split(",");
                 }
-                assert arrayOfString1 != null;
                 for (int j = 0; j < arrayOfString1.length; j++) {
                     if (arrayOfString1[j].equals("id")) {
                         localString = (customers.get(k)).getId();

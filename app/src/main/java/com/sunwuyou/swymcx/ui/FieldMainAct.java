@@ -3,7 +3,6 @@ package com.sunwuyou.swymcx.ui;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
@@ -46,7 +45,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -74,8 +72,6 @@ public class FieldMainAct extends BaseHeadActivity {
                     break;
             }
         }
-
-        ;
     };
     // 数据更新
     @SuppressLint("HandlerLeak")
@@ -168,6 +164,7 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.field_settleup_open:
                 //结算
+                startActivity(new Intent(this, SettleupOpenAct.class));
                 break;
             case R.id.field_transfer_open:
                 //调拨 TODO 未写完
@@ -179,8 +176,7 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.field_settleup_record:
                 //我的结算
-//                startActivity(new Intent(this, SettleupOpenAct.class));
-                startActivity(new Intent(this,  SettletupActivity.class));
+                startActivity(new Intent(this, SettletupActivity.class));
                 break;
             case R.id.field_transfer_record:
                 //我的调拨

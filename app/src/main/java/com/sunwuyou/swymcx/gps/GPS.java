@@ -95,6 +95,7 @@ public class GPS implements AMapLocationListener {
     public void stop() {
         if (mLocationClient != null) {
             mLocationClient.stopLocation();
+            mLocationClient = null;
         }
     }
 

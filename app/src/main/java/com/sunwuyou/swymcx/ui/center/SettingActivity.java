@@ -110,6 +110,7 @@ public class SettingActivity extends BaseHeadActivity {
                 setWarehouse();
                 break;
             case R.id.setting_select_customer_ll:
+
                 break;
             case R.id.setting_select_goods_ll:
                 break;

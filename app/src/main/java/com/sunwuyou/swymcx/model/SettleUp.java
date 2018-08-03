@@ -3,7 +3,7 @@ package com.sunwuyou.swymcx.model;
 import com.sunwuyou.swymcx.utils.Utils;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/7/11.
  * content
  */

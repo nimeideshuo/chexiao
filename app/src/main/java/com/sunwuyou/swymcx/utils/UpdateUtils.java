@@ -35,113 +35,78 @@ public class UpdateUtils {
 
 
     public boolean executeCustomerUpdate(Handler paramHandler, int paramInt, String arg26) {
-        ArrayList localObject2 = new ArrayList();
         ServiceSynchronize v19 = new ServiceSynchronize(0L);
         CustomerDAO v4 = new CustomerDAO();
-        ArrayList<String> v13 = new ArrayList<String>();
-        boolean v21 = false;
+        ArrayList<String> v13 = new ArrayList<>();
         switch (paramInt) {
             case 0:
-                int pages = v19.syn_QueryCustomerIDPages();
-                if (pages > 0) {
-                    for (int i = 1; i <= pages; i++) {
-                        List<HashMap<String, String>> maps = v19.syn_QueryCustomerIDs(i);
-                        if (maps == null) {
-                            continue;
+                try {
+                    int v18 = v19.syn_QueryCustomerIDPages();
+                    for (int i = 0; i < v18; i++) {
+                        List<HashMap<String, String>> v11 = v19.syn_QueryCustomerIDs(i);
+                        if (v11 == null) {
+                            break;
                         }
-                        for (int j = 0; j < maps.size(); j++) {
-                            v13.add(maps.get(j).get("id"));
+                        for (int j = 0; j < v11.size(); j++) {
+                            v13.add(v11.get(j).get("id"));
                         }
-                    }
-                } else {
-                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
-                    v21 = false;
-                }
 
-                break;
-            case 1: {
+                    }
+                } catch (NumberFormatException v7) {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+                    return false;
+                }
+            case 1:
                 if (v4.isExists(arg26)) {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定客户已存在"));
                     return false;
                 }
                 v13.add(arg26);
                 break;
-            }
             case 2:
                 List<IDNameEntity> v15 = JSONUtil.str2list(new ServiceSupport().QueryVisitLineCustomers(arg26), IDNameEntity.class);
                 if (v15 != null && v15.size() != 0) {
-                    for (int i = 0; i < v15.size(); i++) {
-                        String id = v15.get(i).getId();
-                        if (v4.isExists(id)) {
-                            v15.remove(id);
+                    int v9 = 0;
+                    while (true) {
+                        if (v9 < v15.size()) {
+                            String v5 = v15.get(v9).getId();
+                            if (v4.isExists(v5)) {
+                                v15.remove(v9);
+                                --v9;
+                            } else {
+                                v13.add(v5);
+                            }
+                            ++v9;
                         } else {
-                            v13.add(id);
+                            break;
                         }
                     }
-
                 } else {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定路线无客户"));
+                    return false;
                 }
-                break;
             case 3:
-//                List<IDNameEntity> v14 = JSONUtil.str2list(new ServiceSupport().QueryRegionCustomers(arg26), IDNameEntity.class);
-//                //获取所有客户信息  把相同的客户去掉
-//                if (v14 != null && v14.size() != 0) {
-////                    for (int i = 0; i < v14.size(); i++) {
-////                        String id = v14.get(i).getId();
-////                        if (v4.isExists(id)) {
-////                            v14.remove(id);
-////                        } else {
-////                            v13.add(id);
-////                        }
-////
-////                    }
-//                    int v9 = 0;
-//                    while (true) {
-//                        if (v9 < v14.size()) {
-//                            String v5 = v14.get(v9).getId();
-//                            if (v4.isExists(v5)) {
-//                                v14.remove(v9);
-//                                --v9;
-//                            } else {
-//                                v13.add(v5);
-//                            }
-//                            ++v9;
-//                        } else {
-//                            break;
-//                        }
-//                    }
-//
-//                    if (v13.size() != 0) {
-//
-//                        int v17 = v19.getPageSize();
-//                        int v22 = ((List) v13).size() / v17;
-//                        int v21_1 = ((List) v13).size() % v17 > 0 ? 1 : 0;
-//                        int v20 = v22 + v21_1;
-//
-//                        for (int i = 0; i < v20; i++) {
-//                            if (i >= v20) {
-//                                if (!this.executeCustomerGoodsAndDocUpdate(paramHandler, ((List) v13))) {
-//                                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
-//                                    return false;
-//                                }
-//
-//                                if (!this.executePromotionUpdate(paramHandler, ((List) v13))) {
-//                                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
-//                                    return false;
-//                                }
-//                            }
-//
-//
-//                        }
-//
-//
-//                    }
-//
-//                } else {
-//                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定区域无客户"));
-//                }
-                break;
+                List<IDNameEntity> v14 = JSONUtil.str2list(new ServiceSupport().QueryRegionCustomers(arg26), IDNameEntity.class);
+                if (v14 != null && v14.size() != 0) {
+                    int v9 = 0;
+                    while (true) {
+                        if (v9 < v14.size()) {
+                            String v5 = v14.get(v9).getId();
+                            if (v4.isExists(v5)) {
+                                v14.remove(v9);
+                                --v9;
+                            } else {
+                                v13.add(v5);
+                            }
+                            ++v9;
+                        } else {
+                            break;
+                        }
+                    }
+                } else {
+                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定区域无客户"));
+                }
+                return false;
         }
         if (v13.size() != 0) {
             int v17 = v19.getPageSize();
@@ -157,7 +122,6 @@ public class UpdateUtils {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
                     return false;
                 }
-                v21 = true;
             }
 
             for (int i = 0; i < v20; i++) {
@@ -178,7 +142,7 @@ public class UpdateUtils {
                 if (paramInt == 4) {
                     v10 = true;
                 }
-
+                //TODO 第二个执行
                 List<HashMap<String, String>> list = v19.syn_QueryCustomerRecordsByID(v6, v10, v4.getMaxOrderNo());
                 if (list == null) {
                     break;
@@ -573,60 +537,14 @@ public class UpdateUtils {
 
     }
 
-    //    private void updataToLocalDB(List<HashMap<String, String>> paramList) {
-//
-//        SQLiteDatabase database = new DBOpenHelper().getWritableDatabase();
-//        List<SupplierThin> listSupplier = new ArrayList<SupplierThin>();
-//        try {
-//
-//            for (int i = 0; i < paramList.size(); i++) {
-//                if (paramList.get(i).get("sql").trim().length() > 0) {
-//                    String sql = (paramList.get(i)).get("sql").trim();
-//                    String substring = sql.substring(sql.indexOf("values(") + "values(".length(), sql.lastIndexOf(")"));
-//                    substring = substring.replace("'", "");
-//                    String[] split = substring.split(",", 0);
-//                    if (split.length > 6) {
-//                        continue;
-//                    }
-//                    if (!(split[4].contains("1"))) {
-//                        continue;
-//                    }
-//                    SupplierThin supplierThin = new SupplierThin();
-//                    supplierThin.setId(split[0]);
-//                    supplierThin.setName(split[1]);
-//                    supplierThin.setPinyin(split[2]);
-//                    supplierThin.setIscustomer(split[3]);
-//                    supplierThin.setIssupplier(split[4]);
-//                    supplierThin.setIsavailable(split[5]);
-//                    listSupplier.add(supplierThin);
-//
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//        }
-//        for (int i = 0; i < listSupplier.size(); i++) {
-//            SupplierThin supplier = listSupplier.get(i);
-//            ContentValues values = new ContentValues();
-//            values.put("id", supplier.getId().trim());
-//            values.put("name", supplier.getName().trim());
-//            values.put("pinyin", supplier.getPinyin().trim());
-//            values.put("iscustomer", supplier.getIscustomer().trim());
-//            values.put("issupplier", supplier.getIssupplier().trim());
-//            values.put("isavailable", supplier.getIsavailable().trim());
-//            database.insert("cu_customer", null, values);
-//        }
-//
-//    }
-    public boolean executeCustomerGoodsAndDocUpdate(Handler arg20, List arg21) {
+    public boolean executeCustomerGoodsAndDocUpdate(Handler arg20, List<String> arg21) {
         int v16 = 0;
         ServiceSynchronize v15 = new ServiceSynchronize(0);
         int v12 = v15.getPageSize();
         int v18 = arg21.size() / v12;
         int v17 = arg21.size() % v12 > 0 ? 1 : 0;
         int v13 = v18 + v17;
-        ArrayList<RespCustomerGoodsAndDocPages> v10 = new ArrayList<RespCustomerGoodsAndDocPages>();
+        ArrayList<RespCustomerGoodsAndDocPages> v10 = new ArrayList<>();
         if (v13 > 0) {
             int v6 = v12 - 1;
             if (v6 >= arg21.size()) {
@@ -662,7 +580,7 @@ public class UpdateUtils {
             }
             for (int i = 0; i < v10.size(); i++) {
                 RespCustomerGoodsAndDocPages docPages = v10.get(i);
-                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords((docPages).getCustomers(), i);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords(docPages.getCustomers(), i);
                 if (v8 != null) {
                     this.saveToLocalDB(v8);
                 }

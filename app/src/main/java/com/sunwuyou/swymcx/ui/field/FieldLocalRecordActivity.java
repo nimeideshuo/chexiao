@@ -42,7 +42,7 @@ import com.sunwuyou.swymcx.view.MessageDialog;
 import java.util.List;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/7/30.
  * content
  */
@@ -376,9 +376,9 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
     public boolean onTouch(View v, MotionEvent event) {
         if (menuPopup != null && (menuPopup.isShowing())) {
             menuPopup.dismiss();
-            WindowManager.LayoutParams v0 = getWindow().getAttributes();
-            v0.alpha = 1f;
-            getWindow().setAttributes(v0);
+            WindowManager.LayoutParams attributes = getWindow().getAttributes();
+            attributes.alpha = 1f;
+            getWindow().setAttributes(attributes);
         }
         return false;
     }

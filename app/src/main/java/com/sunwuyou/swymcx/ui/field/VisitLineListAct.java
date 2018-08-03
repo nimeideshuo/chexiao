@@ -2,9 +2,11 @@ package com.sunwuyou.swymcx.ui.field;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toolbar;
 
 import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -30,7 +32,8 @@ import butterknife.ButterKnife;
 
 public class VisitLineListAct extends BaseHeadActivity {
 
-    @BindView(R.id.base_list) RecyclerView baseList;
+    @BindView(R.id.base_list)
+    RecyclerView baseList;
     private List<IDNameEntity> entityList;
     private Madapter madapter;
 
@@ -41,7 +44,6 @@ public class VisitLineListAct extends BaseHeadActivity {
 
     @Override
     public void initView() {
-        setTitle("巡店路线");
         baseList.setLayoutManager(new LinearLayoutManager(this));
         madapter = new Madapter();
         madapter.bindToRecyclerView(baseList);
@@ -60,6 +62,12 @@ public class VisitLineListAct extends BaseHeadActivity {
                 madapter.setNewData(entityList);
             }
         }).jsonPost(BaseUrl.getUrl(BaseUrl.SUPPORT_QUERYVISITLINE), this, null, null, null, true, 0);
+    }
+
+    @Override
+    public void setActionBar(@Nullable Toolbar toolbar) {
+        super.setActionBar(toolbar);
+        setTitle("巡店路线");
     }
 
     private class Madapter extends BaseQuickAdapter<IDNameEntity, BaseViewHolder> implements BaseQuickAdapter.OnItemClickListener {

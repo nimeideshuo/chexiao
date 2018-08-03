@@ -3,7 +3,7 @@ package com.sunwuyou.swymcx.model;
 import java.io.Serializable;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/7/11.
  * content
  */

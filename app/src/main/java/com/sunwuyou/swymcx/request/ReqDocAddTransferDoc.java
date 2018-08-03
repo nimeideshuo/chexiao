@@ -3,7 +3,7 @@ package com.sunwuyou.swymcx.request;
 import com.sunwuyou.swymcx.model.TransferDoc;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/7/30.
  * content
  */

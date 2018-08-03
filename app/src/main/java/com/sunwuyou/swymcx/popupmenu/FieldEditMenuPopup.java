@@ -63,7 +63,8 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
     private LoadingDialog loadingDialog;
     //    private DocRemarkDialog remarkDialog;
     private View root;
-    @SuppressLint("HandlerLeak") private Handler handler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -91,18 +92,19 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
         }
     };
     private DocRemarkDialog remarkDialog;
-    @SuppressLint("HandlerLeak") private Handler handlerGetLocation = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler handlerGetLocation = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             AMapLocation obj = (AMapLocation) msg.obj;
-            FieldEditMenuPopup.this.loadingDialog.dismiss();
+            loadingDialog.dismiss();
             if (obj == null || TextUtils.isEmptyS(obj.getAddress())) {
                 PDH.showFail("定位失败");
             } else {
                 PDH.showSuccess(obj.getAddress());
-                new FieldSaleDAO().updateLocation(Long.valueOf(FieldEditMenuPopup.this.fieldSale.getId()), obj);
-                FieldEditMenuPopup.this.btnLocation.setOnClickListener(null);
+                new FieldSaleDAO().updateLocation(fieldSale.getId(), obj);
+                btnLocation.setOnClickListener(null);
             }
 
         }
@@ -153,12 +155,12 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
         new MessageDialog(activity).showDialog("提示", "是否删除单据？", null, null, new MessageDialog.CallBack() {
             @Override
             public void btnOk(View view) {
-                FieldEditMenuPopup.this.fieldsaleDAO.deleteFieldsale(FieldEditMenuPopup.this.fieldSale.getId());
+                fieldsaleDAO.deleteFieldsale(fieldSale.getId());
                 PDH.showSuccess("删除完成");
-                if (!TextUtils.isEmptyS(FieldEditMenuPopup.this.fieldSale.getCustomerid())) {
-                    new CustomerDAO().updateCustomerValue(FieldEditMenuPopup.this.fieldSale.getCustomerid(), "isfinish", "0");
+                if (!TextUtils.isEmptyS(fieldSale.getCustomerid())) {
+                    new CustomerDAO().updateCustomerValue(fieldSale.getCustomerid(), "isfinish", "0");
                 }
-                FieldEditMenuPopup.this.activity.finish();
+                activity.finish();
             }
 
             @Override
@@ -226,6 +228,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 PDH.showMessage("单据已上传");
                 break;
             case R.id.btnSale:
+                //客史
                 if (!TextUtils.isEmptyS(this.fieldSale.getCustomerid()) && !this.fieldSale.isIsnewcustomer()) {
                     this.activity.startActivity(new Intent().setClass(this.activity, CustomerGoodsActivity.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                     return;
@@ -268,6 +271,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
         activity.getWindow().setAttributes(attributes);
         switch (v.getId()) {
             case R.id.btnDelete:
+                //删除
                 if (this.fieldSale.getStatus() == 1) {
                     PDH.showMessage("已处理的单据不允许删除");
                     return true;
@@ -275,6 +279,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 this.delete();
                 break;
             case R.id.btnPrint:
+                //打印
                 if (this.fieldSale.getStatus() == 0) {
                     PDH.showMessage("单据未处理，不允许打印");
                     return true;
@@ -286,6 +291,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 this.activity.startActivity(new Intent(activity, FieldPayTypeAct.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
             case R.id.btnDocInfo:
+                //签名
                 if (remarkDialog == null) {
                     remarkDialog = new DocRemarkDialog(this.activity);
                 }
@@ -300,6 +306,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 this.activity.startActivity(new Intent().setClass(this.activity, FieldItemTotalAct.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
             case R.id.btnPicture:
+                //照片
                 this.activity.startActivity(new Intent(this.activity, PicturesActivity.class).putExtra("fieldsaleid", this.fieldSale.getId()));
                 break;
             case R.id.btnLocation:

@@ -78,7 +78,8 @@ public class TargetCustomerActivity extends BaseHeadActivity {
     @Override
     protected void onRightClick() {
         super.onRightClick();
-        toast("编辑");
+//        toast("编辑");
+        //TODO 未完成
     }
 
     @Override

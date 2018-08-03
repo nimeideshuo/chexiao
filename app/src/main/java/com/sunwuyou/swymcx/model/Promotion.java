@@ -3,37 +3,50 @@ package com.sunwuyou.swymcx.model;
 import java.io.Serializable;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/7/11.
  * content
  */
 public class Promotion implements Serializable {
+    private static final long serialVersionUID = 1;
     private String begintime;
+    private String endtime;
+    private String id;
+    private String name;
 
-    public String getBegintime() {
-        return begintime == null ? "" : begintime;
+    public Promotion() {
+        super();
     }
 
-    public void setBegintime(String begintime) {
-        this.begintime = begintime;
+    public String getBeginTime() {
+        return this.begintime;
     }
 
     public String getEndtime() {
-        return endtime == null ? "" : endtime;
-    }
-
-    public void setEndtime(String endtime) {
-        this.endtime = endtime;
+        return this.endtime;
     }
 
     public String getId() {
-        return id == null ? "" : id;
+        return this.id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getName() {
+        return this.name;
     }
 
-    private String endtime;
-    private String id;
+    public void setBeginTime(String arg1) {
+        this.begintime = arg1;
+    }
+
+    public void setEndtime(String arg1) {
+        this.endtime = arg1;
+    }
+
+    public void setId(String arg1) {
+        this.id = arg1;
+    }
+
+    public void setName(String arg1) {
+        this.name = arg1;
+    }
 }

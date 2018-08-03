@@ -67,11 +67,11 @@ public class NewCustomerAddAct extends BaseHeadActivity implements View.OnClickL
             super.handleMessage(msg);
             if (Boolean.parseBoolean(msg.obj.toString())) {
                 PDH.showSuccess("操作成功");
-                if (NewCustomerAddAct.this.updateCustomer != null) {
-                    new CustomerDAO().updateCustomerDocs(NewCustomerAddAct.this.updateCustomer.getId(), NewCustomerAddAct.this.customer.getId());
+                if (updateCustomer != null) {
+                    new CustomerDAO().updateCustomerDocs(updateCustomer.getId(), customer.getId());
                 }
                 Intent intent = new Intent();
-                intent.putExtra("newcustomer", NewCustomerAddAct.this.customer);
+                intent.putExtra("newcustomer", customer);
                 intent.putExtra("refresh", true);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -83,7 +83,7 @@ public class NewCustomerAddAct extends BaseHeadActivity implements View.OnClickL
     private View.OnClickListener btnAddCustomerListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String v0 = NewCustomerAddAct.this.etCusId.getText().toString();
+            String v0 = etCusId.getText().toString();
             if (TextUtils.isEmpty(v0)) {
                 PDH.showError("客户编号为必填");
             } else if (TextUtils.isEmpty(etCusName.getText().toString())) {
@@ -94,10 +94,10 @@ public class NewCustomerAddAct extends BaseHeadActivity implements View.OnClickL
                 PDH.showError("客户地址必填! ");
             } else {
                 if (new CustomerDAO().isExists(v0)) {
-                    if (NewCustomerAddAct.this.updateCustomer == null) {
+                    if (updateCustomer == null) {
                         PDH.showFail("当前客户编号已经存在");
                         return;
-                    } else if (!v0.equals(NewCustomerAddAct.this.updateCustomer.getId())) {
+                    } else if (!v0.equals(updateCustomer.getId())) {
                         PDH.showFail("当前客户编号已经存在");
                         return;
                     }

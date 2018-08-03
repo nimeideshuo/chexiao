@@ -132,7 +132,7 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
     public void initView() {
         setTitleRight("菜单", null);
         long l = getIntent().getLongExtra("fieldsaleid", -1L);
-        fieldsale = new FieldSaleDAO().getFieldsale(Long.valueOf(l));
+        fieldsale = new FieldSaleDAO().getFieldsale(l);
         init();
     }
 
