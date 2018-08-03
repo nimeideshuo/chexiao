@@ -119,6 +119,11 @@ public class SplashAct extends Activity {
                     }
                 }
             }
+        }, new HttpErrorConnnet() {
+            @Override
+            public void loadHttpError(int i) {
+                loading.setText("无网络链接");
+            }
         }).jsonPost(BaseUrl.getUrl(BaseUrl.SYSTEM_CHECKREGISTER), this, map, null, null, true, 0);
 
 
@@ -153,6 +158,7 @@ public class SplashAct extends Activity {
                 String input = seviceDialog.getmInput();
                 //验证是否正确
                 ap.setServerIp(input);
+                BaseUrl.setUrl(input);
                 checkRegisterNet();
             }
 

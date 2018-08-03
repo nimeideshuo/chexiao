@@ -533,12 +533,12 @@ public class ServiceSynchronize {
         }
     }
 
-    public List<HashMap<String, String>> syn_QueryCustomerGoodsRecords(String arg8, int arg9) {
+    public List<HashMap<String, String>> syn_QueryCustomerGoodsRecords(String id, int pageindex) {
         String url = Utils.getServiceAddress(this.baseAddress, "querycustomergoodsrecords");
         ReqSynQueryRecordsByID v1 = new ReqSynQueryRecordsByID();
-        v1.setPageIndex(arg9);
+        v1.setPageIndex(pageindex);
         v1.setPageSize(1000);
-        v1.setId(arg8);
+        v1.setId(id);
         map.put("parameter", JSONUtil.toJSONString(v1));
         String serviceInfor = new Utils_help().getServiceInfor(url, map);
         if (RequestHelper.isSuccess(serviceInfor)) {
@@ -547,12 +547,12 @@ public class ServiceSynchronize {
         return null;
     }
 
-    public List<HashMap<String, String>> syn_QueryCustomerDocRecords(String arg8, int arg9) {
+    public List<HashMap<String, String>> syn_QueryCustomerDocRecords(String id, int index) {
         String url = Utils.getServiceAddress(this.baseAddress, "querycustomerdocrecords");
         ReqSynQueryRecordsByID v1 = new ReqSynQueryRecordsByID();
-        v1.setPageIndex(arg9);
+        v1.setPageIndex(index);
         v1.setPageSize(1000);
-        v1.setId(arg8);
+        v1.setId(id);
         map.put("parameter", JSONUtil.toJSONString(v1));
         String serviceInfor = new Utils_help().getServiceInfor(url, map);
         if (RequestHelper.isSuccess(serviceInfor)) {

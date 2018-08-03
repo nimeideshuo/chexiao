@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.ui.field;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.view.ActionMode;
@@ -47,6 +48,7 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
     private CustomerGoodsAdapter adapter;
     private List<CustomerFieldSaleGoods> listItems;
     private int type;
+    ActionMode mMode;
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
@@ -66,6 +68,7 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mMode = mode;
             int v3 = 2;
             adapter.setMultiChoice(true);
             mode.setTitle("选择");
@@ -73,7 +76,7 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
             if (type != v3) {
                 menu.add(0, 1, 0, "跳过").setShowAsAction(v3);
             }
-            return false;
+            return true;
         }
 
         @Override
@@ -86,7 +89,6 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
             List<CustomerFieldSaleGoods> saleGoodsList = adapter.getSelectList();
             if (item.getItemId() == 0) {
                 ArrayList<GoodsThin> goodsThins = new ArrayList<>();
-
                 for (int i = 0; i < goodsThins.size(); i++) {
                     GoodsThin goodsThin = new GoodsThin();
                     goodsThin.setId(saleGoodsList.get(i).getGoodsid());
@@ -104,12 +106,10 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
                 });
                 moreDialog.show(goodsThins, fieldSale.getId());
             } else {
-                if (item.getItemId() != 1) {
-                    mode.finish();
-                }
+                mode.finish();
                 passCustomerGoods(saleGoodsList);
             }
-            return true;
+            return false;
         }
 
         @Override
@@ -155,6 +155,9 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
 
     protected void onResume() {
         super.onResume();
+        if (mMode != null) {
+            mMode.finish();
+        }
         this.loadData();
     }
 
@@ -169,7 +172,6 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        int v5 = 2131296441;
         int v4 = -3355444;
         int v3 = -16777216;
         int v2 = -7829368;
@@ -178,7 +180,7 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
                 case R.id.tvOnSale:
                     this.type = 0;
                     this.tvOnSale.setTextColor(v3);
-                    this.findViewById(v5).setBackgroundColor(v4);
+                    this.findViewById(R.id.btnOnSaleline).setBackgroundColor(v4);
                     this.tvStopSale.setTextColor(v2);
                     this.findViewById(R.id.btnStopSaleline).setBackgroundColor(0);
                     this.tvIsPass.setTextColor(v2);
@@ -186,29 +188,45 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
                     break;
                 case R.id.tvStopSale:
                     this.type = 1;
+                    this.tvOnSale.setTextColor(v2);
+                    this.findViewById(R.id.btnOnSaleline).setBackgroundColor(0);
                     this.tvStopSale.setTextColor(v3);
                     this.findViewById(R.id.btnStopSaleline).setBackgroundColor(v4);
-                    this.tvOnSale.setTextColor(v2);
-                    this.findViewById(v5).setBackgroundColor(0);
                     this.tvIsPass.setTextColor(v2);
                     this.findViewById(R.id.btnIsPassline).setBackgroundColor(0);
                     break;
                 case R.id.tvIsPass:
                     this.type = 2;
-                    this.tvIsPass.setTextColor(v3);
-                    this.findViewById(R.id.btnStopSaleline).setBackgroundColor(v4);
-                    this.tvStopSale.setTextColor(v2);
-                    this.findViewById(R.id.btnIsPassline).setBackgroundColor(0);
                     this.tvOnSale.setTextColor(v2);
-                    this.findViewById(v5).setBackgroundColor(0);
+                    this.findViewById(R.id.btnOnSaleline).setBackgroundColor(0);
+
+                    this.tvStopSale.setTextColor(v2);
+                    this.findViewById(R.id.btnStopSaleline).setBackgroundColor(0);
+
+                    this.tvIsPass.setTextColor(v3);
+                    this.findViewById(R.id.btnIsPassline).setBackgroundColor(v4);
+
                     break;
             }
+            loadData();
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        CustomerFieldSaleGoods saleGoods = this.listItems.get(position);
+        GoodsThin goodsThin = new GoodsThin();
+        goodsThin.setId(saleGoods.getGoodsid());
+        goodsThin.setName(saleGoods.getGoodsname());
+        goodsThin.setBarcode(saleGoods.getBarcode());
+        Intent intent = new Intent(this, FieldAddGoodAct.class);
+        intent.putExtra("goods", goodsThin);
+        intent.putExtra("fieldsaleid", this.fieldSale.getId());
+        startActivity(intent);
+    }
 
+    public void setActionBarText() {
+        setTitle("客史商品");
     }
 
     class CustomerGoodsAdapter extends BaseAdapter {

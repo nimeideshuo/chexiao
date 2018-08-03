@@ -42,7 +42,7 @@ public class UpdateUtils {
             case 0:
                 try {
                     int v18 = v19.syn_QueryCustomerIDPages();
-                    for (int i = 0; i < v18; i++) {
+                    for (int i = 1; i <= v18; i++) {
                         List<HashMap<String, String>> v11 = v19.syn_QueryCustomerIDs(i);
                         if (v11 == null) {
                             break;
@@ -56,6 +56,7 @@ public class UpdateUtils {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
                     return false;
                 }
+                break;
             case 1:
                 if (v4.isExists(arg26)) {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定客户已存在"));
@@ -105,24 +106,26 @@ public class UpdateUtils {
                     }
                 } else {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定区域无客户"));
+                    return false;
                 }
-                return false;
+                break;
+
         }
         if (v13.size() != 0) {
             int v17 = v19.getPageSize();
             int v22 = v13.size() / v17;
             int v21_1 = v13.size() % v17 > 0 ? 1 : 0;
             int v20 = v22 + v21_1;
-            if (v20 <= 0) {
-                if (!this.executeCustomerGoodsAndDocUpdate(paramHandler, v13)) {
-                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
-                    return false;
-                }
-                if (!this.executePromotionUpdate(paramHandler, v13)) {
-                    paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
-                    return false;
-                }
+//            if (v20 <= 0) {
+            if (!this.executeCustomerGoodsAndDocUpdate(paramHandler, v13)) {
+                paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+                return false;
             }
+            if (!this.executePromotionUpdate(paramHandler, v13)) {
+                paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
+                return false;
+            }
+//            }
 
             for (int i = 0; i < v20; i++) {
                 int v3 = i * v17;
@@ -573,14 +576,14 @@ public class UpdateUtils {
         if (v16 > 0) {
             for (int i = 0; i < v10.size(); i++) {
                 RespCustomerGoodsAndDocPages v14_1 = v10.get(i);
-                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerGoodsRecords(v14_1.getCustomers(), i);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerGoodsRecords(v14_1.getCustomers(), i+1);
                 if (v8 != null) {
                     this.saveToLocalDB(v8);
                 }
             }
             for (int i = 0; i < v10.size(); i++) {
                 RespCustomerGoodsAndDocPages docPages = v10.get(i);
-                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords(docPages.getCustomers(), i);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords(docPages.getCustomers(), i+1);
                 if (v8 != null) {
                     this.saveToLocalDB(v8);
                 }

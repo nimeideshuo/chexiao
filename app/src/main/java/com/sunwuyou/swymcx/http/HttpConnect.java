@@ -136,7 +136,9 @@ public class HttpConnect {
             public void onError(Response<String> response) {
                 super.onError(response);
                 Toast.makeText(context, response.code() == 404 ? context.getString(R.string.addr_no_found) : context.getString(R.string.server_exception), Toast.LENGTH_SHORT).show();
-                httpErrorConnnet.loadHttpError(response.code());
+               if(httpErrorConnnet!=null){
+                   httpErrorConnnet.loadHttpError(response.code());
+               }
             }
 
             @Override

@@ -59,11 +59,12 @@ public class GoodsSelectMoreDialog extends TitleDialog implements View.OnClickLi
         }
     };
 
+    @SuppressLint("WrongViewCast")
     public GoodsSelectMoreDialog(Activity activity) {
         super(activity);
         this.setView(R.layout.dia_field_goods_select_more);
         this.setTitleText("商品添加");
-        etNum = this.findViewById(R.id.etNum);
+        etNum = findViewById(R.id.etNum);
         goodsunitDAO = new GoodsUnitDAO();
         goodspriceDAO = new GoodsPriceDAO();
         fieldsaleitemDAO = new FieldSaleItemDAO();

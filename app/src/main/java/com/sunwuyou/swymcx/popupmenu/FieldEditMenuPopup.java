@@ -172,6 +172,10 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        dismiss();
+        WindowManager.LayoutParams attributes = this.activity.getWindow().getAttributes();
+        attributes.alpha = 1f;
+        this.activity.getWindow().setAttributes(attributes);
         switch (v.getId()) {
             case R.id.btnOut:
                 if (this.fieldSale.getStatus() == 0) {

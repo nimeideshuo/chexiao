@@ -85,7 +85,6 @@ public class TargetCustomerActivity extends BaseHeadActivity {
     @Override
     protected void onRightClick1() {
         super.onRightClick1();
-        toast("菜单");
         if (menuPopup == null) {
             menuPopup = new TargetCustomerMenuPopup(this);
         }
@@ -100,13 +99,13 @@ public class TargetCustomerActivity extends BaseHeadActivity {
         refresh();
     }
 
-    public void updateCustomer(final int paramInt, final String paramString) {
+    public void updateCustomer(final int type, final String id) {
         PDH.show(this, "正在同步客户信息...", new PDH.ProgressCallBack() {
             public void action() {
-                if (paramInt == 4) {
+                if (type == 4) {
                     new AccountPreference().setValue("customer_data_updateime", Utils.formatDate(new Date().getTime()));
                 }
-                if (new UpdateUtils().executeCustomerUpdate(handler, paramInt, paramString)) {
+                if (new UpdateUtils().executeCustomerUpdate(handler, type, id)) {
                     handler.sendMessage(handler.obtainMessage(0, "客户信息同步成功"));
                 }
             }

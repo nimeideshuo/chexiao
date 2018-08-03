@@ -36,8 +36,8 @@ public class ReqSynQueryRecordsByID {
         return this.pageindex;
     }
 
-    public void setPageIndex(int arg1) {
-        this.pageindex = arg1;
+    public void setPageIndex(int pageindex) {
+        this.pageindex = pageindex;
     }
 
     public int getPageSize() {

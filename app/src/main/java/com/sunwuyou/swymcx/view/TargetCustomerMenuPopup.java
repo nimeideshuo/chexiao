@@ -54,19 +54,19 @@ public class TargetCustomerMenuPopup extends PopupWindow implements View.OnClick
     }
 
     private void init() {
-        this.btnLoadCus = ((Button) this.view.findViewById(R.id.btnLoadCus));
-        this.btnLineCus = ((Button) this.view.findViewById(R.id.btnLineCus));
-        this.btnRegionCus = ((Button) this.view.findViewById(R.id.btnRegionCus));
-        this.btnAll = ((Button) this.view.findViewById(R.id.btnAll));
-        this.btnUpload = ((Button) this.view.findViewById(R.id.btnUpload));
-        this.btnAddNew = ((Button) this.view.findViewById(R.id.btnAddNew));
+        this.btnLoadCus = this.view.findViewById(R.id.btnLoadCus);
+        this.btnLineCus = this.view.findViewById(R.id.btnLineCus);
+        this.btnRegionCus = this.view.findViewById(R.id.btnRegionCus);
+        this.btnAll = this.view.findViewById(R.id.btnAll);
+        this.btnUpload = this.view.findViewById(R.id.btnUpload);
+        this.btnAddNew = this.view.findViewById(R.id.btnAddNew);
         this.btnLoadCus.setOnClickListener(this);
         this.btnAddNew.setOnClickListener(this);
         this.btnAll.setOnClickListener(this);
         this.btnLineCus.setOnClickListener(this);
         this.btnRegionCus.setOnClickListener(this);
         this.btnUpload.setOnClickListener(this);
-        if ((Utils.isDownloadCustomerByVisitLine) && (!TextUtils.isEmpty(((User) SystemState.getObject("cu_user", User.class)).getVisitLineId()))) {
+        if ((Utils.isDownloadCustomerByVisitLine) && (!TextUtils.isEmpty(SystemState.getObject("cu_user", User.class).getVisitLineId()))) {
             this.btnLoadCus.setVisibility(View.GONE);
             this.btnRegionCus.setVisibility(View.GONE);
             this.btnAll.setVisibility(View.GONE);
