@@ -18,6 +18,7 @@
         android:id="@+id/etNum"
         android:layout_width="fill_parent"
         android:layout_height="40.0dip"
+        android:background="@drawable/login_panel_edit_bg"
         android:layout_marginLeft="5.0dip"
         android:imeOptions="actionDone"
         android:inputType="number"

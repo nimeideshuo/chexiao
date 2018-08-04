@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.dao.OtherSettleUpItemDAO;
@@ -22,6 +21,7 @@ import com.sunwuyou.swymcx.model.SettleUp;
 import com.sunwuyou.swymcx.model.SettleUpPayType;
 import com.sunwuyou.swymcx.utils.ClickUtils;
 import com.sunwuyou.swymcx.utils.PDH;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.EditButtonView;
 
@@ -68,7 +68,7 @@ public class SettleupPayActivity extends BaseHeadActivity implements View.OnFocu
 
                         finish();
                     }
-                    new SettleUpDAO().update(SettleupPayActivity.this.settleUp.getId(), "preference", v3);
+                    new SettleUpDAO().update(settleUp.getId(), "preference", v3);
                 }
 
                 for (int v1 = 0; v1 < payItems.size(); ++v1) {

@@ -5,7 +5,7 @@ package com.sunwuyou.swymcx.model;
  * 2018/7/11.
  * content
  */
-public class TransferItemSource {
+public class TransferItemSource extends TransferItem{
     private String barcode;
     private String goodsname;
     private boolean isusebatch;
@@ -29,7 +29,7 @@ public class TransferItemSource {
         this.goodsname = goodsname;
     }
 
-    public boolean isusebatch() {
+    public boolean getIsusebatch() {
         return isusebatch;
     }
 

@@ -1,7 +1,6 @@
 package com.sunwuyou.swymcx.ui;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +10,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.SystemState;
@@ -26,9 +24,9 @@ import com.sunwuyou.swymcx.model.User;
 import com.sunwuyou.swymcx.model.VisitLine;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.PinYin4JUtils;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

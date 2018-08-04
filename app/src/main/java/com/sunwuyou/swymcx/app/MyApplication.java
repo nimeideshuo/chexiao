@@ -7,15 +7,14 @@ import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.support.multidex.MultiDexApplication;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.dou361.dialogui.DialogUIUtils;
-import com.immo.libcomm.utils.TextUtils;
 import com.lzy.okgo.OkGo;
 import com.squareup.leakcanary.LeakCanary;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.ui.SplashAct;
 import com.sunwuyou.swymcx.utils.MLog;
+import com.sunwuyou.swymcx.utils.TextUtils;
 
 /**
  * @author Administrator
@@ -41,7 +40,7 @@ public class MyApplication extends MultiDexApplication {
         OkGo.getInstance().init(this);
         Utils.init(this);
         DialogUIUtils.init(this);
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
         //设置服务器IP地址
         String serverIp = new AccountPreference().getServerIp();
         MLog.d("本地服务器地址>>" + serverIp);
@@ -51,7 +50,7 @@ public class MyApplication extends MultiDexApplication {
 
     public String getUniqueCode() {
         String keycode = SystemState.getValue("keycode");
-        if ((TextUtils.isEmptyS(keycode))) {
+        if (!TextUtils.isEmptyS(keycode)) {
             return keycode;
         }
         @SuppressLint("HardwareIds") String str1 = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -59,13 +58,13 @@ public class MyApplication extends MultiDexApplication {
         localCTelephoneInfo.setCTelephoneInfo();
         String str2 = localCTelephoneInfo.getImeiSIM1();
         String str3 = localCTelephoneInfo.getImeiSIM2();
-        if (!TextUtils.isEmptyS(str2)) {
+        if (TextUtils.isEmptyS(str2)) {
             str2 = "";
         }
-        if (!TextUtils.isEmptyS(str3)) {
+        if (TextUtils.isEmptyS(str3)) {
             str3 = "";
         }
-        if ((TextUtils.isEmptyS(str1 + str2 + str3))) {
+        if (TextUtils.isEmptyS(str1 + str2 + str3)) {
             // 将所有字母 全部转换成大写 toUpperCase
             keycode = (str1 + str2 + str3).toUpperCase();
             SystemState.setValue("keycode", keycode);

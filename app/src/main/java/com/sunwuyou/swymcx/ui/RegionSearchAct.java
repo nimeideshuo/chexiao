@@ -1,17 +1,16 @@
 package com.sunwuyou.swymcx.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.dao.RegionDAO;
 import com.sunwuyou.swymcx.model.Region;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.view.AutoTextView;
 
 import java.util.ArrayList;

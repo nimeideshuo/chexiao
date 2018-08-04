@@ -83,7 +83,7 @@ public class FieldSaleItemDAO {
         try {
             String sql = "select item.serialid, item.fieldsaleid,item.goodsid, g.name goodsname, g.barcode, g.specification, g.isusebatch, item.saleunitid, us.name saleunitname, item.salenum, item.saleprice,item.giveunitid, ug.name giveunitname, item.givenum,item.cancelbasenum,item.giftgoodsid,item.giftgoodsname,item.giftunitid, item.giftunitname,item.giftnum,item.promotiontype,item.ispromotion, item.warehouseid,item.saleremark,item.giftremark,item.cancelremark,item.giveremark,item.isexhibition from kf_fieldsaleitem as item left outer join sz_goods as g on item.goodsid = g.id left outer join sz_unit as us on item.saleunitid = us.id left outer join sz_unit as ug on item.giveunitid = ug.id where item.fieldsaleid = ? ";
             cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg11)});
-            ArrayList<FieldSaleItemSource> v3 = new ArrayList<FieldSaleItemSource>();
+            ArrayList<FieldSaleItemSource> itemSources = new ArrayList<FieldSaleItemSource>();
             while (cursor.moveToNext()) {
                 FieldSaleItemSource itemSource = new FieldSaleItemSource();
                 itemSource.setSerialid(cursor.getLong(0));
@@ -114,8 +114,9 @@ public class FieldSaleItemDAO {
                 itemSource.setCancelremark(cursor.getString(25));
                 itemSource.setGiveremark(cursor.getString(26));
                 itemSource.setIsexhibition(cursor.getInt(27) == 1);
-                v3.add(itemSource);
+                itemSources.add(itemSource);
             }
+            return itemSources;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -220,24 +221,24 @@ public class FieldSaleItemDAO {
     public long saveFieldSaleItem(FieldSaleItem arg7) {
         this.db = this.helper.getWritableDatabase();
         ContentValues v2 = new ContentValues();
-        v2.put("fieldsaleid", Long.valueOf(arg7.getFieldsaleid()));
+        v2.put("fieldsaleid", arg7.getFieldsaleid());
         v2.put("goodsid", arg7.getGoodsid());
         v2.put("warehouseid", arg7.getWarehouseid());
         v2.put("saleunitid", arg7.getSaleunitid());
-        v2.put("salenum", Double.valueOf(arg7.getSalenum()));
-        v2.put("saleprice", Double.valueOf(arg7.getSaleprice()));
-        v2.put("cancelbasenum", Double.valueOf(arg7.getCancelbasenum()));
+        v2.put("salenum", arg7.getSalenum());
+        v2.put("saleprice", arg7.getSaleprice());
+        v2.put("cancelbasenum", arg7.getCancelbasenum());
         v2.put("giveunitid", arg7.getGiveunitid());
-        v2.put("givenum", Double.valueOf(arg7.getGivenum()));
+        v2.put("givenum", arg7.getGivenum());
         String v4 = "ispromotion";
         int v3 = arg7.isIspromotion() ? 1 : 0;
-        v2.put(v4, Integer.valueOf(v3));
-        v2.put("promotiontype", Integer.valueOf(arg7.getPromotiontype()));
+        v2.put(v4, v3);
+        v2.put("promotiontype", arg7.getPromotiontype());
         v2.put("giftgoodsid", arg7.getGiftgoodsid());
         v2.put("giftgoodsname", arg7.getGiftgoodsname());
         v2.put("giftunitid", arg7.getGiftunitid());
         v2.put("giftunitname", arg7.getGiftunitname());
-        v2.put("giftnum", Double.valueOf(arg7.getGiftnum()));
+        v2.put("giftnum", arg7.getGiftnum());
         v4 = "isexhibition";
         v2.put(v4, arg7.isIsexhibition() ? "1" : "0");
         v2.put("saleremark", arg7.getSaleremark());
@@ -385,7 +386,8 @@ public class FieldSaleItemDAO {
     public List<ReqDocAddCheXiaoItem> getFieldSaleItemForUpload(long arg12, int arg14, int arg15) {
         this.db = this.helper.getWritableDatabase();
         try {
-            cursor = this.db.rawQuery("select goodsid, salenum, saleprice, saleunitid, givenum, giveunitid, cancelbasenum, saleremark, giftremark, cancelremark, giveremark, ispromotion, promotiontype, giftgoodsid, giftunitid, giftnum, isexhibition from kf_fieldsaleitem where fieldsaleid = ? limit ? offset ?", new String[]{String.valueOf(arg12), String.valueOf(arg14), String.valueOf(arg15)});
+            String sql = "select goodsid, salenum, saleprice, saleunitid, givenum, giveunitid, cancelbasenum, saleremark, giftremark, cancelremark, giveremark, ispromotion, promotiontype, giftgoodsid, giftunitid, giftnum, isexhibition from kf_fieldsaleitem where fieldsaleid = ? limit ? offset ?";
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), String.valueOf(arg14), String.valueOf(arg15)});
             ArrayList<ReqDocAddCheXiaoItem> xiaoItemArrayList = new ArrayList<>();
             while (cursor.moveToNext()) {
                 ReqDocAddCheXiaoItem xiaoItem = new ReqDocAddCheXiaoItem();
@@ -426,7 +428,8 @@ public class FieldSaleItemDAO {
     public double getGoodsOutSumNum(long arg12, String arg14, int arg15) {
         this.db = this.helper.getWritableDatabase();
         try {
-            Cursor cursor = this.db.rawQuery("select item.goodsid, (item.salenum*gus.ratio + item.givenum*gug.ratio) as salebasicnum,  item.giftgoodsid, item.giftnum*gugift.ratio as giftbasicnum from kf_fieldsaleitem as item \t\tleft outer join sz_goodsunit as gus on item.goodsid = gus.goodsid and item.saleunitid = gus.unitid \t\tleft outer join sz_goodsunit as gug on item.goodsid = gug.goodsid and item.giveunitid = gug.unitid \t\tleft outer join sz_goodsunit as gugift on item.giftgoodsid = gugift.goodsid and item.giftunitid = gugift.unitid where fieldsaleid = ? limit ? offset ?", new String[]{String.valueOf(arg12), String.valueOf(arg15 - 1), String.valueOf(0)});
+            String sql = "select item.goodsid, (item.salenum*gus.ratio + item.givenum*gug.ratio) as salebasicnum,  item.giftgoodsid, item.giftnum*gugift.ratio as giftbasicnum from kf_fieldsaleitem as item \t\tleft outer join sz_goodsunit as gus on item.goodsid = gus.goodsid and item.saleunitid = gus.unitid \t\tleft outer join sz_goodsunit as gug on item.goodsid = gug.goodsid and item.giveunitid = gug.unitid \t\tleft outer join sz_goodsunit as gugift on item.giftgoodsid = gugift.goodsid and item.giftunitid = gugift.unitid where fieldsaleid = ? limit ? offset ?";
+            Cursor cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), String.valueOf(arg15 - 1), String.valueOf(0)});
             double v3 = 0;
             while (cursor.moveToNext()) {
                 if (arg14.equals(cursor.getString(0))) {
@@ -453,13 +456,87 @@ public class FieldSaleItemDAO {
 
     public boolean goodsIsAdded(long arg6, String arg8) {
         this.db = this.helper.getReadableDatabase();
-        Cursor v0 = this.db.rawQuery("select 1 from kf_fieldsaleitem where fieldsaleid=? and goodsid=?", null);
+        String sql = "select 1 from kf_fieldsaleitem where fieldsaleid=? and goodsid=?";
+        Cursor v0 = this.db.rawQuery(sql, null);
         if (!v0.moveToNext()) {
             return true;
         }
         v0.close();
         db.close();
         return false;
+    }
+
+    public List<FieldSaleItemTotal> queryFieldItemTotal(long arg19, boolean arg21) {
+        boolean v13_1;
+        FieldSaleItemBatchDAO v5;
+        ArrayList<FieldSaleItemTotal> v10 = new ArrayList<>();
+        this.db = this.helper.getReadableDatabase();
+        Cursor v2 = null;
+        Cursor v3 = null;
+        try {
+            String sql = "select item.goodsid,g.name as goodsname,g.barcode,g.isusebatch, (item.salenum * gs.ratio + item.givenum * gg.ratio) as outbasicnum, item.cancelbasenum as inbasicnum from kf_fieldsaleitem item left join sz_goods g on g.id = item.goodsid left join sz_goodsunit gs on gs.goodsid = item.goodsid and gs.unitid = item.saleunitid left join sz_goodsunit gg on gg.goodsid = item.goodsid and gg.unitid = item.giveunitid where item.fieldsaleid=? and (item.salenum > 0 or item.givenum > 0 or item.cancelbasenum > 0)";
+            v2 = this.db.rawQuery(sql, new String[]{String.valueOf(arg19)});
+            v5 = new FieldSaleItemBatchDAO();
+            if (v2.moveToNext()) {
+                FieldSaleItemTotal v8 = new FieldSaleItemTotal();
+                v8.setGoodsid(v2.getString(0));
+                v8.setGoodsname(v2.getString(1));
+                v8.setBarcode(v2.getString(2));
+                v8.setIsusebatch(v2.getInt(3) == 1);
+                v8.setOutbasicnum(v2.getDouble(4));
+                v8.setInbasicnum(v2.getDouble(5));
+                if (arg21) {
+                    v8.setItems(v5.queryItemBatchs(arg19, v8.getGoodsid()));
+                } else {
+                    v8.setItems(null);
+                }
+                v10.add(v8);
+            }
+            String sql2 = "select item.giftgoodsid goodsid, g.name as goodsname, g.barcode, g.isusebatch,  (item.giftnum * gu.ratio) as outbasicnum from kf_fieldsaleitem item left join sz_goods g on g.id = item.giftgoodsid left join sz_goodsunit gu on gu.goodsid = item.giftgoodsid and gu.unitid = item.giftunitid where item.fieldsaleid=? and item.ispromotion = 1 and item.promotiontype = 1";
+            v3 = this.db.rawQuery(sql2, new String[]{String.valueOf(arg19)});
+            while (v3.moveToNext()) {
+                FieldSaleItemTotal v8_1 = null;
+                String v6 = v3.getString(0);
+                for (int i = 0; i < v10.size(); i++) {
+                    if (v6.equals(v10.get(i).getGoodsid())) {
+                        v8_1 = v10.get(i);
+                        break;
+                    }
+                }
+                if (v8_1 != null) {
+                    v8_1.setOutbasicnum(v8_1.getOutbasicnum() + v3.getDouble(4));
+                } else {
+                    v8_1 = new FieldSaleItemTotal();
+                    v8_1.setGoodsid(v3.getString(0));
+                    v8_1.setGoodsname(v3.getString(1));
+                    v8_1.setBarcode(v3.getString(2));
+                    v13_1 = v3.getInt(3) == 1;
+                    v8_1.setIsusebatch(v13_1);
+                    v8_1.setOutbasicnum(v3.getDouble(4));
+                    v8_1.setInbasicnum(0);
+                    if (arg21) {
+                        v8_1.setItems(v5.queryItemBatchs(arg19, v8_1.getGoodsid()));
+                    } else {
+                        v8_1.setItems(null);
+                    }
+                }
+                v10.add(v8_1);
+            }
+            return v10;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (v2 != null) {
+                v2.close();
+            }
+            if (v3 != null) {
+                v3.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
     }
 
 }

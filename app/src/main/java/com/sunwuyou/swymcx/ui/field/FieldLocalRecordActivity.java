@@ -16,7 +16,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.RequestHelper;
@@ -36,6 +35,7 @@ import com.sunwuyou.swymcx.utils.InfoDialog;
 import com.sunwuyou.swymcx.utils.MLog;
 import com.sunwuyou.swymcx.utils.NetUtils;
 import com.sunwuyou.swymcx.utils.PDH;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.UpLoadUtils;
 import com.sunwuyou.swymcx.view.MessageDialog;
 
@@ -122,7 +122,7 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
                     }
                     if ("sameid".equals(v1)) {
                         PDH.showFail("客户编号已经存在，请修改");
-                        FieldLocalRecordActivity.this.startActivityForResult(new Intent().setClass(FieldLocalRecordActivity.this, NewCustomerAddAct.class).putExtra("updatecustomerid", FieldLocalRecordActivity.this.selectItmes.get(FieldLocalRecordActivity.this.customerindex).getCustomerid()), 0);
+                        startActivityForResult(new Intent(FieldLocalRecordActivity.this, NewCustomerAddAct.class).putExtra("updatecustomerid", selectItmes.get(customerindex).getCustomerid()), 0);
                         return;
                     }
                     break;
@@ -134,7 +134,10 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
+            adapter.setMultiChoice(true);
+            mode.setTitle("选择");
+            mode.getMenuInflater().inflate(R.menu.menu_visit_record_context, menu);
+            return true;
         }
 
         @Override
@@ -145,19 +148,18 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (menuPopup == null || !menuPopup.isShowing()) {
-
-
                 selectItmes = adapter.getSelectList();
                 switch (item.getItemId()) {
                     case R.id.btnDelete: {
-                        if (selectItmes.size() == 1 && selectItmes.get(0).getStatus() == 1) {
+                        if (!selectItmes.isEmpty() && selectItmes.get(0).getStatus() == 1) {
                             PDH.showMessage("单据已处理，不能被删除");
                             return true;
                         }
+                        mode.finish();
                         deleteSelected(selectItmes);
                         return false;
                     }
-                    case R.id.btnUpload: {
+                    case R.id.btnUpload:
                         if (!NetUtils.isConnected(FieldLocalRecordActivity.this)) {
                             PDH.showFail("当前无可用网络");
                             return true;
@@ -179,11 +181,10 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
                         }.start();
                         mode.finish();
                         return false;
-                    }
-                    //                    case R.id.btnSelectAll:
-                    //                        adapter.setSelectAll();
-                    //                        mode.setSubtitle("选中" + adapter.getCount() + "条");
-                    //                        return false;
+                    case R.id.btnSelectAll:
+                        adapter.setSelectAll();
+                        mode.setSubtitle("选中" + adapter.getCount() + "条");
+                        return false;
                 }
             } else {
                 menuPopup.dismiss();
@@ -196,12 +197,17 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-
+            adapter.setMultiChoice(false);
         }
 
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
+            adapter.setCheckePosition(position);
+            int count = adapter.getSelectCount();
+            if (count == 0) {
+                mode.finish();
+            }
+            mode.setSubtitle("选中" + count + "条");
         }
     };
 
@@ -216,11 +222,11 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
             }
             handlerUpdate.sendMessage(handlerUpdate.obtainMessage(0, v16));
         } else {
-            int v8 = 0;
+            int count = 0;
             for (int i = 0; i < arg19.size(); i++) {
                 FieldSaleThin saleThin = arg19.get(i);
                 if ((new FieldSaleItemDAO().getFieldSaleItems(saleThin.getId()).size() != 0 || new FieldSalePayTypeDAO().getPayTypeAmount(saleThin.getId()) == 0) && 1 == saleThin.getStatus()) {
-                    v8 = i;
+                    count++;
                     String v13 = v12.getZeroSalePriceGoods(saleThin.getId());
                     if (v13 != null) {
                         this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(0, "上传失败，客户【" + saleThin.getCustomername() + " 】存在【" + v13 + "】等商品销售价格为零"));
@@ -228,7 +234,7 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
                     }
                 }
             }
-            this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, v8));
+            this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, count));
             for (int i = 0; i < arg19.size(); i++) {
                 FieldSaleThin saleThin = arg19.get(i);
                 if (1 == saleThin.getStatus()) {
@@ -248,16 +254,16 @@ public class FieldLocalRecordActivity extends BaseHeadActivity implements View.O
                         }
                     }
                     v16 = v17.uploadCheXiao(saleThin);
-                    if (v8 == 1) {
-                        if (v16 != null) {
-                            this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(0, v16));
-                        } else {
-                            this.handlerUpdate.sendEmptyMessage(1);
-                        }
+//                    if (v8 == 1) {
+                    if (v16 != null) {
+                        this.handlerUpdate.sendMessage(this.handlerUpdate.obtainMessage(0, v16));
+                    } else {
+                        this.handlerProgress.sendEmptyMessage(i);
                     }
-                    this.handlerProgress.sendEmptyMessage(i);
+//                    }
                 }
             }
+            this.handlerUpdate.sendEmptyMessage(1);
             this.handlerUpdate.sendEmptyMessage(2);
         }
     }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:id="@id/tvSerialid" android:layout_weight="1.0" style="@style/m_order_item" />
+    <LinearLayout android:layout_gravity="center" android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginTop="2.0dip" android:layout_marginBottom="2.0dip" android:layout_weight="6.0">
+        <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:textSize="@dimen/list_item_inner_title" android:gravity="center|left" android:id="@id/tvGoodsName" style="@style/m_order_item" />
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="2.0dip">
+            <TextView android:textSize="@dimen/list_item_inner_info" android:textColor="@color/gray" android:gravity="center|left" android:id="@id/tvBarcode" android:layout_width="wrap_content" android:layout_height="fill_parent" />
+            <TextView android:textColor="@color/gray" android:gravity="center|right" android:id="@id/tvWarehouse" android:paddingRight="5.0dip" style="@style/m_order_item" />
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="2.0dip">
+            <TextView android:textColor="@color/gray" android:gravity="center|left" android:id="@id/tvBatch" style="@style/m_order_item" />
+            <TextView android:textColor="@color/gray" android:gravity="center|right" android:id="@id/tvNum" android:paddingRight="5.0dip" style="@style/m_order_item" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

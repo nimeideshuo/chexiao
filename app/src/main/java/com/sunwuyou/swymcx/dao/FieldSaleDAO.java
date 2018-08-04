@@ -156,11 +156,11 @@ public class FieldSaleDAO {
         return null;
     }
 
-    public FieldSale getFieldsale(Long arg12) {
+    public FieldSale getFieldsale(Long id) {
         this.db = this.helper.getReadableDatabase();
         String sql = "select id, showid, customerid, customername, departmentid, departmentname, warehouseid, warehousename, builderid, buildername, buildtime, preference, pricesystemid, promotionid, remark, status, longitude, latitude, address, isnewcustomer,printnum from kf_fieldsale where id=?";
         try {
-            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12)});
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(id)});
             if (cursor.moveToNext()) {
                 FieldSale sale = new FieldSale();
                 sale.setId(cursor.getLong(0));
@@ -225,12 +225,12 @@ public class FieldSaleDAO {
         new UpdateUtils().saveToLocalDB(localArrayList);
     }
 
-    public boolean updateDocValue(long arg9, String arg11, String arg12) {
+    public boolean updateDocValue(long id, String arg11, String arg12) {
         boolean v0 = true;
         this.db = this.helper.getWritableDatabase();
         ContentValues v1 = new ContentValues();
         v1.put(arg11, arg12);
-        if (this.db.update("kf_fieldsale", v1, "id=?", new String[]{String.valueOf(arg9)}) != 1) {
+        if (this.db.update("kf_fieldsale", v1, "id=?", new String[]{String.valueOf(id)}) != 1) {
             v0 = false;
         }
         if (this.db != null) {
@@ -383,10 +383,10 @@ public class FieldSaleDAO {
                 db.close();
             }
         }
-        return "";
+        return null;
     }
 
-    public boolean submit(long arg3) {
-        return this.updateDocValue(arg3, "status", String.valueOf(2));
+    public boolean submit(long id) {
+        return this.updateDocValue(id, "status", String.valueOf(2));
     }
 }

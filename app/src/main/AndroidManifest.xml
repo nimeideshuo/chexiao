@@ -198,6 +198,9 @@
             android:name=".ui.field.CameraActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.transfer.TransferDocOpenActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.FieldMainAct"
             android:windowSoftInputMode="adjustPan" />
         <activity

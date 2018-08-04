@@ -60,7 +60,8 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
         public void handleMessage(Message message) {
             long l = Long.parseLong(message.obj.toString());
             if (l != -1L) {
-                Intent intent = new Intent(FieldDocOpenAct.this, FieldEditActivity.class).putExtra("fieldsaleid", l);
+                Intent intent = new Intent(FieldDocOpenAct.this, FieldEditActivity.class);
+                intent.putExtra("fieldsaleid", l);
                 startActivity(intent);
                 if ((customer != null) && (!TextUtils.isEmptyS(customer.getId()))) {
                     new CustomerDAO().updateCustomerValue(customer.getId(), "isfinish", "1");
@@ -101,17 +102,19 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
             fieldSale.setIsnewcustomer(this.customer.getIsNew());
             if (!TextUtils.isEmptyS(this.customer.getPromotionId())) {
                 Promotion v9 = new PromotionDAO().getPromotion(this.customer.getPromotionId());
-                if (v9 == null) {
-                    fieldSale.setPromotionid(null);
-                }
                 try {
-                    long v0 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(v9.getBeginTime()).getTime();
-                    long v7 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(v9.getEndtime()).getTime();
-                    long v2 = Utils.getCurrentTime(false);
-                    if (v2 > v0 && v2 < v7) {
-                        fieldSale.setPromotionid(this.customer.getPromotionId());
+                    if (v9 == null) {
+                        fieldSale.setPromotionid(null);
+                    } else {
+                        long v0 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(v9.getBeginTime()).getTime();
+                        long v7 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).parse(v9.getEndtime()).getTime();
+                        long v2 = Utils.getCurrentTime(false);
+                        if (v2 > v0 && v2 < v7) {
+                            fieldSale.setPromotionid(this.customer.getPromotionId());
+                        } else {
+                            fieldSale.setPromotionid(null);
+                        }
                     }
-                    fieldSale.setPromotionid(null);
                 } catch (ParseException v6) {
                     v6.printStackTrace();
                 }
@@ -176,10 +179,7 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         mLocation = aMapLocation;
-        if (aMapLocation.getLatitude() != 0) {
-            mGps.stop();
-            tvGetLocation.setText(mGps.getmAddress());
-        }
+        tvGetLocation.setText(mGps.getmAddress());
     }
 
 }

@@ -141,7 +141,7 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
 
     @Override
     public void initData() {
-
+        this.docType = "63";
     }
 
     @Override
@@ -166,21 +166,21 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
     }
 
     private SettleUp makeForm() {
-        User v1 = SystemState.getObject("cu_user", User.class);
-        SettleUp v0 = new SettleUp();
-        v0.set0bjectId(this.customer.getId());
-        v0.setObjectName(this.customer.getName());
-        v0.setBuilderId(v1.getId());
-        v0.setBuilderName(v1.getName());
-        v0.setBuildTime(Utils.formatDate(Utils.getCurrentTime(true)));
-        v0.setDepartmentId(this.department.getDid());
-        v0.setDepartmentName(this.department.getDname());
-        v0.setType(this.docType);
-        v0.setObjectOperator(this.etObjectPeople.getText().toString());
-        v0.setPreference(0);
-        v0.setRemark("");
-        v0.setIsSubmit(false);
-        return v0;
+        User user = SystemState.getObject("cu_user", User.class);
+        SettleUp settleUp = new SettleUp();
+        settleUp.set0bjectId(this.customer.getId());
+        settleUp.setObjectName(this.customer.getName());
+        settleUp.setBuilderId(user.getId());
+        settleUp.setBuilderName(user.getName());
+        settleUp.setBuildTime(Utils.formatDate(Utils.getCurrentTime(true)));
+        settleUp.setDepartmentId(this.department.getDid());
+        settleUp.setDepartmentName(this.department.getDname());
+        settleUp.setType(this.docType);
+        settleUp.setObjectOperator(this.etObjectPeople.getText().toString());
+        settleUp.setPreference(0);
+        settleUp.setRemark("");
+        settleUp.setIsSubmit(false);
+        return settleUp;
     }
 
     @Override

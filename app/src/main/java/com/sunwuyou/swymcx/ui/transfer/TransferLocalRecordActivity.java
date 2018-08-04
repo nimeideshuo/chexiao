@@ -139,8 +139,8 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
                     });
                     break;
                 }
-                //                case R.id.btnSelectAll:
-                //                    break;
+                case R.id.btnSelectAll:
+                    break;
             }
 
 

@@ -150,9 +150,9 @@ public class GoodsDAO {
     }
 
     // 从 SQL 中 取 数据 匹配
-    public ArrayList<GoodsThin> queryGoods(String id, long arg14) {
+    public ArrayList<GoodsThin> queryGoods(String text, long fieldsaleid) {
         AccountPreference v0 = new AccountPreference();
-        String v8 = "select g.id,g.name,g.pinyin,g.barcode,g.specification,g.isusebatch,stocknumber,bigstocknumber,initnumber,biginitnumber from sz_goods g where g.isavailable = \'1\' and g.id not in (select f.goodsid from kf_fieldsaleitem f where f.fieldsaleid=?) and '('";
+        String v8 = "select g.id,g.name,g.pinyin,g.barcode,g.specification,g.isusebatch,stocknumber,bigstocknumber,initnumber,biginitnumber from sz_goods g where g.isavailable = \'1\' and g.id not in (select f.goodsid from kf_fieldsaleitem f where f.fieldsaleid=?) and (";
         if ("1".equals(v0.getValue("goods_result_select", "0"))) {
             v8 = String.valueOf(v8) + " g.stocknumber>0.0 and (";
         }
@@ -169,11 +169,11 @@ public class GoodsDAO {
         }
         v8 = String.valueOf(v8) + ") order by g.id asc";
         String[] v6 = new String[v5.length + 1];
-        v6[0] = new StringBuilder(String.valueOf(arg14)).toString();
+        v6[0] = String.valueOf(fieldsaleid);
         for (v4 = 1; v4 < v6.length; ++v4) {
-            v6[v4] = "%" + id + "%";
+            v6[v4] = "%" + text + "%";
         }
-        ArrayList<GoodsThin> v7 = new ArrayList<GoodsThin>();
+        ArrayList<GoodsThin> v7 = new ArrayList<>();
         try {
             this.db = this.helper.getReadableDatabase();
             Cursor v1 = this.db.rawQuery(v8, v6);

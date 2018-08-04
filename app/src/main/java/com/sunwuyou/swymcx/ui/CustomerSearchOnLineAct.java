@@ -8,15 +8,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.RequestHelper;
 import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.service.ServiceCustomer;
 import com.sunwuyou.swymcx.utils.JSONUtil;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.AutoTextView;
 

@@ -2,6 +2,7 @@ package com.sunwuyou.swymcx.ui;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -30,6 +31,8 @@ import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
 import com.sunwuyou.swymcx.ui.field.TruckStockActivity;
 import com.sunwuyou.swymcx.ui.settleup.SettletupActivity;
 import com.sunwuyou.swymcx.ui.settleup.SettleupOpenAct;
+import com.sunwuyou.swymcx.ui.transfer.TransferDocOpenActivity;
+import com.sunwuyou.swymcx.ui.transfer.TransferEditActivity;
 import com.sunwuyou.swymcx.ui.transfer.TransferLocalRecordActivity;
 import com.sunwuyou.swymcx.utils.NetUtils;
 import com.sunwuyou.swymcx.utils.PDH;
@@ -162,16 +165,22 @@ public class FieldMainAct extends BaseHeadActivity {
                 }
                 startActivity(new Intent(this, FieldDocOpenAct.class));
                 break;
+
             case R.id.field_settleup_open:
                 //结算
                 startActivity(new Intent(this, SettleupOpenAct.class));
                 break;
             case R.id.field_transfer_open:
-                //调拨 TODO 未写完
-                startActivity(new Intent(this, TransferLocalRecordActivity.class));
+                //调拨
+                if (SystemState.getWarehouse() != null) {
+                    this.startActivity(new Intent(this, TransferEditActivity.class).putExtra("transferdocid", -1));
+                } else {
+                    PDH.showMessage("请先设置车销仓库");
+                }
+//                startActivity(new Intent(this, TransferDocOpenActivity.class));
                 break;
             case R.id.field_fields_record:
-                //我的销售  TODO 未写完
+                //我的销售
                 startActivity(new Intent(this, FieldLocalRecordActivity.class));
                 break;
             case R.id.field_settleup_record:

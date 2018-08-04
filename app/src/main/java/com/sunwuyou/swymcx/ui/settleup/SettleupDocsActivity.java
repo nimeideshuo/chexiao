@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.dao.SettleUpDAO;
@@ -20,6 +19,7 @@ import com.sunwuyou.swymcx.model.SettleUp;
 import com.sunwuyou.swymcx.model.SettleUpItem;
 import com.sunwuyou.swymcx.utils.ClickUtils;
 import com.sunwuyou.swymcx.utils.PDH;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 
 import java.util.List;

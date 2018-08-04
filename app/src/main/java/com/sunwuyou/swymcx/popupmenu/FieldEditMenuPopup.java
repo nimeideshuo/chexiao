@@ -73,7 +73,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
                 case 1: {
                     PDH.showSuccess("撤销库存成功");
                     new FieldSaleDAO().updateDocValue(FieldEditMenuPopup.this.fieldSale.getId(), "status", "0");
-                    FieldEditMenuPopup.this.activity.loadDoc();
+                    activity.loadDoc();
                     break;
                 }
                 case 2: {
@@ -178,6 +178,7 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
         this.activity.getWindow().setAttributes(attributes);
         switch (v.getId()) {
             case R.id.btnOut:
+                //库存处理
                 if (this.fieldSale.getStatus() == 0) {
                     if (new FieldSaleItemDAO().getFieldSaleItems(this.fieldSale.getId()).size() == 0) {
                         new MessageDialog(activity).showDialog("提示", "当前单据为空，是否置为已处理状态？", null, null, new MessageDialog.CallBack() {
@@ -326,10 +327,9 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
         return false;
     }
 
-    public void show(View paramView, long paramLong) {
-        this.fieldSale = new FieldSaleDAO().getFieldsale(paramLong);
+    public void show(View paramView, long id) {
+        this.fieldSale = new FieldSaleDAO().getFieldsale(id);
         int v7 = View.VISIBLE;
-        int v5 = View.GONE;
         if (this.fieldSale.getStatus() == 0) {
             this.btnOut.setText("库存处理");
             this.btnBatchDetail.setVisibility(View.GONE);
@@ -341,59 +341,57 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
             }
 
             if (TextUtils.isEmptyS(this.fieldSale.getCustomerid())) {
-                this.btnSale.setVisibility(v5);
+                this.btnSale.setVisibility(View.GONE);
+            }
+        }
+        if (this.fieldSale.getStatus() == 1) {
+            this.btnOut.setText("撤销库存");
+            this.btnDelete.setVisibility(View.GONE);
+            if (this.fieldSale.getPrintnum() > v7 && !Utils.IS_ALLOWEDMODIFY_PRINTED) {
+                this.btnOut.setVisibility(View.GONE);
             }
 
-        } else {
-            if (this.fieldSale.getStatus() == 1) {
-                this.btnOut.setText("撤销库存");
-                this.btnDelete.setVisibility(v5);
-                if (this.fieldSale.getPrintnum() > v7 && !Utils.IS_ALLOWEDMODIFY_PRINTED) {
-                    this.btnOut.setVisibility(v5);
-                }
-
-                if (this.fieldSale.getLatitude() == v7) {
-                    this.btnLocation.setVisibility(View.VISIBLE);
-                } else {
-                    this.btnLocation.setVisibility(v5);
-                }
-
-                this.btnSale.setVisibility(v5);
-                if (this.activity.getItems().size() == 0) {
-                    this.btnSettle.setVisibility(v5);
-                    this.btnPrint.setVisibility(v5);
-                    this.btnBatchDetail.setVisibility(v5);
-                    this.btnWritePad.setVisibility(v5);
-                }
-            }
-
-            if (this.fieldSale.getStatus() != 2) {
-                this.btnOut.setVisibility(v5);
-                this.btnWritePad.setVisibility(v5);
-                this.btnSale.setVisibility(v5);
-                this.btnLocation.setVisibility(v5);
-            }
-
-
-            if (this.activity.getItems().size() == 0) {
-                this.btnSettle.setVisibility(v5);
-                this.btnPrint.setVisibility(v5);
-                this.btnBatchDetail.setVisibility(v5);
-                this.root.findViewById(R.id.linear_top).setVisibility(v5);
-                DisplayMetrics v1 = new DisplayMetrics();
-                this.activity.getWindowManager().getDefaultDisplay().getMetrics(v1);
-                int v2 = v1.widthPixels;
-                int v0 = v1.heightPixels;
-                this.setWidth(v2);
-                this.setHeight(v0 / 12);
+            if (this.fieldSale.getLatitude() == v7) {
+                this.btnLocation.setVisibility(View.VISIBLE);
             } else {
-                DisplayMetrics v1 = new DisplayMetrics();
-                this.activity.getWindowManager().getDefaultDisplay().getMetrics(v1);
-                int v2 = v1.widthPixels;
-                int v0 = v1.heightPixels;
-                this.setWidth(v2);
-                this.setHeight(v0 / 6);
+                this.btnLocation.setVisibility(View.GONE);
             }
+
+            this.btnSale.setVisibility(View.GONE);
+            if (this.activity.getItems().size() == 0) {
+                this.btnSettle.setVisibility(View.GONE);
+                this.btnPrint.setVisibility(View.GONE);
+                this.btnBatchDetail.setVisibility(View.GONE);
+                this.btnWritePad.setVisibility(View.GONE);
+            }
+        }
+
+        if (this.fieldSale.getStatus() == 2) {
+            this.btnOut.setVisibility(View.GONE);
+            this.btnWritePad.setVisibility(View.GONE);
+            this.btnSale.setVisibility(View.GONE);
+            this.btnLocation.setVisibility(View.GONE);
+        }
+
+
+        if (this.activity.getItems().size() == 0) {
+            this.btnSettle.setVisibility(View.GONE);
+            this.btnPrint.setVisibility(View.GONE);
+            this.btnBatchDetail.setVisibility(View.GONE);
+            this.root.findViewById(R.id.linear_top).setVisibility(View.GONE);
+            DisplayMetrics v1 = new DisplayMetrics();
+            this.activity.getWindowManager().getDefaultDisplay().getMetrics(v1);
+            int v2 = v1.widthPixels;
+            int v0 = v1.heightPixels;
+            this.setWidth(v2);
+            this.setHeight(v0 / 12);
+        } else {
+            DisplayMetrics v1 = new DisplayMetrics();
+            this.activity.getWindowManager().getDefaultDisplay().getMetrics(v1);
+            int v2 = v1.widthPixels;
+            int v0 = v1.heightPixels;
+            this.setWidth(v2);
+            this.setHeight(v0 / 6);
         }
         super.showAtLocation(paramView, 80, 0, 0);
     }

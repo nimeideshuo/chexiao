@@ -130,13 +130,13 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
                     }.start();
                     return true;
                 //TODO 未完成
-                //                case R.id.btnSelectAll:
-                //                    for (int i = 0; i < listView.getCount(); i++) {
-                //                        if (!listView.isItemChecked(i)) {
-                //                            listView.setItemChecked(i, true);
-                //                        }
-                //                    }
-                //                return true;
+                case R.id.btnSelectAll:
+                    for (int i = 0; i < listView.getCount(); i++) {
+                        if (!listView.isItemChecked(i)) {
+                            listView.setItemChecked(i, true);
+                        }
+                    }
+                    return true;
             }
 
 

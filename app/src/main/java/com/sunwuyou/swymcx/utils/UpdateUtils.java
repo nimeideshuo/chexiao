@@ -512,7 +512,7 @@ public class UpdateUtils {
     }
 
     // 保存 List 到 SQL
-    public void saveToLocalDB(List<HashMap<String, String>> paramList) {
+    public boolean saveToLocalDB(List<HashMap<String, String>> paramList) {
         SQLiteDatabase localSQLiteDatabase = null;
         if ((paramList != null) && (paramList.size() > 0)) {
             localSQLiteDatabase = new DBOpenHelper().getWritableDatabase();
@@ -527,6 +527,7 @@ public class UpdateUtils {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                return false;
             } finally {
                 // 必须写词句， 否则，查询不到插入的信息
                 localSQLiteDatabase.setTransactionSuccessful();
@@ -538,6 +539,7 @@ public class UpdateUtils {
 
         }
 
+        return true;
     }
 
     public boolean executeCustomerGoodsAndDocUpdate(Handler arg20, List<String> arg21) {
@@ -576,14 +578,14 @@ public class UpdateUtils {
         if (v16 > 0) {
             for (int i = 0; i < v10.size(); i++) {
                 RespCustomerGoodsAndDocPages v14_1 = v10.get(i);
-                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerGoodsRecords(v14_1.getCustomers(), i+1);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerGoodsRecords(v14_1.getCustomers(), i + 1);
                 if (v8 != null) {
                     this.saveToLocalDB(v8);
                 }
             }
             for (int i = 0; i < v10.size(); i++) {
                 RespCustomerGoodsAndDocPages docPages = v10.get(i);
-                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords(docPages.getCustomers(), i+1);
+                List<HashMap<String, String>> v8 = v15.syn_QueryCustomerDocRecords(docPages.getCustomers(), i + 1);
                 if (v8 != null) {
                     this.saveToLocalDB(v8);
                 }

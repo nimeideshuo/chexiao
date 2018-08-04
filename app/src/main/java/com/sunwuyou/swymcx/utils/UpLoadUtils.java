@@ -82,9 +82,13 @@ public class UpLoadUtils {
         }
         return v12;
     }
+
     //TODO 未完成
     public String uploadCheXiao(FieldSaleThin arg46) {
-        String v9_1 = null;
+
+        String v9_1;
+        CheXiaoDocID v4_1 = null;
+        String v42 = "";
         ServiceDocUpload v3 = new ServiceDocUpload();
         ServiceVisit v43 = new ServiceVisit();
         FieldSaleDAO v25 = new FieldSaleDAO();
@@ -99,12 +103,11 @@ public class UpLoadUtils {
             int v10 = v21 / v39;
             int v9 = v21 % v39 > 0 ? 1 : 0;
             int v38 = v10 + v9;
+
             for (int i = 0; i < v38; i++) {
-                if (i >= v38) {
-                    break;
-                }
                 List<ReqDocAddCheXiaoItem> v6 = v26.getFieldSaleItemForUpload(arg46.getId(), v39, i * v39);
                 ArrayList<String> v34 = new ArrayList<>();
+
                 for (int j = 0; j < v6.size(); j++) {
                     ReqDocAddCheXiaoItem v31 = v6.get(j);
                     if (!v34.contains(v31.getGoodsId())) {
@@ -115,85 +118,92 @@ public class UpLoadUtils {
                     }
                 }
                 ArrayList<ReqDocAddCheXiaoBatch> v7 = new ArrayList<>();
-                for (int e = 0; e < v34.size(); e++) {
+                for (int j = 0; j < v34.size(); j++) {
                     double v18 = 0;
                     if (i > 0) {
-                        v18 = v26.getGoodsOutSumNum(arg46.getId(), v34.get(e), i * v39);
+                        v18 = v26.getGoodsOutSumNum(arg46.getId(), v34.get(j), i * v39);
                     }
-                    List<ReqDocAddCheXiaoBatch> v36 = v24.getFieldSaleItemBatchForUpload(arg46.getId(), v34.get(e));
-                    for (int j = 0; j < v36.size(); j++) {
-                        ReqDocAddCheXiaoBatch xiaoBatch = v36.get(j);
-                        if (!xiaoBatch.isIsout() || v18 == 0) {
-                            v7.add(xiaoBatch);
-                        } else if (v18 >= xiaoBatch.getNum()) {
-                            v18 -= xiaoBatch.getNum();
+                    List<ReqDocAddCheXiaoBatch> v36 = v24.getFieldSaleItemBatchForUpload(arg46.getId(), v34.get(j));
+                    for (int k = 0; k < v36.size(); k++) {
+                        ReqDocAddCheXiaoBatch v31 = v36.get(k);
+                        if (!v31.isIsout() || v18 == 0) {
+                            v7.add(v31);
+                        } else if (v18 >= v31.getNum()) {
+                            v18 -= v31.getNum();
                         } else {
-                            xiaoBatch.setNum(xiaoBatch.getNum() - v18);
+                            v31.setNum(v31.getNum() - v18);
                             v18 = 0;
-                            v7.add(xiaoBatch);
+                            v7.add(v31);
                         }
-                    }
 
+
+                    }
                 }
                 List<ReqDocUpdatePayType> v8 = null;
                 if (i == 0) {
                     v8 = new FieldSalePayTypeDAO().getPayTypeForUpload(arg46.getId());
                 }
-                String v42 = v3.doc_UploadCheXiao(v4, v5, v6, v7, v8);
+                v42 = v3.doc_UploadCheXiao(v4, v5, v6, v7, v8);
                 if (RequestHelper.isSuccess(v42)) {
-                    CheXiaoDocID v4_1 = JSONUtil.readValue(v42, CheXiaoDocID.class);
-                    return v42;
+                    v4_1 = JSONUtil.readValue(v42, CheXiaoDocID.class);
                 }
             }
         } else {
-            String v42 = v3.doc_UploadCheXiao(v4, v5, null, null, null);
+            v42 = v3.doc_UploadCheXiao(v4, v5, null, null, null);
             if (RequestHelper.isSuccess(v42)) {
-                CheXiaoDocID v4_1 = JSONUtil.readValue(v42, CheXiaoDocID.class);
-                return v42;
+                v4_1 = JSONUtil.readValue(v42, CheXiaoDocID.class);
             }
         }
         List<ReqVstAddVisitCustomerJobImage> v35 = v23.getFieldSaleImageForUpload(arg46.getId());
         if (v35 != null && v35.size() > 0) {
             FileUtils v27 = new FileUtils();
-            for (int v33 = 0; v33 < v35.size(); ++v33) {
-                ReqVstAddVisitCustomerJobImage v32 = v35.get(v33);
-                v32.setVisitJobId(v4.getVisitItemId());
+            for (int i = 0; i < v35.size(); i++) {
+                ReqVstAddVisitCustomerJobImage v32 = v35.get(i);
+                assert v4_1 != null;
+                v32.setVisitJobId(v4_1.getVisitItemId());
                 File v40 = v27.findPicture(v32.getImagePath());
                 if (v40 != null) {
+                    int v44 = ((int) v40.length());
+                    byte[] v20 = new byte[v44];
                     try {
-                        int v44 = ((int) v40.length());
-                        byte[] v20 = new byte[v44];
                         new FileInputStream(v40).read(v20, 0, v44);
                         v32.setImageFile(Base64.encodeToString(v20, 0));
-                    } catch (Exception e) {
+
+
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    String v42 = v43.vst_UploadVisitImage(v32);
-                    if (!RequestHelper.isSuccess(v42)) {
-                        MLog.d(v42);
+                    v42 = v43.vst_UploadVisitImage(v32);
+                    if (RequestHelper.isSuccess(v42)) {
+
+                    } else {
                         return v42;
                     }
-                    arg46.setStatus(2);
-                    v25.submit(arg46.getId());
-                    if ("success".equals(v42)) {
-                        MLog.d("上传成功");
-                        return null;
-                    }
-                    RespStockProcessReParaEntity v41 = JSONUtil.readValue(v42, RespStockProcessReParaEntity.class);
-                    if (!v41.getIsSubmitSuccess()) {
-                        MLog.d("上传成功，但过账失败");
-                        v9_1 = "上传成功，但" + v41.getInfo();
-                    } else {
-                        MLog.d("上传成功，且过账成功");
-                        return null;
-                    }
-                    v42 = v3.doc_SubmitCheXiao(v4.getVisitId(), v4.getOutDocId(), v4.getInDocId(), v5.getSaleAmount());
-                    return v42;
+
                 }
 
             }
         }
-        return null;
+        v42 = v3.doc_SubmitCheXiao(v4_1.getVisitId(), v4_1.getOutDocId(), v4_1.getInDocId(), v5.getSaleAmount());
+        if (!RequestHelper.isSuccess(v42)) {
+            MLog.d(v42);
+            return v42;
+        }
+        arg46.setStatus(2);
+        v25.submit(arg46.getId());
+        if ("success".equals(v42)) {
+            MLog.d("上传成功");
+            return null;
+        }
+        RespStockProcessReParaEntity v41 = JSONUtil.readValue(v42, RespStockProcessReParaEntity.class);
+        if (!v41.getIsSubmitSuccess()) {
+            MLog.d("上传成功，但过账失败");
+            v9_1 = "上传成功，但" + v41.getInfo();
+        } else {
+            MLog.d("上传成功，且过账成功");
+            return null;
+        }
+        return v9_1;
     }
 
     public String uploadSettleUp(SettleUp arg13) {

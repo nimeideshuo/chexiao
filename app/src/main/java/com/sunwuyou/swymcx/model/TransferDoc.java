@@ -83,7 +83,7 @@ public class TransferDoc {
         this.inwarehousename = inwarehousename;
     }
 
-    public boolean isposted() {
+    public boolean isIsposted() {
         return isposted;
     }
 

@@ -170,7 +170,7 @@ public class ReqDocAddCheXiao {
     }
 
     public String getPromotionId() {
-        return this.promotionid;
+        return promotionid;
     }
 
     public void setPromotionId(String arg1) {

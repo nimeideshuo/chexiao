@@ -1,23 +1,19 @@
 package com.sunwuyou.swymcx.ui;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.dou361.dialogui.DialogUIUtils;
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.MyApplication;
-import com.sunwuyou.swymcx.app.RequestHelper;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
 import com.sunwuyou.swymcx.http.HttpListener;
 import com.sunwuyou.swymcx.request.TerminalEntity;
+import com.sunwuyou.swymcx.utils.TextUtils;
 
 import java.util.HashMap;
 

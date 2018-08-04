@@ -74,12 +74,12 @@ public class SearchHelper implements View.OnClickListener, AutoTextView.OnTextCh
         }
     };
 
-    public SearchHelper(BaseActivity paramBaseActivity, View paramView, long paramLong, boolean paramBoolean) {
+    public SearchHelper(BaseActivity paramBaseActivity, View paramView, long fieldsaleid, boolean paramBoolean) {
         this.mBaseGoodsAct = paramBaseActivity;
-        this.fieldsaleid = paramLong;
+        this.fieldsaleid = fieldsaleid;
         this.autoTextView = paramView.findViewById(R.id.atvSearch);
         this.btnAdd = paramView.findViewById(R.id.btnAdd);
-        listGoods = new ArrayList<GoodsThin>();
+        listGoods = new ArrayList<>();
         this.autoTextView.setOnClickListener(this);
         this.autoTextView.setOnItemClickListener(this.onItemClickListener);
         this.autoTextView.setOnTextChangeListener(this);

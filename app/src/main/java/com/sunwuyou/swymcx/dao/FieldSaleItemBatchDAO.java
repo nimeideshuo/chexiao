@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.model.FieldSaleItemBatchEx;
 import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoBatch;
+import com.sunwuyou.swymcx.utils.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +159,8 @@ public class FieldSaleItemBatchDAO {
     public double getCancelAmount(String arg8) {
         this.db = this.helper.getReadableDatabase();
         try {
-            cursor = this.db.rawQuery("select sum(num*price) from kf_fieldsale as doc, kf_fieldsaleitembatch as itembatch  where doc.id = itembatch.fieldsaleid and doc.status != 0 and itembatch.goodsid = ? and itembatch.isout = \'0\'", new String[]{arg8});
+            String sql="select sum(num*price) from kf_fieldsale as doc, kf_fieldsaleitembatch as itembatch  where doc.id = itembatch.fieldsaleid and doc.status != 0 and itembatch.goodsid = ? and itembatch.isout = \'0\'";
+            cursor = this.db.rawQuery(sql, new String[]{arg8});
             if (cursor.moveToNext()) {
                 return cursor.getDouble(0);
             }
@@ -179,7 +180,8 @@ public class FieldSaleItemBatchDAO {
     public List<ReqDocAddCheXiaoBatch> getFieldSaleItemBatchForUpload(long arg12, String arg14) {
         this.db = this.helper.getReadableDatabase();
         try {
-            cursor = this.db.rawQuery("select ib.goodsid, ib.batch, case when ib.isout=\'1\' then gu.unitid else ib.unitid end as unitid,  \tib.price, ib.productiondate, case when ib.isout=\'1\' then ib.num*gu.ratio else ib.num end as num,  \tib.isout from kf_fieldsaleitembatch as ib left outer join sz_goodsunit as gu on ib.goodsid = gu.goodsid and ib.unitid = gu.unitid  where ib.fieldsaleid=? and ib.goodsid=? order by ib.batch asc", new String[]{new StringBuilder(String.valueOf(arg12)).toString(), arg14});
+            String sql="select ib.goodsid, ib.batch, case when ib.isout=\'1\' then gu.unitid else ib.unitid end as unitid,  \tib.price, ib.productiondate, case when ib.isout=\'1\' then ib.num*gu.ratio else ib.num end as num,  \tib.isout from kf_fieldsaleitembatch as ib left outer join sz_goodsunit as gu on ib.goodsid = gu.goodsid and ib.unitid = gu.unitid  where ib.fieldsaleid=? and ib.goodsid=? order by ib.batch asc";
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), arg14});
             ArrayList<ReqDocAddCheXiaoBatch> batchArrayList = new ArrayList<>();
             while (cursor.moveToNext()) {
                 ReqDocAddCheXiaoBatch xiaoBatch = new ReqDocAddCheXiaoBatch();
@@ -190,12 +192,90 @@ public class FieldSaleItemBatchDAO {
                 xiaoBatch.setProductiondate(cursor.getString(4));
                 xiaoBatch.setNum(cursor.getDouble(5));
                 xiaoBatch.setIsout(cursor.getInt(6) == 1);
-                if (TextUtils.isEmptyS(xiaoBatch.getProductiondate())) {
+                if (!TextUtils.isEmptyS(xiaoBatch.getProductiondate())) {
                     xiaoBatch.setProductiondate(null);
                 }
                 batchArrayList.add(xiaoBatch);
             }
             return batchArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public List<FieldSaleItemBatchEx> queryItemBatchs(long arg12, String arg14) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            String sql="select fb.serialid,fb.fieldsaleid,fb.batch,fb.isout,fb.num,fb.goodsid,fb.unitid, b.stocknumber as stocknumber,b.bigstocknumber as bigstocknumber,fb.price,gu.unitname, fb.productiondate,gu.ratio, g.name as goodsname, g.barcode, g.specification, g.isusebatch  from kf_fieldsaleitembatch fb  left join kf_goodsbatch b on b.goodsid=fb.goodsid and b.batch=fb.batch  left join sz_goodsunit gu on gu.goodsid=fb.goodsid and gu.unitid=fb.unitid left join sz_goods g on g.id=fb.goodsid where fb.fieldsaleid=? and fb.goodsid=? order by fb.isout desc";
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), arg14});
+            ArrayList<FieldSaleItemBatchEx> batchExArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                FieldSaleItemBatchEx batchEx = new FieldSaleItemBatchEx();
+                batchEx.setSerialid(cursor.getLong(0));
+                batchEx.setFieldsaleid(cursor.getLong(1));
+                batchEx.setBatch(cursor.getString(2));
+                batchEx.setIsout(cursor.getInt(3) == 1);
+                batchEx.setNum(cursor.getDouble(4));
+                batchEx.setGoodsid(cursor.getString(5));
+                batchEx.setUnitid(cursor.getString(6));
+                batchEx.setStocknumber(cursor.getDouble(7));
+                batchEx.setBigstocknumber(cursor.getString(8));
+                batchEx.setPrice(cursor.getDouble(9));
+                batchEx.setUnitname(cursor.getString(10));
+                batchEx.setProductiondate(cursor.getString(11));
+                batchEx.setRatio(cursor.getDouble(12));
+                batchEx.setGoodsname(cursor.getString(13));
+                batchEx.setBarcode(cursor.getString(14));
+                batchEx.setSpecification(cursor.getString(15));
+                batchEx.setIsusebatch(cursor.getInt(16) == 1);
+                batchExArrayList.add(batchEx);
+            }
+            return batchExArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public List<FieldSaleItemBatchEx> getGoodsCancelItemBatch(long arg12, String arg14) {
+        this.db = this.helper.getReadableDatabase();
+        String sql = "select fb.serialid,fb.fieldsaleid,fb.batch,fb.isout,fb.num,fb.goodsid,fb.unitid, b.stocknumber as stocknumber,b.bigstocknumber as bigstocknumber,fb.price,gu.unitname, fb.productiondate,gu.ratio from kf_fieldsaleitembatch fb  left join kf_goodsbatch b on b.goodsid=fb.goodsid and b.batch=fb.batch  left join sz_goodsunit gu on gu.goodsid=fb.goodsid and gu.unitid=fb.unitid where fb.fieldsaleid=? and fb.isout=\'0\' and fb.goodsid=?";
+        try {
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), arg14});
+            ArrayList<FieldSaleItemBatchEx> exArrayList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                FieldSaleItemBatchEx v2 = new FieldSaleItemBatchEx();
+                v2.setSerialid(cursor.getLong(0));
+                v2.setFieldsaleid(cursor.getLong(1));
+                v2.setBatch(cursor.getString(2));
+                v2.setIsout(cursor.getInt(3) == 1);
+                v2.setNum(cursor.getDouble(4));
+                v2.setGoodsid(cursor.getString(5));
+                v2.setUnitid(cursor.getString(6));
+                v2.setStocknumber(cursor.getDouble(7));
+                v2.setBigstocknumber(cursor.getString(8));
+                v2.setPrice(cursor.getDouble(9));
+                v2.setUnitname(cursor.getString(10));
+                v2.setProductiondate(cursor.getString(11));
+                v2.setRatio(cursor.getDouble(12));
+                exArrayList.add(v2);
+            }
+            return exArrayList;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

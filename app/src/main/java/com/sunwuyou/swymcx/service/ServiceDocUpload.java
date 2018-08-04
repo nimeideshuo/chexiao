@@ -6,14 +6,18 @@ import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.model.User;
 import com.sunwuyou.swymcx.request.CheXiaoDocID;
 import com.sunwuyou.swymcx.request.ReqDocAddCheXiao;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoBatch;
+import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoItem;
 import com.sunwuyou.swymcx.request.ReqDocAddOtherSettleUp;
 import com.sunwuyou.swymcx.request.ReqDocAddSettleUp;
 import com.sunwuyou.swymcx.request.ReqDocAddTransferDoc;
 import com.sunwuyou.swymcx.request.ReqDocSubmitCheXiao;
+import com.sunwuyou.swymcx.request.ReqDocUpdatePayType;
 import com.sunwuyou.swymcx.request.ReqDocUploadForCheXiao;
 import com.sunwuyou.swymcx.request.ReqDocUploadForSettleUp;
 import com.sunwuyou.swymcx.request.ReqDocUploadForTransferDoc;
 import com.sunwuyou.swymcx.utils.JSONUtil;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.utils.Utils_help;
 
@@ -67,31 +71,33 @@ public class ServiceDocUpload {
         return new Utils_help().getServiceInfor(url, map);
     }
 
-    public String doc_UploadCheXiao(CheXiaoDocID arg8, ReqDocAddCheXiao arg9, List arg10, List arg11, List arg12) {
+    public String doc_UploadCheXiao(CheXiaoDocID id, ReqDocAddCheXiao doc, List<ReqDocAddCheXiaoItem> items, List<ReqDocAddCheXiaoBatch> itemBatchs, List<ReqDocUpdatePayType> payTypes) {
         String url = Utils.getServiceAddress(this.baseAddress, "uploadchexiao");
-        ReqDocUploadForCheXiao v1 = new ReqDocUploadForCheXiao();
-        v1.setVisitId(arg8.getVisitId());
-        v1.setOutDocId(arg8.getOutDocId());
-        v1.setInDocId(arg8.getInDocId());
-        v1.setDoc(JSONUtil.object2Json(arg9));
-        if (arg10 != null) {
-            v1.setItems(JSONUtil.object2Json(arg10));
+        ReqDocUploadForCheXiao cheXiao = new ReqDocUploadForCheXiao();
+        cheXiao.setVisitId(id.getVisitId());
+        cheXiao.setOutDocId(id.getOutDocId());
+        cheXiao.setInDocId(id.getInDocId());
+        if (TextUtils.isEmpty(doc.getPromotionId())) {
+            doc.setPromotionId(null);
+        }
+        cheXiao.setDoc(JSONUtil.object2Json(doc));
+        if (items != null) {
+            cheXiao.setItems(JSONUtil.object2Json(items));
         } else {
-            v1.setItems(null);
+            cheXiao.setItems(null);
+        }
+        if (itemBatchs != null) {
+            cheXiao.setItemBatchs(JSONUtil.object2Json(itemBatchs));
+        } else {
+            cheXiao.setItemBatchs(null);
         }
 
-        if (arg11 != null) {
-            v1.setItemBatchs(JSONUtil.object2Json(arg11));
+        if (payTypes != null) {
+            cheXiao.setPayTypes(JSONUtil.object2Json(payTypes));
         } else {
-            v1.setItemBatchs(null);
+            cheXiao.setPayTypes(null);
         }
-
-        if (arg12 != null) {
-            v1.setPayTypes(JSONUtil.object2Json(arg12));
-        } else {
-            v1.setPayTypes(null);
-        }
-        map.put("parameter", JSON.toJSONString(v1));
+        map.put("parameter", JSON.toJSONString(cheXiao));
         return new Utils_help().getServiceInfor(url, map);
     }
 

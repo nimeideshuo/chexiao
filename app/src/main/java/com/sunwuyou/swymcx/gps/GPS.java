@@ -82,8 +82,11 @@ public class GPS implements AMapLocationListener {
             mLatitude = aMapLocation.getLatitude();
             //当前时间
             mTagerTime = aMapLocation.getTime();
-            MLog.d("定位成功  获取经度:" + aMapLocation.getLongitude() + " 获取纬度:" + aMapLocation.getLatitude() + mAddress);
-            callBack.onLocationChanged(aMapLocation);
+            if (aMapLocation.getLongitude() > 0) {
+                mLocationClient.stopLocation();
+                MLog.d("定位成功  获取经度:" + aMapLocation.getLongitude() + " 获取纬度:" + aMapLocation.getLatitude() + mAddress);
+                callBack.onLocationChanged(aMapLocation);
+            }
         } else {
             //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
             MLog.d("location Error, ErrCode:"

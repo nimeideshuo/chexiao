@@ -4,11 +4,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.model.PayType;
 import com.sunwuyou.swymcx.model.SettleUp;
 import com.sunwuyou.swymcx.model.SettleUpPayType;
 import com.sunwuyou.swymcx.model.SettleupThin;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class SettleUpDAO {
         }
         SettleUpPayTypeDAO v0 = new SettleUpPayTypeDAO();
         if (v2 != -1) {
-            List<PayType> typeList = new PayTypeDAO().getPaytypes(TextUtils.isEmptyS(arg11.getObjectId()));
+            List<PayType> typeList = new PayTypeDAO().getPaytypes(!TextUtils.isEmptyS(arg11.getObjectId()));
             for (int i = 0; i < typeList.size(); i++) {
                 SettleUpPayType v5 = new SettleUpPayType();
                 v5.setAmount(0);
@@ -67,7 +67,8 @@ public class SettleUpDAO {
     public SettleUp getSettleUp(long arg11) {
         this.db = this.helper.getReadableDatabase();
         try {
-            cursor = this.db.rawQuery("select id,objectid,objectname,departmentid,departmentname,objectoperator,preference,issubmit,remark,builderid,buildername,buildtime,type from cw_settleup where id=?", new String[]{String.valueOf(arg11)});
+            String sql="select id,objectid,objectname,departmentid,departmentname,objectoperator,preference,issubmit,remark,builderid,buildername,buildtime,type from cw_settleup where id=?";
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg11)});
             if (cursor.moveToNext()) {
                 SettleUp settleUp = new SettleUp();
                 settleUp.setId(cursor.getLong(0));
@@ -201,7 +202,8 @@ public class SettleUpDAO {
     public double getPreference(long arg10) {
         this.db = this.helper.getWritableDatabase();
         try {
-            cursor = this.db.rawQuery("select preference from cw_settleup where id=?", new String[]{String.valueOf(arg10)});
+            String sql="select preference from cw_settleup where id=?";
+            cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg10)});
             if (cursor.moveToNext()) {
                 return cursor.getDouble(0);
             }

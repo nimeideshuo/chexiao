@@ -7,7 +7,6 @@ import android.os.Message;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.immo.libcomm.utils.TextUtils;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.dao.FieldSaleDAO;
 import com.sunwuyou.swymcx.dao.FieldSaleItemDAO;
@@ -22,6 +21,7 @@ import com.sunwuyou.swymcx.model.GoodsUnit;
 import com.sunwuyou.swymcx.model.PromotionGoods;
 import com.sunwuyou.swymcx.ui.TitleDialog;
 import com.sunwuyou.swymcx.utils.PDH;
+import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.EditButtonView;
 
@@ -72,9 +72,11 @@ public class GoodsSelectMoreDialog extends TitleDialog implements View.OnClickLi
         this.setConfirmButton(this);
         this.setCancelButton(null);
     }
+
     public void setAction(EmptyDo actionDo) {
         this.actionDo = actionDo;
     }
+
     @Override
     public void onClick(View v) {
         if (TextUtils.isEmpty(this.etNum.getText().toString())) {
@@ -90,22 +92,21 @@ public class GoodsSelectMoreDialog extends TitleDialog implements View.OnClickLi
                     for (int i = 0; i < goods.size(); i++) {
                         if (fieldsaleitemDAO.goodsIsAdded(fieldsale.getId(), goods.get(i).getId())) {
                             name = String.valueOf(i) + goods.get(i).getName();
-                        } else {
-                            PromotionGoods v9 = null;
-                            if (!TextUtils.isEmptyS(fieldsale.getPromotionid())) {
-                                v9 = new PromotionGoodsDAO().getPromotiongoods(fieldsale.getPromotionid(), goods.get(i).getId());
-                            }
-                            GoodsUnit v13 = Utils.DEFAULT_UNIT == 0 ? goodsunitDAO.queryBaseUnit(goods.get(i).getId()) : goodsunitDAO.queryBigUnit(goods.get(i).getId());
-                            FieldSaleItem fieldSaleItem = new FieldSaleItem();
-                            double v11 = v9 == null || v9.getType() != 0 ? goodspriceDAO.queryGoodsPrice(goods.get(i).getId(), v13.getUnitid(), fieldsale.getCustomerid(), fieldsale.isIsnewcustomer(), fieldsale.getPricesystemid()) : v13.getRatio() / new GoodsUnitDAO().getGoodsUnit(goods.get(i).getId(), v9.getUnitid()).getRatio() * v9.getPrice();
-                            fieldSaleItem.setFieldsaleid(fieldsale.getId());
-                            fieldSaleItem.setGoodsid(goods.get(i).getId());
-                            fieldSaleItem.setSaleunitid(v13.getUnitid());
-                            fieldSaleItem.setGiveunitid(v13.getUnitid());
-                            fieldSaleItem.setSalenum(Utils.getDouble(etNum.getText().toString()));
-                            fieldSaleItem.setSaleprice(v11);
-                            fieldsaleitemDAO.saveFieldSaleItem(fieldSaleItem);
                         }
+                        PromotionGoods v9 = null;
+                        if (!TextUtils.isEmptyS(fieldsale.getPromotionid())) {
+                            v9 = new PromotionGoodsDAO().getPromotiongoods(fieldsale.getPromotionid(), goods.get(i).getId());
+                        }
+                        GoodsUnit v13 = Utils.DEFAULT_UNIT == 0 ? goodsunitDAO.queryBaseUnit(goods.get(i).getId()) : goodsunitDAO.queryBigUnit(goods.get(i).getId());
+                        FieldSaleItem fieldSaleItem = new FieldSaleItem();
+                        double v11 = v9 == null || v9.getType() != 0 ? goodspriceDAO.queryGoodsPrice(goods.get(i).getId(), v13.getUnitid(), fieldsale.getCustomerid(), fieldsale.isIsnewcustomer(), fieldsale.getPricesystemid()) : v13.getRatio() / new GoodsUnitDAO().getGoodsUnit(goods.get(i).getId(), v9.getUnitid()).getRatio() * v9.getPrice();
+                        fieldSaleItem.setFieldsaleid(fieldsale.getId());
+                        fieldSaleItem.setGoodsid(goods.get(i).getId());
+                        fieldSaleItem.setSaleunitid(v13.getUnitid());
+                        fieldSaleItem.setGiveunitid(v13.getUnitid());
+                        fieldSaleItem.setSalenum(Utils.getDouble(etNum.getText().toString()));
+                        fieldSaleItem.setSaleprice(v11);
+                        fieldsaleitemDAO.saveFieldSaleItem(fieldSaleItem);
                     }
                     handler.sendMessage(handler.obtainMessage(0, name));
                 }

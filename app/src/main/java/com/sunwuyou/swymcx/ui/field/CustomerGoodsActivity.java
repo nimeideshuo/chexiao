@@ -89,7 +89,7 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
             List<CustomerFieldSaleGoods> saleGoodsList = adapter.getSelectList();
             if (item.getItemId() == 0) {
                 ArrayList<GoodsThin> goodsThins = new ArrayList<>();
-                for (int i = 0; i < goodsThins.size(); i++) {
+                for (int i = 0; i < saleGoodsList.size(); i++) {
                     GoodsThin goodsThin = new GoodsThin();
                     goodsThin.setId(saleGoodsList.get(i).getGoodsid());
                     goodsThin.setName(saleGoodsList.get(i).getGoodsname());
@@ -106,9 +106,9 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
                 });
                 moreDialog.show(goodsThins, fieldSale.getId());
             } else {
-                mode.finish();
                 passCustomerGoods(saleGoodsList);
             }
+            mode.finish();
             return false;
         }
 
@@ -157,6 +157,9 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
         super.onResume();
         if (mMode != null) {
             mMode.finish();
+        }
+        if (moreDialog != null && moreDialog.isShowing()) {
+            moreDialog.dismiss();
         }
         this.loadData();
     }
@@ -256,13 +259,13 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
         }
 
         public List<CustomerFieldSaleGoods> getSelectList() {
-            ArrayList<CustomerFieldSaleGoods> listItems = new ArrayList<>();
+            ArrayList<CustomerFieldSaleGoods> items = new ArrayList<>();
             for (int i = 0; i < listItems.size(); i++) {
                 if (this.status.get(i) != null && (this.status.get(i))) {
-                    listItems.add(this.listItems.get(i));
+                    items.add(listItems.get(i));
                 }
             }
-            return listItems;
+            return items;
         }
 
         @Override
@@ -294,10 +297,7 @@ public class CustomerGoodsActivity extends BaseHeadActivity implements View.OnCl
             if (this.status.get(position) == null) {
                 this.status.put(position, true);
             } else {
-                HashMap<Integer, Boolean> v2 = this.status;
-                Integer v3 = position;
-                boolean v0 = !this.status.get(position);
-                v2.put(v3, v0);
+                status.put(position, status.get(position));
             }
             this.notifyDataSetChanged();
         }
