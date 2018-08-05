@@ -145,7 +145,7 @@ public class UpdateUtils {
                 if (paramInt == 4) {
                     v10 = true;
                 }
-                //TODO 第二个执行
+                // 第二个执行
                 List<HashMap<String, String>> list = v19.syn_QueryCustomerRecordsByID(v6, v10, v4.getMaxOrderNo());
                 if (list == null) {
                     break;

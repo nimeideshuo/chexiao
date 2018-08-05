@@ -129,7 +129,20 @@ public class SettleUpItemDAO {
                 db.close();
             }
         }
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
+    public boolean updateSettleUpItem(long arg9, String arg11, String arg12) {
+        boolean v0 = true;
+        this.db = this.helper.getWritableDatabase();
+        ContentValues v1 = new ContentValues();
+        v1.put(arg11, arg12);
+        if (this.db.update("cw_settleupitem", v1, "serialid=?", new String[]{String.valueOf(arg9)}) != 1) {
+            v0 = false;
+        }
+        if (this.db != null) {
+            this.db.close();
+        }
+        return v0;
+    }
 }

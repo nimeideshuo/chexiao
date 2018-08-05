@@ -83,7 +83,7 @@ public class GoodsUnitDAO {
         return goodsunit;
     }
 
-    // TODO 获取商品 规格 1*多少
+    //  获取商品 规格 1*多少
     public double getGoodsUnitRatio(String goodsid, String unitid) {
         this.db = this.helper.getReadableDatabase();
         try {

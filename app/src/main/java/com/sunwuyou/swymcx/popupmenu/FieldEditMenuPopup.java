@@ -20,10 +20,14 @@ import com.sunwuyou.swymcx.dao.FieldSaleDAO;
 import com.sunwuyou.swymcx.dao.FieldSaleItemBatchDAO;
 import com.sunwuyou.swymcx.dao.FieldSaleItemDAO;
 import com.sunwuyou.swymcx.dao.FieldSalePayTypeDAO;
+import com.sunwuyou.swymcx.dao.GoodsBatchDAO;
 import com.sunwuyou.swymcx.dao.GoodsDAO;
+import com.sunwuyou.swymcx.dao.GoodsUnitDAO;
 import com.sunwuyou.swymcx.gps.GPS;
 import com.sunwuyou.swymcx.model.FieldSale;
 import com.sunwuyou.swymcx.model.FieldSaleItemBatchEx;
+import com.sunwuyou.swymcx.model.FieldSaleItemTotal;
+import com.sunwuyou.swymcx.model.GoodsBatchForUpdate;
 import com.sunwuyou.swymcx.ui.LoadingDialog;
 import com.sunwuyou.swymcx.ui.WritePadAct;
 import com.sunwuyou.swymcx.ui.field.CustomerGoodsActivity;
@@ -35,9 +39,12 @@ import com.sunwuyou.swymcx.ui.field.FieldPayTypeAct;
 import com.sunwuyou.swymcx.ui.field.PicturesActivity;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.TextUtils;
+import com.sunwuyou.swymcx.utils.UpdateUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.MessageDialog;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -249,15 +256,107 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
             public void btnOk(View view) {
                 FieldSaleItemBatchDAO v5 = new FieldSaleItemBatchDAO();
                 List<FieldSaleItemBatchEx> v17 = v5.queryFieldSaleBatchs(fieldSale.getId(), false);
-                int v13;
-                for (v13 = 0; v13 < v17.size(); ++v13) {
-                    FieldSaleItemBatchEx v14 = v17.get(v13);
+
+                for (int i = 0; i < v17.size(); i++) {
+                    FieldSaleItemBatchEx v14 = v17.get(i);
                     if ((v14.getIsusebatch()) && v14.getNum() * v14.getRatio() > v14.getStocknumber()) {
                         handler.sendMessage(handler.obtainMessage(3, new GoodsDAO().getGoodsThin(v14.getGoodsid()).getName()));
                         return;
                     }
                 }
+                GoodsDAO v8 = new GoodsDAO();
+                List<FieldSaleItemTotal> v19 = new FieldSaleItemDAO().queryFieldItemTotal(fieldSale.getId(), false);
+                ArrayList<FieldSaleItemTotal> v20 = new ArrayList<>();
+                for (int i = 0; i < v19.size(); i++) {
+                    FieldSaleItemTotal v15 = v19.get(i);
+                    if (!v15.getIsusebatch()) {
+                        if (v15.getInbasicnum() > v8.getGoodsThin(v15.getGoodsid()).getStocknumber()) {
+                            handler.sendMessage(handler.obtainMessage(4, v15.getGoodsname()));
+                            return;
+                        } else {
+                            v20.add(v15);
+                        }
+                    }
+                }
+                ArrayList<GoodsBatchForUpdate> v18 = new ArrayList<>();
+                List<FieldSaleItemBatchEx> v17s = v5.queryFieldSaleBatchs(fieldSale.getId(), true);
+                for (int i = 0; i < v17s.size(); i++) {
+                    FieldSaleItemBatchEx batchEx = v17s.get(i);
+                    if (batchEx.getIsusebatch()) {
+                        GoodsBatchForUpdate v7 = new GoodsBatchForUpdate();
+                        v7.setGoodsid(batchEx.getGoodsid());
+                        v7.setBatch(batchEx.getBatch());
+                        v7.setProductiondate(batchEx.getProductiondate());
+                        v7.setStocknumber(batchEx.getStocknumber() + batchEx.getNum() * batchEx.getRatio());
+                        v18.add(v7);
+                    }
+                }
 
+                List<FieldSaleItemBatchEx> v17g = v5.queryFieldSaleBatchs(fieldSale.getId(), false);
+
+                for (int i = 0; i < v17g.size(); i++) {
+                    FieldSaleItemBatchEx v14 = v17g.get(i);
+                    if (v14.getIsusebatch()) {
+                        GoodsBatchForUpdate v7_1 = null;
+                        for (int j = 0; j < v18.size(); j++) {
+                            GoodsBatchForUpdate v30 = v18.get(j);
+                            if ((v30.getGoodsid().equals(v14.getGoodsid())) && (v30.getBatch().equals(v14.getBatch()))) {
+                                v7_1 = v30;
+                                break;
+                            }
+                        }
+                        if (v7_1 != null) {
+                            v7_1.setStocknumber(v7_1.getStocknumber() - v14.getNum() * v14.getRatio());
+                        }
+                    }
+
+
+                }
+                ArrayList<HashMap<String, String>> v21 = new ArrayList<>();
+                GoodsUnitDAO v10 = new GoodsUnitDAO();
+                for (int i = 0; i < v18.size(); i++) {
+                    GoodsBatchForUpdate forUpdate = v18.get(i);
+                    String v25 = String.format("update kf_goodsbatch set stocknumber=%s,bigstocknumber=\'%s\' where goodsid=\'%s\' and batch=\'%s\'", forUpdate.getStocknumber(), v10.getBigNum(forUpdate.getGoodsid(), null, forUpdate.getStocknumber()), forUpdate.getGoodsid(), forUpdate.getBatch());
+                    HashMap<String, String> v24 = new HashMap<>();
+                    v24.put("sql", v25);
+                    v21.add(v24);
+                }
+
+                for (int i = 0; i < v20.size(); i++) {
+                    FieldSaleItemTotal v15 = v20.get(i);
+                    double v28 = v8.getGoodsThin(v15.getGoodsid()).getStocknumber() + (v15.getOutbasicnum() - v15.getInbasicnum());
+                    String v25 = String.format(" update sz_goods set stocknumber = %s, bigstocknumber = \'%s\' where id = \'%s\' ", v28, v10.getBigNum(v15.getGoodsid(), null, v28), v15.getGoodsid());
+                    HashMap<String, String> v24 = new HashMap<>();
+                    v24.put("sql", v25);
+                    v21.add(v24);
+                }
+                if (v21.size() > 0) {
+                    List<String> v9 = v5.getUseBatchGoodsIds(fieldSale.getId());
+                    String v25 = String.format(" delete from kf_fieldsaleitembatch where fieldsaleid = %s and isout = \'1\' ", fieldSale.getId());
+                    HashMap<String, String> v24 = new HashMap<>();
+                    v24.put("sql", v25);
+                    v21.add(v24);
+
+                    String v25s = String.format(" update kf_fieldsale set status = %s where id = %s ", "0", fieldSale.getId());
+                    HashMap<String, String> v24s = new HashMap<>();
+                    v24s.put("sql", v25s);
+                    v21.add(v24s);
+                    if (!new UpdateUtils().saveToLocalDB(v21)) {
+                        handler.sendEmptyMessage(2);
+                        return;
+                    }
+                    GoodsBatchDAO v6 = new GoodsBatchDAO();
+                    for (int i = 0; i < v9.size(); i++) {
+                        String v11 = v9.get(i);
+                        double v28 = v6.queryGoodStock(v11);
+                        String v30 = String.format(" update sz_goods set stocknumber = %s, bigstocknumber = \'%s\' where id = \'%s\' ", v28, v10.getBigNum(v11, null, v28), v11);
+                        HashMap<String, String> v30s = new HashMap<>();
+                        v30s.put("sql", v30);
+                        v21.add(v30s);
+                    }
+                    new UpdateUtils().saveToLocalDB(v21);
+                    handler.sendEmptyMessage(1);
+                }
 
             }
 
@@ -329,69 +428,42 @@ public class FieldEditMenuPopup extends PopupWindow implements View.OnClickListe
 
     public void show(View paramView, long id) {
         this.fieldSale = new FieldSaleDAO().getFieldsale(id);
-        int v7 = View.VISIBLE;
-        if (this.fieldSale.getStatus() == 0) {
-            this.btnOut.setText("库存处理");
-            this.btnBatchDetail.setVisibility(View.GONE);
-            this.btnPrint.setVisibility(View.GONE);
-            if (this.fieldSale.getLatitude() == v7) {
-                this.btnLocation.setVisibility(View.VISIBLE);
-            } else {
-                this.btnLocation.setVisibility(View.GONE);
-            }
-
-            if (TextUtils.isEmptyS(this.fieldSale.getCustomerid())) {
-                this.btnSale.setVisibility(View.GONE);
-            }
-        }
-        if (this.fieldSale.getStatus() == 1) {
-            this.btnOut.setText("撤销库存");
-            this.btnDelete.setVisibility(View.GONE);
-            if (this.fieldSale.getPrintnum() > v7 && !Utils.IS_ALLOWEDMODIFY_PRINTED) {
-                this.btnOut.setVisibility(View.GONE);
-            }
-
-            if (this.fieldSale.getLatitude() == v7) {
-                this.btnLocation.setVisibility(View.VISIBLE);
-            } else {
-                this.btnLocation.setVisibility(View.GONE);
-            }
-
-            this.btnSale.setVisibility(View.GONE);
-            if (this.activity.getItems().size() == 0) {
-                this.btnSettle.setVisibility(View.GONE);
-                this.btnPrint.setVisibility(View.GONE);
+        switch (this.fieldSale.getStatus()) {
+            case 0:
+                this.btnOut.setText("库存处理");
                 this.btnBatchDetail.setVisibility(View.GONE);
+                this.btnPrint.setVisibility(View.GONE);
+                if (this.fieldSale.getLatitude() == 0) {
+                    this.btnLocation.setVisibility(View.VISIBLE);
+                } else {
+                    this.btnLocation.setVisibility(View.GONE);
+                }
+
+                if (TextUtils.isEmptyS(this.fieldSale.getCustomerid())) {
+                    this.btnSale.setVisibility(View.GONE);
+                }
+                break;
+            case 1:
+                this.btnOut.setText("撤销库存");
+                this.btnDelete.setVisibility(View.GONE);
+                if (this.fieldSale.getPrintnum() > 0 && !Utils.IS_ALLOWEDMODIFY_PRINTED) {
+                    this.btnOut.setVisibility(View.GONE);
+                }
+
+                if (this.fieldSale.getLatitude() == 0) {
+                    this.btnLocation.setVisibility(View.VISIBLE);
+                } else {
+                    this.btnLocation.setVisibility(View.GONE);
+                }
+                this.btnSale.setVisibility(View.GONE);
+                this.btnPrint.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                this.btnOut.setVisibility(View.GONE);
                 this.btnWritePad.setVisibility(View.GONE);
-            }
-        }
-
-        if (this.fieldSale.getStatus() == 2) {
-            this.btnOut.setVisibility(View.GONE);
-            this.btnWritePad.setVisibility(View.GONE);
-            this.btnSale.setVisibility(View.GONE);
-            this.btnLocation.setVisibility(View.GONE);
-        }
-
-
-        if (this.activity.getItems().size() == 0) {
-            this.btnSettle.setVisibility(View.GONE);
-            this.btnPrint.setVisibility(View.GONE);
-            this.btnBatchDetail.setVisibility(View.GONE);
-            this.root.findViewById(R.id.linear_top).setVisibility(View.GONE);
-            DisplayMetrics v1 = new DisplayMetrics();
-            this.activity.getWindowManager().getDefaultDisplay().getMetrics(v1);
-            int v2 = v1.widthPixels;
-            int v0 = v1.heightPixels;
-            this.setWidth(v2);
-            this.setHeight(v0 / 12);
-        } else {
-            DisplayMetrics v1 = new DisplayMetrics();
-            this.activity.getWindowManager().getDefaultDisplay().getMetrics(v1);
-            int v2 = v1.widthPixels;
-            int v0 = v1.heightPixels;
-            this.setWidth(v2);
-            this.setHeight(v0 / 6);
+                this.btnSale.setVisibility(View.GONE);
+                this.btnLocation.setVisibility(View.GONE);
+                break;
         }
         super.showAtLocation(paramView, 80, 0, 0);
     }

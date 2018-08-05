@@ -201,6 +201,18 @@
             android:name=".ui.transfer.TransferDocOpenActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.transfer.TransferAddGoodAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.GoodsWarehouseSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.transfer.GoodsBatchSearchAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.transfer.TransferAddMoreGoodsAct"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.FieldMainAct"
             android:windowSoftInputMode="adjustPan" />
         <activity

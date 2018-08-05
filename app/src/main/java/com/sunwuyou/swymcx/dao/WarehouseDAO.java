@@ -17,6 +17,7 @@ import java.util.List;
 public class WarehouseDAO {
     private SQLiteDatabase db;
     private DBOpenHelper helper;
+    private Cursor cursor;
 
     public WarehouseDAO() {
         super();
@@ -26,7 +27,7 @@ public class WarehouseDAO {
     public List<Warehouse> getAllWarehouses(boolean warehouses) {
         this.db = this.helper.getReadableDatabase();
         String sql = warehouses ? "select id, name from sz_warehouse where istruck = \'1\' and isavailable = \'1\'" : "select id, name from sz_warehouse where isavailable = \'1\'";
-        Cursor cursor = this.db.rawQuery(sql, null);
+        cursor = this.db.rawQuery(sql, null);
         List<Warehouse> localArrayList = new ArrayList<Warehouse>();
         try {
             while (cursor.moveToNext()) {
@@ -41,11 +42,37 @@ public class WarehouseDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (cursor != null)
+            if (cursor != null) {
                 cursor.close();
-            if (this.db != null)
+            }
+            if (this.db != null) {
                 this.db.close();
+            }
         }
         return localArrayList;
+    }
+
+    public Warehouse getWarehouse(String id) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            String sql = "select id, name from sz_warehouse where id=?";
+            cursor = this.db.rawQuery(sql, new String[]{id});
+            if (cursor.moveToNext()) {
+                Warehouse warehouse = new Warehouse();
+                warehouse.setId(cursor.getString(0));
+                warehouse.setName(cursor.getString(1));
+                return warehouse;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return null;
     }
 }

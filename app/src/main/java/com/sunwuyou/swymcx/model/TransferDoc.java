@@ -1,11 +1,13 @@
 package com.sunwuyou.swymcx.model;
 
+import java.io.Serializable;
+
 /**
  * Created by admin on
  * 2018/7/11.
  * content
  */
-public class TransferDoc {
+public class TransferDoc implements Serializable{
     private String builderid;
     private String buildername;
     private String buildtime;

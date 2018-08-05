@@ -159,7 +159,7 @@ public class FieldSaleItemBatchDAO {
     public double getCancelAmount(String arg8) {
         this.db = this.helper.getReadableDatabase();
         try {
-            String sql="select sum(num*price) from kf_fieldsale as doc, kf_fieldsaleitembatch as itembatch  where doc.id = itembatch.fieldsaleid and doc.status != 0 and itembatch.goodsid = ? and itembatch.isout = \'0\'";
+            String sql = "select sum(num*price) from kf_fieldsale as doc, kf_fieldsaleitembatch as itembatch  where doc.id = itembatch.fieldsaleid and doc.status != 0 and itembatch.goodsid = ? and itembatch.isout = \'0\'";
             cursor = this.db.rawQuery(sql, new String[]{arg8});
             if (cursor.moveToNext()) {
                 return cursor.getDouble(0);
@@ -180,7 +180,7 @@ public class FieldSaleItemBatchDAO {
     public List<ReqDocAddCheXiaoBatch> getFieldSaleItemBatchForUpload(long arg12, String arg14) {
         this.db = this.helper.getReadableDatabase();
         try {
-            String sql="select ib.goodsid, ib.batch, case when ib.isout=\'1\' then gu.unitid else ib.unitid end as unitid,  \tib.price, ib.productiondate, case when ib.isout=\'1\' then ib.num*gu.ratio else ib.num end as num,  \tib.isout from kf_fieldsaleitembatch as ib left outer join sz_goodsunit as gu on ib.goodsid = gu.goodsid and ib.unitid = gu.unitid  where ib.fieldsaleid=? and ib.goodsid=? order by ib.batch asc";
+            String sql = "select ib.goodsid, ib.batch, case when ib.isout=\'1\' then gu.unitid else ib.unitid end as unitid,  \tib.price, ib.productiondate, case when ib.isout=\'1\' then ib.num*gu.ratio else ib.num end as num,  \tib.isout from kf_fieldsaleitembatch as ib left outer join sz_goodsunit as gu on ib.goodsid = gu.goodsid and ib.unitid = gu.unitid  where ib.fieldsaleid=? and ib.goodsid=? order by ib.batch asc";
             cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), arg14});
             ArrayList<ReqDocAddCheXiaoBatch> batchArrayList = new ArrayList<>();
             while (cursor.moveToNext()) {
@@ -214,7 +214,7 @@ public class FieldSaleItemBatchDAO {
     public List<FieldSaleItemBatchEx> queryItemBatchs(long arg12, String arg14) {
         this.db = this.helper.getReadableDatabase();
         try {
-            String sql="select fb.serialid,fb.fieldsaleid,fb.batch,fb.isout,fb.num,fb.goodsid,fb.unitid, b.stocknumber as stocknumber,b.bigstocknumber as bigstocknumber,fb.price,gu.unitname, fb.productiondate,gu.ratio, g.name as goodsname, g.barcode, g.specification, g.isusebatch  from kf_fieldsaleitembatch fb  left join kf_goodsbatch b on b.goodsid=fb.goodsid and b.batch=fb.batch  left join sz_goodsunit gu on gu.goodsid=fb.goodsid and gu.unitid=fb.unitid left join sz_goods g on g.id=fb.goodsid where fb.fieldsaleid=? and fb.goodsid=? order by fb.isout desc";
+            String sql = "select fb.serialid,fb.fieldsaleid,fb.batch,fb.isout,fb.num,fb.goodsid,fb.unitid, b.stocknumber as stocknumber,b.bigstocknumber as bigstocknumber,fb.price,gu.unitname, fb.productiondate,gu.ratio, g.name as goodsname, g.barcode, g.specification, g.isusebatch  from kf_fieldsaleitembatch fb  left join kf_goodsbatch b on b.goodsid=fb.goodsid and b.batch=fb.batch  left join sz_goodsunit gu on gu.goodsid=fb.goodsid and gu.unitid=fb.unitid left join sz_goods g on g.id=fb.goodsid where fb.fieldsaleid=? and fb.goodsid=? order by fb.isout desc";
             cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg12), arg14});
             ArrayList<FieldSaleItemBatchEx> batchExArrayList = new ArrayList<>();
             while (cursor.moveToNext()) {
@@ -288,5 +288,29 @@ public class FieldSaleItemBatchDAO {
         }
         return new ArrayList<>();
     }
+
+    public List<String> getUseBatchGoodsIds(long arg9) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery(" select distinct fsib.goodsid  from kf_fieldsaleitembatch as fsib  \tleft outer join sz_goods as g on fsib.goodsid = g.id  where fsib.fieldsaleid=? and g.isusebatch = \'1\' ", new String[]{new StringBuilder(String.valueOf(arg9)).toString()});
+            ArrayList<String> v1 = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                v1.add(cursor.getString(0));
+            }
+            return v1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+
+    }
+
 
 }

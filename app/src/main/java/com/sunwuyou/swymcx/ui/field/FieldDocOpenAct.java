@@ -60,6 +60,7 @@ public class FieldDocOpenAct extends BaseHeadActivity implements GPS.onLocationC
         public void handleMessage(Message message) {
             long l = Long.parseLong(message.obj.toString());
             if (l != -1L) {
+                //TODO 跳转入口
                 Intent intent = new Intent(FieldDocOpenAct.this, FieldEditActivity.class);
                 intent.putExtra("fieldsaleid", l);
                 startActivity(intent);

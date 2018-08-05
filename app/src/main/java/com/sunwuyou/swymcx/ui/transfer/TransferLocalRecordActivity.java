@@ -43,9 +43,9 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
     private ProgressDialog progressDialog;
     private List<TransferDoc> items;
     public AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> paramAnonymousAdapterView, View paramAnonymousView, int paramAnonymousInt, long paramAnonymousLong) {
+        public void onItemClick(AdapterView<?> paramAnonymousAdapterView, View paramAnonymousView, int position, long paramAnonymousLong) {
             Intent intent = new Intent(TransferLocalRecordActivity.this, TransferEditActivity.class);
-            intent.putExtra("transferdocid", items.get(paramAnonymousInt).getId());
+            intent.putExtra("transferdocid", items.get(position).getId());
             startActivity(intent);
         }
     };
@@ -101,7 +101,10 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
+            TransferLocalRecordActivity.this.adapter.setMultiChoice(true);
+            mode.setTitle("选择");
+            mode.getMenuInflater().inflate(R.menu.menu_visit_record_context, menu);
+            return true;
         }
 
         @Override
@@ -112,34 +115,44 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-            final ArrayList<TransferDoc> v1 = new ArrayList<>();
-            int v0;
-            for (v0 = 0; v0 < listView.getCount(); ++v0) {
-                if (listView.isItemChecked(v0)) {
-                    v1.add(items.get(v0));
-                }
-            }
 
             switch (item.getItemId()) {
-                case R.id.btnDelete: {
+                case R.id.btnDelete:
+                    ArrayList<TransferDoc> v1 = new ArrayList<>();
+                    for (int i = 0; i < listView.getCount(); i++) {
+                        if (listView.isItemChecked(i)) {
+                            v1.add(items.get(i));
+                        }
+                    }
+                    mode.finish();
                     deleteSelected(v1);
                     break;
-                }
-                case R.id.btnUpload: {
+                case R.id.btnUpload:
                     if (!NetUtils.isConnected(TransferLocalRecordActivity.this)) {
                         PDH.showFail("当前无可用网络");
                         return true;
                     }
+                    final ArrayList<TransferDoc> upList = new ArrayList<>();
+                    for (int i = 0; i < listView.getCount(); i++) {
+                        if (listView.isItemChecked(i)) {
+                            upList.add(items.get(i));
+                        }
+                    }
+                    mode.finish();
                     PDH.show(TransferLocalRecordActivity.this, "正在上传...", new PDH.ProgressCallBack() {
 
                         @Override
                         public void action() {
-                            uploadAll(v1);
+                            uploadAll(upList);
                         }
                     });
                     break;
-                }
                 case R.id.btnSelectAll:
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        if (!listView.isItemChecked(i)) {
+                            listView.setItemChecked(i, true);
+                        }
+                    }
                     break;
             }
 
@@ -149,12 +162,13 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-
+            adapter.setMultiChoice(false);
         }
 
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
+            adapter.setCheckePosition(position);
+            mode.setSubtitle("选中" + listView.getCheckedItemCount() + "条");
         }
     };
 
@@ -231,7 +245,6 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
     }
 
     private void uploadAll(List<TransferDoc> arg14) {
-        TransferDoc v1;
         TransferDocDAO v5 = new TransferDocDAO();
         UpLoadUtils v6 = new UpLoadUtils();
         String v4 = new ServiceUser().usr_CheckAuthority("NewDiaobodan");
@@ -241,37 +254,32 @@ public class TransferLocalRecordActivity extends BaseHeadActivity {
             }
             this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, v4));
         } else {
-            //TODO 等待测试
-            int v0 = 0;
-            for (int v2 = arg14.size() - 1; v2 >= 0; --v2) {
-                v1 = arg14.get(v2);
-                if (!v1.isIsupload()) {
-                    ++v0;
-                    if (v5.isEmpty(v1.getId())) {
-                        this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, "上传失败，调拨单是空单"));
-                        return;
-                    } else if (v5.isExistsNoBatch(v1.getId())) {
-                        this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, "上传失败，存在未选批次的商品"));
-                        return;
-                    }
-                }
-            }
-            this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, v0));
-            int v3 = 0;
-            for (int v2 = arg14.size() - 1; v2 >= 0; --v2) {
-                v1 = arg14.get(v2);
-                if (!v1.isIsupload()) {
-                    ++v3;
-                    v4 = v6.uploadTransferDoc(v1);
-                    if (v0 == 1) {
-                        if (v4 != null) {
-                            this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, v4));
-                        } else {
-                            this.handlerUpload.sendEmptyMessage(1);
-                        }
-                    }
 
-                    this.handlerProgress.sendEmptyMessage(v3);
+            for (int i = 0; i < arg14.size(); i++) {
+                TransferDoc doc = arg14.get(i);
+                if (v5.isEmpty(doc.getId())) {
+                    this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, "上传失败，调拨单是空单"));
+                    return;
+                } else if (v5.isExistsNoBatch(doc.getId())) {
+                    this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, "上传失败，存在未选批次的商品"));
+                    return;
+                }
+
+            }
+            this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, arg14.size()));
+            for (int i = 0; i < arg14.size(); i++) {
+                TransferDoc doc = arg14.get(i);
+                if (doc.isIsupload()) {
+                    continue;
+                }
+                String transferDoc = v6.uploadTransferDoc(doc);
+                if (transferDoc != null) {
+                    this.handlerUpload.sendMessage(this.handlerUpload.obtainMessage(0, transferDoc));
+                    return;
+                }
+                this.handlerProgress.sendEmptyMessage(i);
+                if (arg14.size()-1 == i) {
+                    this.handlerUpload.sendEmptyMessage(1);
                 }
             }
             this.handlerUpload.sendEmptyMessage(2);

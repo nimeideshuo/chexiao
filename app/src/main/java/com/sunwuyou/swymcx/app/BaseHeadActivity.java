@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 
 /**
- * 作者： YaoChen
+ * 作者：
  * 日期： 2017/8/12 10:38
  * 描述： 公用头部的封装
  */
@@ -34,6 +34,7 @@ public abstract class BaseHeadActivity extends BaseActivity {
     private ImageView titleBack;
     private ImageView titleMore;
     private Toolbar mToolbar;
+    private BaseTitleClick baseTitleClick;
 
     public static int getStatusBarHeight(Activity activity) {
         int result = 0;
@@ -119,11 +120,8 @@ public abstract class BaseHeadActivity extends BaseActivity {
         actionBar.setDisplayShowTitleEnabled(false);
         titleRight.setEnabled(true);
         titleRight1.setEnabled(true);
-        BaseTitleClick baseTitleClick = new BaseTitleClick();
+        baseTitleClick = new BaseTitleClick();
         titleBack.setOnClickListener(baseTitleClick);
-        titleRight.setOnClickListener(baseTitleClick);
-        titleRight1.setOnClickListener(baseTitleClick);
-        titleMore.setOnClickListener(baseTitleClick);
     }
 
     protected void setmToolbar(boolean enable, Activity activity, int animInId, int animOutId) {
@@ -194,8 +192,6 @@ public abstract class BaseHeadActivity extends BaseActivity {
             titleMore.setVisibility(View.GONE);
 
         } else {
-
-
             if (text != null) {
                 titleRight.setVisibility(View.VISIBLE);
                 titleMore.setVisibility(View.GONE);
@@ -204,11 +200,13 @@ public abstract class BaseHeadActivity extends BaseActivity {
                 lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 titleRight.setText(text);
                 titleRight.setBackgroundResource(R.color.colorTransparent);
+                titleRight.setOnClickListener(baseTitleClick);
             }
             if (drawableRes != null) {
                 titleRight.setVisibility(View.GONE);
                 titleMore.setVisibility(View.VISIBLE);
                 titleMore.setImageDrawable(drawableRes);
+                titleMore.setOnClickListener(baseTitleClick);
             }
         }
     }
@@ -235,6 +233,7 @@ public abstract class BaseHeadActivity extends BaseActivity {
         if (titleRight1 != null) {
             titleRight1.setVisibility(View.VISIBLE);
             titleRight1.setText(text);
+            titleRight1.setOnClickListener(baseTitleClick);
         }
     }
 

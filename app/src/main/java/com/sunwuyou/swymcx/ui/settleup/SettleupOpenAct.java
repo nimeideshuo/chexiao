@@ -45,25 +45,6 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
     private String docType;
     private EditText etObjectPeople;
     private String docTypeNmae = "收款单";
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                if (docType.equals("63")) {
-                    startActivity(new Intent(SettleupOpenAct.this, SettleupDocsActivity.class).putExtra("settleupid", msg.obj.toString()));
-                } else {
-                    startActivity(new Intent(SettleupOpenAct.this, OtherSettleupDocActivity.class).putExtra("settleupid", msg.obj.toString()));
-                }
-
-                finish();
-            } else {
-                PDH.showFail(msg.obj.toString());
-                btnOpenSettleupDoc.setOnClickListener(onClickListener);
-            }
-        }
-    };
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -109,6 +90,25 @@ public class SettleupOpenAct extends BaseHeadActivity implements View.OnClickLis
                         }
                     }
                 });
+            }
+        }
+    };
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                if (docType.equals("63")) {
+                    startActivity(new Intent(SettleupOpenAct.this, SettleupDocsActivity.class).putExtra("settleupid", Long.parseLong(msg.obj.toString())));
+                } else {
+                    startActivity(new Intent(SettleupOpenAct.this, OtherSettleupDocActivity.class).putExtra("settleupid", Long.parseLong(msg.obj.toString())));
+                }
+
+                finish();
+            } else {
+                PDH.showFail(msg.obj.toString());
+                btnOpenSettleupDoc.setOnClickListener(onClickListener);
             }
         }
     };

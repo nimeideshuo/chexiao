@@ -59,14 +59,11 @@ public class TransferLocalRecordAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void setCheckePosition(int arg6) {
-        if (this.statusMap.get(arg6) == null) {
-            this.statusMap.put(arg6, Boolean.TRUE);
+    public void setCheckePosition(int position) {
+        if (this.statusMap.get(position) == null) {
+            this.statusMap.put(position, true);
         } else {
-            HashMap<Integer, Boolean> v2 = this.statusMap;
-            Integer v3 = arg6;
-            boolean v0 = !this.statusMap.get(arg6);
-            v2.put(v3, v0);
+            statusMap.put(position, !statusMap.get(position));
         }
         this.notifyDataSetChanged();
     }

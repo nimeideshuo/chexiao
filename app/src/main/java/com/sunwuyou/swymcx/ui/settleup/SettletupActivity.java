@@ -173,7 +173,6 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
                     this.handler.sendMessage(this.handler.obtainMessage(0, "上传失败，客户【" + ((SettleupThin) v11).getObjectname() + " 】的结算单未结清"));
                     return;
                 }
-                //TODO 等待验证
                 if (v11.getType().equals("63")) {
                     v6 = 1;
                     break;

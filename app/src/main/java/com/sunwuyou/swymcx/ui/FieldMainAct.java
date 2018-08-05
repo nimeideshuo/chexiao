@@ -177,7 +177,6 @@ public class FieldMainAct extends BaseHeadActivity {
                 } else {
                     PDH.showMessage("请先设置车销仓库");
                 }
-//                startActivity(new Intent(this, TransferDocOpenActivity.class));
                 break;
             case R.id.field_fields_record:
                 //我的销售

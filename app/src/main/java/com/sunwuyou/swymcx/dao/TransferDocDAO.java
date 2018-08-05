@@ -61,7 +61,7 @@ public class TransferDocDAO {
         String sql = "select 1 from kf_transferitem where transferdocid=?";
         try {
             cursor = this.db.rawQuery(sql, new String[]{String.valueOf(transferdocid)});
-            if (cursor.moveToNext()) {
+            if (!cursor.moveToNext()) {
                 return true;
             }
         } catch (Exception e) {
@@ -161,6 +161,7 @@ public class TransferDocDAO {
                 v4.setInwarehouseid(cursor.getString(4));
                 v4.setInwarehousename(cursor.getString(5));
                 v4.setIsposted(cursor.getInt(6) == 1);
+                v4.setIsupload(cursor.getInt(7) == 1);
                 v4.setRemark(cursor.getString(8));
                 v4.setBuilderid(cursor.getString(9));
                 v4.setBuildername(cursor.getString(10));

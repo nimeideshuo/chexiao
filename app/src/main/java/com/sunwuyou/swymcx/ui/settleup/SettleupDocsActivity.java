@@ -1,6 +1,7 @@
 package com.sunwuyou.swymcx.ui.settleup;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -31,14 +32,6 @@ import java.util.List;
  */
 public class SettleupDocsActivity extends BaseHeadActivity {
 
-    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (SettleupDocsActivity.this.isModify) {
-                receiveMoney(position);
-            }
-        }
-    };
     private ListView listView;
     private SettleUp settleUp;
     private ItemAdapter adapter;
@@ -47,31 +40,37 @@ public class SettleupDocsActivity extends BaseHeadActivity {
     private TextView tv_settle_shidhou;
     private TextView tv_sumamount;
     private List<SettleUpItem> listItems;
+    AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (SettleupDocsActivity.this.isModify) {
+                receiveMoney(position);
+            }
+        }
+    };
 
     @Override
     public int getLayoutID() {
         return R.layout.act_settleup_docs;
     }
 
-    //TODO 未写完
-    protected void receiveMoney(int position) {
-        //        Object v1 = this.listItems.get(arg6);
-        //        SettleupReceivedDialog v0 = new SettleupReceivedDialog(((Activity)this));
-        //        v0.setConfirmDo(new ConfirmDo(((SettleUpItem)v1), arg6) {
-        //            public void received(double arg8) {
-        //                if(new SettleUpItemDAO().updateSettleUpItem(this.val$item.getSerialid(), "thisamount", new StringBuilder(String.valueOf(arg8)).toString())) {
-        //                    this.val$item.setThisamount(arg8);
-        //                    SettleupDocsActivity.this.listItems.set(this.val$position, this.val$item);
-        //                    SettleupDocsActivity.this.adapter.setData(SettleupDocsActivity.this.listItems);
-        //                    SettleupDocsActivity.this.refreshUI();
-        //                }
-        //                else {
-        //                    PDH.showFail("操作失败，请重试");
-        //                }
-        //            }
-        //        });
-        //        v0.setDefaultMoney(Utils.getRecvableMoney(((SettleUpItem)v1).getLeftamount()));
-        //        v0.show();
+    protected void receiveMoney(final int position) {
+        final SettleUpItem item = this.listItems.get(position);
+        SettleupReceivedDialog v0 = new SettleupReceivedDialog(this);
+        v0.setConfirmDo(new SettleupReceivedDialog.ConfirmDo() {
+            public void received(double arg8) {
+                if (new SettleUpItemDAO().updateSettleUpItem(item.getSerialid(), "thisamount", String.valueOf(arg8))) {
+                    item.setThisamount(arg8);
+                    listItems.set(position, item);
+                    adapter.setData(listItems);
+                    refreshUI();
+                } else {
+                    PDH.showFail("操作失败，请重试");
+                }
+            }
+        });
+        v0.setDefaultMoney(Utils.getRecvableMoney(item.getLeftamount()));
+        v0.show();
     }
 
     @Override

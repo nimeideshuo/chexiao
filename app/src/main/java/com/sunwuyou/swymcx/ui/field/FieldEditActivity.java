@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -216,7 +217,7 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
                     itemInfoShow(v1.getSerialid());
                 } else {
                     if (menuPopup != null && (menuPopup.isShowing())) {
-                         menuPopup.dismiss();
+                        menuPopup.dismiss();
                         WindowManager.LayoutParams v2 = getWindow().getAttributes();
                         v2.alpha = 1f;
                         getWindow().setAttributes(v2);
@@ -334,7 +335,7 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
     }
 
     public void print() {
-
+        //TODO 未完成
     }
 
     @Override
@@ -386,6 +387,20 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
 
     }
 
+    public boolean onKeyDown(int arg3, KeyEvent arg4) {
+        boolean v1;
+        if (this.menuPopup == null || !this.menuPopup.isShowing()) {
+            v1 = super.onKeyDown(arg3, arg4);
+        } else {
+            this.menuPopup.dismiss();
+            WindowManager.LayoutParams v0 = this.getWindow().getAttributes();
+            v0.alpha = 1f;
+            this.getWindow().setAttributes(v0);
+            v1 = true;
+        }
+
+        return v1;
+    }
 
     public void setActionBarText() {
         String str2 = this.fieldsale.getCustomername();
