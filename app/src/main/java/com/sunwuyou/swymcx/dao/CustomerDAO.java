@@ -307,6 +307,7 @@ public class CustomerDAO {
             this.db.close();
         }
     }
+
     public void updateCustomer(String arg8, Customer arg9) {
         this.db = this.helper.getWritableDatabase();
         ContentValues v0 = new ContentValues();
@@ -338,14 +339,52 @@ public class CustomerDAO {
         String v1 = arg9.getIsNew() ? "1" : "0";
         v5[1] = v1;
         v2.update(v3, v0, v4, v5);
-        if(this.db != null) {
+        if (this.db != null) {
             this.db.close();
         }
     }
+
     public void updateCustomerDocs(String arg12, String arg13) {
         Customer v0 = this.getCustomer(arg13, true);
         this.db = this.helper.getWritableDatabase();
         this.db.execSQL("update kf_fieldsale set customerid=?,customername=? where customerid=? and isnewcustomer=?", new String[]{v0.getId(), v0.getName(), arg12, "1"});
         this.db.execSQL("update cw_settleup set objectid=?,objectname=? where objectid=? and isnewobject=?", new String[]{v0.getId(), v0.getName(), arg12, "1"});
     }
+
+    public boolean isCustomerHasDoc(String arg15) {
+        Cursor v11;
+        Cursor v10;
+        this.db = this.helper.getReadableDatabase();
+        boolean v9 = false;
+        v10 = this.db.query("kf_fieldsale", null, "customerid=?", new String[]{arg15}, null, null, null);
+        v11 = this.db.query("cw_settleup", null, "objectid=?", new String[]{arg15}, null, null, null);
+        if (v10.getCount() > 0) {
+            return true;
+        } else if (v11.getCount() > 0) {
+            return true;
+        }
+        if (db != null) {
+            db.close();
+        }
+
+        return false;
+
+    }
+
+    public boolean delete(List arg15) {
+        int v0;
+        Cursor v1;
+        String v6;
+        boolean v5 = false;
+        int v4 = 0;
+        while (v4 < arg15.size()) {
+
+
+
+        }
+
+        return true;
+
+    }
+
 }
