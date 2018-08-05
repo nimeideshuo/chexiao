@@ -170,6 +170,14 @@ public class SettleupPayActivity extends BaseHeadActivity implements View.OnFocu
         this.listview.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
     }
 
+    public void setActionBarText() {
+        if (this.settleUp.getType().equals("62")) {
+            setTitle("付款");
+        } else {
+            setTitle("收款");
+        }
+    }
+
     class ItemAdapter extends BaseAdapter {
         private List<SettleUpPayType> payTypes;
 

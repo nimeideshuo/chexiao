@@ -8,6 +8,7 @@ import com.sunwuyou.swymcx.model.PayType;
 import com.sunwuyou.swymcx.model.SettleUp;
 import com.sunwuyou.swymcx.model.SettleUpPayType;
 import com.sunwuyou.swymcx.model.SettleupThin;
+import com.sunwuyou.swymcx.utils.MLog;
 import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
 
@@ -67,7 +68,7 @@ public class SettleUpDAO {
     public SettleUp getSettleUp(long arg11) {
         this.db = this.helper.getReadableDatabase();
         try {
-            String sql="select id,objectid,objectname,departmentid,departmentname,objectoperator,preference,issubmit,remark,builderid,buildername,buildtime,type from cw_settleup where id=?";
+            String sql = "select id,objectid,objectname,departmentid,departmentname,objectoperator,preference,issubmit,remark,builderid,buildername,buildtime,type from cw_settleup where id=?";
             cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg11)});
             if (cursor.moveToNext()) {
                 SettleUp settleUp = new SettleUp();
@@ -171,7 +172,7 @@ public class SettleUpDAO {
         String v3 = arg11 ? "select 1 from cw_othersettleupitem where othersettleupid=?" : "select 1 from cw_settleupitem where settleupid=?";
         try {
             cursor = this.db.rawQuery(v3, new String[]{String.valueOf(arg9)});
-            if (cursor.moveToNext()) {
+            if (!cursor.moveToNext()) {
                 return true;
             }
         } catch (Exception e) {
@@ -202,7 +203,7 @@ public class SettleUpDAO {
     public double getPreference(long arg10) {
         this.db = this.helper.getWritableDatabase();
         try {
-            String sql="select preference from cw_settleup where id=?";
+            String sql = "select preference from cw_settleup where id=?";
             cursor = this.db.rawQuery(sql, new String[]{String.valueOf(arg10)});
             if (cursor.moveToNext()) {
                 return cursor.getDouble(0);
@@ -219,6 +220,7 @@ public class SettleUpDAO {
         }
         return 0;
     }
+
     public boolean submit(long arg3) {
         return this.update(arg3, "issubmit", String.valueOf(1));
     }

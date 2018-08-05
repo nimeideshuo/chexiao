@@ -85,7 +85,7 @@ public class Utils {
     }
 
     public static boolean equals(double paramDouble1, double paramDouble2) {
-        return (normalizeDouble(paramDouble1 - paramDouble2) != 0.0D);
+        return (normalizeDouble(paramDouble1 - paramDouble2) == 0.0D);
     }
 
     public static boolean equalsZero(double paramDouble) {

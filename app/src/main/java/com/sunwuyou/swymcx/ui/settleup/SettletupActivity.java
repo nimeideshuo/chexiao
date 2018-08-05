@@ -91,12 +91,16 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
     AbsListView.MultiChoiceModeListener muliChoiceModeLisener = new AbsListView.MultiChoiceModeListener() {
         @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
+            adapter.setCheckePosition(position);
+            mode.setSubtitle("选中" + listView.getCheckedItemCount() + "条");
         }
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
+            SettletupActivity.this.adapter.setMultiChoice(true);
+            mode.setTitle("选择");
+            mode.getMenuInflater().inflate(R.menu.menu_visit_record_context, menu);
+            return true;
         }
 
         @Override
@@ -106,37 +110,44 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            final ArrayList<SettleupThin> selectItmes = new ArrayList<>();
-            for (int i = 0; i < listView.getCount(); i++) {
-                if (listView.isItemChecked(i)) {
-                    selectItmes.add(items.get(i));
-                }
-            }
+
             switch (item.getItemId()) {
                 case R.id.btnDelete:
-                    deleteSelected(selectItmes);
+                    ArrayList<SettleupThin> selectItmes = new ArrayList<>();
+                    for (int i = 0; i < listView.getCount(); i++) {
+                        if (listView.isItemChecked(i)) {
+                            selectItmes.add(items.get(i));
+                        }
+                    }
                     mode.finish();
+                    deleteSelected(selectItmes);
                     return true;
                 case R.id.btnUpload:
                     if (!NetUtils.isConnected(SettletupActivity.this)) {
                         PDH.showFail("当前无可用网络");
                         return true;
                     }
+                    final ArrayList<SettleupThin> upItmes = new ArrayList<>();
+                    for (int i = 0; i < listView.getCount(); i++) {
+                        if (listView.isItemChecked(i)) {
+                            upItmes.add(items.get(i));
+                        }
+                    }
+                    mode.finish();
                     handlerProgress.sendEmptyMessage(-1);
                     new Thread() {
                         public void run() {
-                            uploadAll(selectItmes);
+                            uploadAll(upItmes);
                         }
                     }.start();
                     return true;
-                //TODO 未完成
                 case R.id.btnSelectAll:
-                    for (int i = 0; i < listView.getCount(); i++) {
+                    for (int i = 0; i < adapter.getCount(); i++) {
                         if (!listView.isItemChecked(i)) {
                             listView.setItemChecked(i, true);
                         }
                     }
-                    return true;
+                    break;
             }
 
 
@@ -145,43 +156,39 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-
+            adapter.setMultiChoice(false);
         }
     };
 
     private void uploadAll(List<SettleupThin> arg19) {
-        String v8 = null;
-        SettleupThin v11;
         SettleUpDAO v10 = new SettleUpDAO();
         UpLoadUtils v12 = new UpLoadUtils();
         int v6 = 0;
         int v5 = 0;
         int v4 = 0;
-        int v3;
-        for (v3 = arg19.size() - 1; v3 >= 0; --v3) {
-            v11 = arg19.get(v3);
+        for (int i = 0; i < arg19.size(); i++) {
+            SettleupThin v11 = arg19.get(i);
             if (!v11.isIssubmit()) {
                 long v14 = v11.getId();
                 boolean v13 = !v11.getType().equals("63");
                 if (v10.isEmpty(v14, v13)) {
-                    handler.sendMessage(handler.obtainMessage(0, "上传失败，客户【" + v11.getObjectname() + " 】的结算单是空单"));
+                    this.handler.sendMessage(this.handler.obtainMessage(0, "上传失败，客户【" + v11.getObjectname() + " 】的结算单是空单"));
                     return;
                 }
-                v14 = v11.getId();
-                v13 = !v11.getType().equals("63");
                 if (!v10.isSettleup(v14, v13)) {
-                    this.handler.sendMessage(this.handler.obtainMessage(0, "上传失败，客户【" + ((SettleupThin) v11).getObjectname() + " 】的结算单未结清"));
+                    this.handler.sendMessage(this.handler.obtainMessage(0, "上传失败，客户【" + v11.getObjectname() + " 】的结算单未结清"));
                     return;
                 }
                 if (v11.getType().equals("63")) {
                     v6 = 1;
                     break;
                 }
+
                 if (v11.getType().equals("64")) {
                     v5 = 1;
                     break;
                 }
-                if (!v11.getType().equals("62")) {
+                if (v11.getType().equals("62")) {
                     v4 = 1;
                     break;
                 }
@@ -199,8 +206,9 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
         if (v4 != 0) {
             v1 = v1.length() > 0 ? String.valueOf(v1) + ",NewQitafukuandan" : String.valueOf(v1) + "NewQitafukuandan";
         }
+
         if (v1.length() > 0) {
-            v8 = new ServiceUser().usr_CheckAuthority(v1);
+            String v8 = new ServiceUser().usr_CheckAuthority(v1);
             if (!RequestHelper.isSuccess(v8)) {
                 if ("forbid".equals(v8)) {
                     v8 = "请联系系统管理员获取授权！";
@@ -209,21 +217,26 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
                 return;
             }
         }
-        this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, 0));
-        //TODO 待验证
+        this.handlerProgress.sendMessage(this.handlerProgress.obtainMessage(-2, arg19.size()));
         for (int i = 0; i < arg19.size(); i++) {
-            SettleupThin thin = arg19.get(i);
-            if (!thin.isIssubmit()) {
-                SettleUp v9 = v10.getSettleUp(thin.getId());
-                v8 = thin.getType().equals("63") ? v12.uploadSettleUp(v9) : v12.uploadOtherSettleUp(v9);
+            SettleupThin v11 = arg19.get(i);
+            if (!v11.isIssubmit()) {
+                SettleUp v9 = v10.getSettleUp(v11.getId());
+                String v8 = v11.getType().equals("63") ? v12.uploadSettleUp(v9) : v12.uploadOtherSettleUp(v9);
+                if (v8 != null) {
+                    this.handler.sendMessage(this.handler.obtainMessage(0, v8));
+                    return;
+                }
                 this.handlerProgress.sendEmptyMessage(i);
             }
         }
-        if (v8 != null) {
-            this.handler.sendMessage(this.handler.obtainMessage(0, v8));
-        } else {
-            this.handler.sendEmptyMessage(1);
-        }
+        this.handler.sendEmptyMessage(1);
+        this.handler.sendEmptyMessage(2);
+    }
+
+    protected void onRestart() {
+        super.onRestart();
+        this.refresh();
     }
 
     private void deleteSelected(final List<SettleupThin> settleups) {
@@ -370,12 +383,11 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
             this.notifyDataSetChanged();
         }
 
-        public void setCheckePosition(int arg6) {
-            if (this.statusMap.get(arg6) == null) {
-                this.statusMap.put(arg6, true);
+        public void setCheckePosition(int position) {
+            if (this.statusMap.get(position) == null) {
+                this.statusMap.put(position, true);
             } else {
-                HashMap<Integer, Boolean> v2 = this.statusMap;
-                v2.put(arg6, this.statusMap.get(arg6));
+                statusMap.put(position, !statusMap.get(position));
             }
             this.notifyDataSetChanged();
         }
@@ -387,13 +399,13 @@ public class SettletupActivity extends BaseHeadActivity implements AdapterView.O
             private TextView tvReceivableAmount;
             private TextView tvReceivedAmount;
 
-            public Item(View arg3) {
+            public Item(View view) {
                 super();
-                this.tvId = arg3.findViewById(R.id.tvId);
-                this.tvCustomerName = arg3.findViewById(R.id.tvCustomerName);
-                this.tvReceivableAmount = arg3.findViewById(R.id.tvReceivableAmount);
-                this.tvReceivedAmount = arg3.findViewById(R.id.tvReceivedAmount);
-                this.cbTV = arg3.findViewById(R.id.cbTV);
+                this.tvId = view.findViewById(R.id.tvId);
+                this.tvCustomerName = view.findViewById(R.id.tvCustomerName);
+                this.tvReceivableAmount = view.findViewById(R.id.tvReceivableAmount);
+                this.tvReceivedAmount = view.findViewById(R.id.tvReceivedAmount);
+                this.cbTV = view.findViewById(R.id.cbTV);
             }
 
 
