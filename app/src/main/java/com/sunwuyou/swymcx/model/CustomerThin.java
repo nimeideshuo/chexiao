@@ -102,7 +102,7 @@ public class CustomerThin implements Serializable {
         this.name = name;
     }
 
-    public int getOrderno() {
+    public int getOrderNo() {
         return orderno;
     }
 
@@ -110,7 +110,7 @@ public class CustomerThin implements Serializable {
         this.orderno = orderno;
     }
 
-    public String getPromotionid() {
+    public String getPromotionId() {
         return promotionid == null ? "" : promotionid;
     }
 

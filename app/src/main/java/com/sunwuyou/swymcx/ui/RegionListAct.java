@@ -1,6 +1,7 @@
 package com.sunwuyou.swymcx.ui;
 
 import android.content.Intent;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -39,6 +40,8 @@ public class RegionListAct extends BaseHeadActivity {
     @Override
     public void initView() {
         baseList.setLayoutManager(new LinearLayoutManager(this));
+        //添加Android自带的分割线
+        baseList.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         madapter = new Madapter();
         madapter.bindToRecyclerView(baseList);
     }

@@ -352,39 +352,131 @@ public class CustomerDAO {
     }
 
     public boolean isCustomerHasDoc(String arg15) {
-        Cursor v11;
-        Cursor v10;
         this.db = this.helper.getReadableDatabase();
-        boolean v9 = false;
-        v10 = this.db.query("kf_fieldsale", null, "customerid=?", new String[]{arg15}, null, null, null);
-        v11 = this.db.query("cw_settleup", null, "objectid=?", new String[]{arg15}, null, null, null);
+        Cursor v10 = this.db.query("kf_fieldsale", null, "customerid=?", new String[]{arg15}, null, null, null);
+        Cursor v11 = this.db.query("cw_settleup", null, "objectid=?", new String[]{arg15}, null, null, null);
         if (v10.getCount() > 0) {
             return true;
         } else if (v11.getCount() > 0) {
             return true;
         }
+        v11.close();
+        v10.close();
         if (db != null) {
             db.close();
         }
-
         return false;
 
     }
 
-    public boolean delete(List arg15) {
-        int v0;
-        Cursor v1;
-        String v6;
-        boolean v5 = false;
-        int v4 = 0;
-        while (v4 < arg15.size()) {
 
+    public boolean moveToFirst(CustomerThin arg8) {
+        boolean v0 = false;
+        if (arg8 != null) {
+            int v1 = getMinOrderNo();
+            if (v1 != arg8.getOrderNo()) {
+                this.db = this.helper.getWritableDatabase();
+                String v2 = "update cu_customer set orderno = ? where id = ? and isnew = ?";
+                SQLiteDatabase v4 = this.db;
+                Object[] v5 = new Object[3];
+                v5[0] = v1 - 1;
+                v5[1] = arg8.getId();
+                int v6 = 2;
+                String v3 = arg8.getIsNew() ? "1" : "0";
+                v5[v6] = v3;
+                v4.execSQL(v2, v5);
+                v0 = true;
+            }
+        }
+        return v0;
+    }
 
-
+    public boolean moveToLast(CustomerThin arg8) {
+        boolean v0 = false;
+        if(arg8 != null) {
+            int v1 = this.getMaxOrderNo();
+            if(v1 != arg8.getOrderNo()) {
+                this.db = this.helper.getWritableDatabase();
+                String v2 = "update cu_customer set orderno = ? where id = ? and isnew = ?";
+                SQLiteDatabase v4 = this.db;
+                Object[] v5 = new Object[3];
+                v5[0] = v1 + 1;
+                v5[1] = arg8.getId();
+                int v6 = 2;
+                String v3 = arg8.getIsNew() ? "1" : "0";
+                v5[v6] = v3;
+                v4.execSQL(v2, v5);
+                if(this.db != null) {
+                    this.db.close();
+                }
+                v0 = true;
+            }
         }
 
-        return true;
-
+        return v0;
     }
+    public boolean exchangeOrderNo(CustomerThin arg10, CustomerThin arg11) {
+        int v8 = 3;
+        int v7 = 2;
+        boolean v0 = false;
+        if(arg10 != null && arg11 != null) {
+            this.db = this.helper.getWritableDatabase();
+            SQLiteDatabase v2 = this.db;
+            Object[] v3 = new Object[v8];
+            v3[0] = arg10.getOrderNo();
+            v3[1] = arg11.getId();
+            v3[v7] = arg11.getIsNew();
+            v2.execSQL("update cu_customer set orderno = ? where id = ? and isnew = ?", v3);
+            v2 = this.db;
+            v3 = new Object[v8];
+            v3[0] = arg11.getOrderNo();
+            v3[1] = arg10.getId();
+            v3[v7] = arg10.getIsNew();
+            v2.execSQL("update cu_customer set orderno = ? where id = ? and isnew = ?", v3);
+            if(this.db != null) {
+                this.db.close();
+            }
+
+            v0 = true;
+        }
+
+        return v0;
+    }
+
+    public int getMinOrderNo() {
+        this.db = this.helper.getWritableDatabase();
+        Cursor v0 = this.db.rawQuery("select min(orderno) from cu_customer", null);
+        if (v0.moveToNext()) {
+            return v0.getInt(0);
+        }
+        v0.close();
+        return 0;
+    }
+
+    public boolean delete(List<CustomerThin> arg15) {
+        this.db = this.helper.getWritableDatabase();
+        int v0;
+        String v6;
+        for (int i = 0; i < arg15.size(); i++) {
+            if (this.isCustomerHasDoc(arg15.get(i).getId())) {
+                this.db.delete("cu_customerfieldsalegoods", "customerid=?", new String[]{arg15.get(i).getId()});
+                this.db.delete("kf_serverdoc", "customerid=?", new String[]{arg15.get(i).getId()});
+            }
+            v6 = arg15.get(i).getPromotionId();
+            if (v6 != null) {
+                Cursor v1 = this.db.rawQuery("select count(*) from cu_customer where promotionid = ?", new String[]{v6});
+                if (v1.moveToNext()) {
+                    v0 = v1.getInt(0);
+                    if (v0 == 1) {
+                        this.db.delete("sz_promotiongoods", "promotionid=?", new String[]{v6});
+                        this.db.delete("sz_promotion", "id=?", new String[]{v6});
+                    }
+                }
+                v1.close();
+            }
+        }
+        return true;
+    }
+
 
 }

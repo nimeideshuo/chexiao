@@ -34,11 +34,11 @@ public class UpdateUtils {
     public static final int RefreshLocalALl = 4;
 
 
-    public boolean executeCustomerUpdate(Handler paramHandler, int paramInt, String arg26) {
+    public boolean executeCustomerUpdate(Handler paramHandler, int type, String id) {
         ServiceSynchronize v19 = new ServiceSynchronize(0L);
         CustomerDAO v4 = new CustomerDAO();
         ArrayList<String> v13 = new ArrayList<>();
-        switch (paramInt) {
+        switch (type) {
             case 0:
                 try {
                     int v18 = v19.syn_QueryCustomerIDPages();
@@ -58,28 +58,22 @@ public class UpdateUtils {
                 }
                 break;
             case 1:
-                if (v4.isExists(arg26)) {
+                if (v4.isExists(id)) {
                     paramHandler.sendMessage(paramHandler.obtainMessage(1, "指定客户已存在"));
                     return false;
                 }
-                v13.add(arg26);
+                v13.add(id);
                 break;
             case 2:
-                List<IDNameEntity> v15 = JSONUtil.str2list(new ServiceSupport().QueryVisitLineCustomers(arg26), IDNameEntity.class);
+                //客户路线
+                List<IDNameEntity> v15 = JSONUtil.str2list(new ServiceSupport().QueryVisitLineCustomers(id), IDNameEntity.class);
                 if (v15 != null && v15.size() != 0) {
-                    int v9 = 0;
-                    while (true) {
-                        if (v9 < v15.size()) {
-                            String v5 = v15.get(v9).getId();
-                            if (v4.isExists(v5)) {
-                                v15.remove(v9);
-                                --v9;
-                            } else {
-                                v13.add(v5);
-                            }
-                            ++v9;
+                    for (int i = 0; i < v15.size(); i++) {
+                        String v5 = v15.get(i).getId();
+                        if (v4.isExists(v5)) {
+                            v15.remove(i);
                         } else {
-                            break;
+                            v13.add(v5);
                         }
                     }
                 } else {
@@ -87,7 +81,8 @@ public class UpdateUtils {
                     return false;
                 }
             case 3:
-                List<IDNameEntity> v14 = JSONUtil.str2list(new ServiceSupport().QueryRegionCustomers(arg26), IDNameEntity.class);
+                //客户地区
+                List<IDNameEntity> v14 = JSONUtil.str2list(new ServiceSupport().QueryRegionCustomers(id), IDNameEntity.class);
                 if (v14 != null && v14.size() != 0) {
                     int v9 = 0;
                     while (true) {
@@ -116,7 +111,7 @@ public class UpdateUtils {
             int v22 = v13.size() / v17;
             int v21_1 = v13.size() % v17 > 0 ? 1 : 0;
             int v20 = v22 + v21_1;
-//            if (v20 <= 0) {
+            //            if (v20 <= 0) {
             if (!this.executeCustomerGoodsAndDocUpdate(paramHandler, v13)) {
                 paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
                 return false;
@@ -125,7 +120,7 @@ public class UpdateUtils {
                 paramHandler.sendMessage(paramHandler.obtainMessage(1, "客户信息同步失败，请重试"));
                 return false;
             }
-//            }
+            //            }
 
             for (int i = 0; i < v20; i++) {
                 int v3 = i * v17;
@@ -142,7 +137,7 @@ public class UpdateUtils {
                 }
 
                 boolean v10 = false;
-                if (paramInt == 4) {
+                if (type == 4) {
                     v10 = true;
                 }
                 // 第二个执行

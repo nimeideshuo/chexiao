@@ -55,4 +55,15 @@ public class PromotionDAO {
         }
         return null;
     }
+
+    public String getPromotionName(String arg8) {
+        this.db = this.helper.getReadableDatabase();
+        Cursor v0 = this.db.rawQuery("select name from sz_promotion where id=?", new String[]{arg8});
+        if (v0.moveToNext()) {
+            return v0.getString(0);
+        }
+        v0.close();
+        db.close();
+        return "";
+    }
 }

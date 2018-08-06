@@ -3,6 +3,7 @@ package com.sunwuyou.swymcx.ui.field;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,7 +29,10 @@ import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.dao.CustomerDAO;
+import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.model.CustomerThin;
+import com.sunwuyou.swymcx.ui.MAlertDialog;
+import com.sunwuyou.swymcx.ui.NewCustomerAddOnlyForShowAct;
 import com.sunwuyou.swymcx.utils.ClickUtils;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.TextUtils;
@@ -37,13 +41,11 @@ import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.MessageDialog;
 import com.sunwuyou.swymcx.view.TargetCustomerMenuPopup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by admin
@@ -52,61 +54,17 @@ import butterknife.ButterKnife;
  */
 
 public class TargetCustomerActivity extends BaseHeadActivity implements View.OnTouchListener {
-
-
-        private TargetCustomerMenuPopup menuPopup;
-//
-//    @Override
-//    public int getLayoutID() {
-//        return R.layout.activity_base_recyclerview;
-//    }
-//
-//    @Override
-//    public void initView() {
-//        setTitle("客户中心");
-//        setTitleRight("编辑", null);
-//        setTitleRight1("菜单");
-//        baseList.setLayoutManager(new LinearLayoutManager(this));
-//        madapter = new Madapter();
-//        madapter.bindToRecyclerView(baseList);
-//        customerDAO = new CustomerDAO();
-//    }
-//
-//    @Override
-//    protected void onRightClick() {
-//        super.onRightClick();
-////        toast("编辑");
-//        //TODO 未完成
-//    }
-//
-//    @Override
-//    protected void onRightClick1() {
-//        super.onRightClick1();
-//        if (menuPopup == null) {
-//            menuPopup = new TargetCustomerMenuPopup(this);
-//        }
-//        this.menuPopup.showAtLocation(baseList, Gravity.BOTTOM, 0, 0);
-//        WindowManager.LayoutParams attributes = this.getWindow().getAttributes();
-//        attributes.alpha = 0.8f;
-//        this.getWindow().setAttributes(attributes);
-//    }
-//
-//    @Override
-//    public void initData() {
-//        refresh();
-//    }
-//
     public boolean issort;
+    private TargetCustomerMenuPopup menuPopup;
     private CustomerDAO customerDAO;
     private View root;
     private ListView listView;
     private Button btnSelectAll;
     private List<CustomerThin> customers;
-    //    @BindView(R.id.base_list) RecyclerView baseList;
-//    private Madapter madapter;
-//    private List<CustomerThin> customers;
-//    private CustomerDAO customerDAO;
-    @SuppressLint("HandlerLeak") Handler handler = new Handler() {
+    private Button btnDelete;
+    private CustomerItemAdapter adapter;
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -116,35 +74,63 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
             } else if (msg.what == 1) {
                 PDH.showSuccess(msg.obj.toString());
             } else if (msg.what == 2) {
-
+                adapter.setData(customers);
+                listView.setAdapter(adapter);
             }
         }
     };
-    private Button btnDelete;
-    private CustomerItemAdapter adapter;
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int v2 = (int) v.getTag(2131296314);
             if (menuPopup == null || !menuPopup.isShowing()) {
+                CustomerThin v0 = customers.get(v2);
+                if (v.getId() == R.id.btnTop) {
+                    if (v2 != 0) {
+                        customerDAO.moveToFirst(v0);
+                        refresh();
+                    }
+                } else if (v.getId() == R.id.btnBottom) {
+                    if (v2 != customers.size() - 1) {
+                        customerDAO.moveToLast(v0);
+                        refresh();
+                    }
+                } else if (v.getId() == R.id.btnBefore) {
+                    if (v2 != 0) {
+                        customerDAO.exchangeOrderNo(v0, customers.get(v2 - 1));
+                        refresh();
+                    }
+                } else if (v.getId() == R.id.btnNext) {
+                    if (v2 != TargetCustomerActivity.this.customers.size() - 1) {
+                        customerDAO.exchangeOrderNo(v0, customers.get(v2 + 1));
+                        refresh();
+                    }
+                } else if (!customers.get(v2).getIsNew()) {
+                    startActivityForResult(new Intent().setClass(TargetCustomerActivity.this, NewCustomerAddOnlyForShowAct.class).putExtra("updatecustomerid", TargetCustomerActivity.this.customers.get(v2).getId()), 0);
+                }
 
 
             } else {
                 menuPopup.dismiss();
                 WindowManager.LayoutParams v1 = getWindow().getAttributes();
                 v1.alpha = 1f;
-                TargetCustomerActivity.this.getWindow().setAttributes(v1);
-
+                getWindow().setAttributes(v1);
             }
-
-
-            switch (v.getId()) {
-                case 1:
-
-
-                    break;
+        }
+    };
+    @SuppressLint("HandlerLeak")
+    private Handler deleteHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (Boolean.parseBoolean(msg.obj.toString())) {
+                PDH.showSuccess("删除成功");
+                CheckBox cb = findViewById(R.id.checkBox);
+                cb.setChecked(false);
+                refresh();
+            } else {
+                PDH.showFail("删除失败，请重试");
             }
-
         }
     };
 
@@ -155,6 +141,8 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
 
     @Override
     public void initView() {
+        setTitleRight("编辑", null);
+        setTitleRight1("菜单");
         customerDAO = new CustomerDAO();
         root = this.findViewById(R.id.root);
         this.root.setOnTouchListener(this);
@@ -179,8 +167,99 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
         this.refresh();
     }
 
+    @Override
+    protected void onRightClick() {
+        super.onRightClick();
+        if (this.menuPopup == null || !this.menuPopup.isShowing()) {
+            if (issort) {
+                issort = false;
+                setTitleRight("编辑", null);
+                this.btnSelectAll.setText("全选");
+                this.findViewById(R.id.llButtons).setVisibility(View.GONE);
+                this.adapter.setSelectAll(false);
+            } else {
+                if (this.customers != null && this.customers.size() != 0) {
+                    issort = true;
+                    setTitleRight("完成", null);
+                    this.findViewById(R.id.llButtons).setVisibility(View.VISIBLE);
+                } else {
+                    PDH.showMessage("当前列表为空");
+                }
+            }
+            this.adapter.notifyDataSetChanged();
+        } else {
+            this.menuPopup.dismiss();
+            WindowManager.LayoutParams attributes = this.getWindow().getAttributes();
+            attributes.alpha = 1f;
+            this.getWindow().setAttributes(attributes);
+        }
+    }
+
+    @Override
+    protected void onRightClick1() {
+        super.onRightClick1();
+        if (this.menuPopup == null || !this.menuPopup.isShowing()) {
+            issort = false;
+            setTitleRight("编辑", null);
+            this.btnSelectAll.setText("全选");
+            this.findViewById(R.id.llButtons).setVisibility(View.GONE);
+            if (this.menuPopup == null) {
+                this.menuPopup = new TargetCustomerMenuPopup(this);
+            }
+            this.menuPopup.showAtLocation(this.root, 80, 0, 0);
+            WindowManager.LayoutParams attributes = this.getWindow().getAttributes();
+            attributes.alpha = 0.8f;
+            this.getWindow().setAttributes(attributes);
+        } else {
+            this.menuPopup.dismiss();
+            WindowManager.LayoutParams attributes = this.getWindow().getAttributes();
+            attributes.alpha = 1f;
+            this.getWindow().setAttributes(attributes);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 1:
+                final MAlertDialog dialog = new MAlertDialog(this);
+                dialog.simpleShow("是否同步该线路上的客户信息？");
+                dialog.setCancelButton(null);
+                dialog.setConfirmButton(new View.OnClickListener() {
+                    public void onClick(View arg5) {
+                        dialog.dismiss();
+                        updateCustomer(2, data.getStringExtra("visitlineid"));
+                    }
+                });
+                dialog.show();
+                break;
+
+            case 2:
+                Customer customer = (Customer) data.getSerializableExtra("customer");
+                this.updateCustomer(1, customer.getId());
+                break;
+            case 3:
+                final MAlertDialog dialogRegionid = new MAlertDialog(this);
+                dialogRegionid.simpleShow("是否同步该地区的客户信息？");
+                dialogRegionid.setCancelButton(null);
+                dialogRegionid.setConfirmButton(new View.OnClickListener() {
+                    public void onClick(View arg5) {
+                        dialogRegionid.dismiss();
+                        updateCustomer(3, data.getStringExtra("regionid"));
+                    }
+                });
+                dialogRegionid.show();
+                break;
+        }
+        if (resultCode == RESULT_OK && (data.getBooleanExtra("refresh", false))) {
+            this.refresh();
+        }
+    }
+
     public void delete() {
-        List<CustomerThin> selectItems = this.adapter.getSelectCustomers();
+        final List<CustomerThin> selectItems = this.adapter.getSelectCustomers();
         if (selectItems.size() == 0) {
             PDH.showFail("请选择删除的项");
         } else {
@@ -193,7 +272,7 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
                 public void btnOk(View view) {
                     PDH.show(TargetCustomerActivity.this, "正在删除...", new PDH.ProgressCallBack() {
                         public void action() {
-                            deleteHandler.sendMessage(deleteHandler.obtainMessage(0, Boolean.valueOf(customerDAO.delete(selectItems))));
+                            deleteHandler.sendMessage(deleteHandler.obtainMessage(0, customerDAO.delete(selectItems)));
                         }
                     });
                 }
@@ -203,7 +282,6 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
 
                 }
             }).showDialog();
-
         }
     }
 
@@ -218,7 +296,7 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
     }
 
     public void selectAll() {
-        if ("全选".equals(this.btnSelectAll.getText())) {
+        if ("全选".equals(this.btnSelectAll.getText().toString())) {
             this.adapter.setSelectAll(true);
             this.btnSelectAll.setText("全不选");
         } else {
@@ -238,6 +316,12 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (menuPopup != null && (menuPopup.isShowing())) {
+            menuPopup.dismiss();
+            WindowManager.LayoutParams v0 = getWindow().getAttributes();
+            v0.alpha = 1f;
+            getWindow().setAttributes(v0);
+        }
         return false;
     }
 
@@ -286,6 +370,17 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
         @Override
         public int getCount() {
             return this.customers == null ? 0 : this.customers.size();
+        }
+
+        public void removeItem(int position) {
+            this.customers.remove(position);
+            this.notifyDataSetChanged();
+        }
+
+        public void setData(List<CustomerThin> customers) {
+            this.status.clear();
+            this.customers = customers;
+            this.notifyDataSetChanged();
         }
 
         @Override
@@ -425,72 +520,4 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
             }
         }
     }
-//
-//    public void refresh() {
-//        PDH.show(this, new PDH.ProgressCallBack() {
-//            public void action() {
-//                customers = customerDAO.getCustomerThin(false);
-//                handler.sendEmptyMessage(2);
-//            }
-//        });
-//    }
-//
-//    private class Madapter extends BaseQuickAdapter<CustomerThin, BaseViewHolder> {
-//
-//        public boolean issort=true;
-//        private  HashMap<Integer,Boolean> status;
-//
-//        Madapter() {
-//            super(R.layout.item_field_customer, customers);
-//            status = new HashMap<Integer, Boolean>();
-//        }
-//
-//        @Override
-//        protected void convert(BaseViewHolder helper, CustomerThin arg10) {
-//            helper.setText(R.id.tvCustomerName, "[" + arg10.getId() + "] " + arg10.getName());
-//            helper.getView(R.id.tvIsNew).setVisibility(arg10.getIsNew() ? View.VISIBLE : View.GONE);
-//
-//            String v2 = arg10.getContactMoblie();
-//            if (!TextUtils.isEmpty(arg10.getTelephone())) {
-//                v2 = TextUtils.isEmpty(v2) ? arg10.getTelephone() : String.valueOf(v2) + "，" + arg10.getTelephone();
-//            }
-//            helper.getView(R.id.tvTelephone).setVisibility(TextUtils.isEmptyS(v2) ? View.GONE : View.VISIBLE);
-//            helper.setText(R.id.tvTelephone, v2);
-//            String v0 = arg10.getAddress();
-//            helper.getView(R.id.tvCusAddress).setVisibility(TextUtils.isEmptyS(v0) ? View.GONE : View.VISIBLE);
-//            helper.setText(R.id.tvCusAddress, v0);
-//            if (arg10.getExhibitionTerm() > 0) {
-//                helper.getView(R.id.tvExhibition).setVisibility(View.VISIBLE);
-//                String v1 = "每月" + arg10.getExhibitionTerm() + "日送陈列";
-//                if (arg10.getLastExhibition() > 0) {
-//                    v1 = String.valueOf(v1) + "，最近一次" + Utils.formatDate(arg10.getLastExhibition(), "yyyy-MM-dd");
-//                }
-//                helper.setText(R.id.tvExhibition, v1);
-//                helper.setTextColor(R.id.tvExhibition, -65536);
-//            } else {
-//                helper.getView(R.id.tvExhibition).setVisibility(View.GONE);
-//            }
-//
-//            if (issort) {
-//                helper.getView(R.id.lin1).setVisibility(View.VISIBLE);
-//                helper.getView(R.id.llCheckBox).setVisibility(View.VISIBLE);
-//            } else {
-//                helper.getView(R.id.lin1).setVisibility(View.GONE);
-//                helper.getView(R.id.llCheckBox).setVisibility(View.GONE);
-//            }
-//            helper.addOnClickListener(R.id.btnBefore);
-//            helper.addOnClickListener(R.id.btnBottom);
-//            helper.addOnClickListener(R.id.btnNext);
-//            helper.addOnClickListener(R.id.btnTop);
-//            CheckBox cb = helper.getView(R.id.checkBox);
-//            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                 status.put(Integer.valueOf(buttonView.getTag(2131296314).toString()),isChecked);
-//                }
-//            });
-//        }
-//
-//    }
-
 }

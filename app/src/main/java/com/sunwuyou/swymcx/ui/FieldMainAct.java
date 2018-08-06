@@ -25,6 +25,7 @@ import com.sunwuyou.swymcx.popupmenu.MainMenuPopup;
 import com.sunwuyou.swymcx.request.ReqSupQueryDepartment;
 import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
 import com.sunwuyou.swymcx.service.ServiceSynchronize;
+import com.sunwuyou.swymcx.ui.field.AllGoodsActivity;
 import com.sunwuyou.swymcx.ui.field.FieldDocOpenAct;
 import com.sunwuyou.swymcx.ui.field.FieldLocalRecordActivity;
 import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
@@ -204,7 +205,7 @@ public class FieldMainAct extends BaseHeadActivity {
                 break;
             case R.id.field_local_goods:
                 //产品手册
-
+                startActivity(new Intent(this, AllGoodsActivity.class));
                 break;
             case R.id.root:
                 if ((this.menuPopup != null) && (this.menuPopup.isShowing())) {

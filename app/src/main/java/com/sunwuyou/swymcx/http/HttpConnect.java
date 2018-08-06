@@ -136,9 +136,9 @@ public class HttpConnect {
             public void onError(Response<String> response) {
                 super.onError(response);
                 Toast.makeText(context, response.code() == 404 ? context.getString(R.string.addr_no_found) : context.getString(R.string.server_exception), Toast.LENGTH_SHORT).show();
-               if(httpErrorConnnet!=null){
-                   httpErrorConnnet.loadHttpError(response.code());
-               }
+                if (httpErrorConnnet != null) {
+                    httpErrorConnnet.loadHttpError(response.code());
+                }
             }
 
             @Override
@@ -207,13 +207,11 @@ public class HttpConnect {
     }
 
     private String getJson(HashMap<String, String> map) {
-        if (map == null) {
-            return "";
-        }
         StringBuilder sb = new StringBuilder();
-
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+        if (map != null) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+            }
         }
         if (SystemState.getAccountSet() != null) {
             sb.append("accountset").append("=").append(SystemState.getAccountSet().getDatabase()).append("&");

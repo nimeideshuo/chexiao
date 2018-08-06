@@ -19,6 +19,13 @@ public class MAlertDialog extends TitleDialog {
             dismiss();
         }
     };
+    public MAlertDialog(Activity activity) {
+        super(activity);
+        this.setView(R.layout.dia_alert);
+        this.setConfirmButton(this.defaultClickListener);
+        this.setCancelButton(this.defaultClickListener);
+        this.setTitleText("提示");
+    }
 
     public MAlertDialog(Activity activity, int i) {
         super(activity);
