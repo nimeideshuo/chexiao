@@ -3,6 +3,7 @@ package com.sunwuyou.swymcx.app;
 import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSON;
+import com.sunwuyou.swymcx.print.BTPrinter;
 import com.sunwuyou.swymcx.utils.JSONUtil;
 
 import java.util.HashMap;
@@ -41,26 +42,21 @@ public class AccountPreference {
         return JSONUtil.parse2ListMap(this.bizparamiterPreferences.getString("bizinfo", "[]"));
     }
 
-//    public BTPrinter getPrinter() {
-//        Object localObject2 = null;
-//        String str1 = this.setPreferences.getString("printername", null);
-//        String str2 = this.setPreferences.getString("printeradress", null);
-//        Object localObject1 = localObject2;
-//        if (str1 != null) {
-//            localObject1 = localObject2;
-//            if (str2 != null) {
-//                localObject1 = new BTPrinter(str1, str2);
-//            }
-//        }
-//        return localObject1;
-//    }
+    public BTPrinter getPrinter() {
+        String v1 = this.setPreferences.getString("printername", null);
+        String v0 = this.setPreferences.getString("printeradress", null);
+        if (v1 != null && v0 != null) {
+            return new BTPrinter(v1, v0);
+        }
+        return null;
+    }
 
     public String getServerIp() {
         return getValue("ip");
     }
 
     public <T> T getValue(String json, Class<T> tClass) {
-        return JSON.parseObject(json,tClass);
+        return JSON.parseObject(json, tClass);
     }
 
     public String getValue(String paramString) {
@@ -77,10 +73,9 @@ public class AccountPreference {
         localEditor.putString("bizinfo", paramString);
         return localEditor.commit();
     }
-
-//    public boolean savePrinter(BTPrinter paramBTPrinter) {
-//        return this.setPreferences.edit().putString("printername", paramBTPrinter.getName()).putString("printeradress", paramBTPrinter.getAddress()).commit();
-//    }
+    public boolean savePrinter(BTPrinter arg4) {
+        return this.setPreferences.edit().putString("printername", arg4.getName()).putString("printeradress", arg4.getAddress()).commit();
+    }
 
     public boolean setServerIp(String ip) {
         return setValue("ip", ip);

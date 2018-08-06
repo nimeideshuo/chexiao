@@ -61,5 +61,20 @@ public class PricesystemDAO {
         return false;
     }
 
+    public int getCount() {
+        this.db = this.helper.getReadableDatabase();
+        cursor = this.db.rawQuery("select count(*) from sz_pricesystem where isavailable = \'1\'", null);
+        if (cursor.moveToNext()) {
+            return cursor.getInt(0);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (db != null) {
+            db.close();
+        }
+        return 0;
+    }
+
 
 }

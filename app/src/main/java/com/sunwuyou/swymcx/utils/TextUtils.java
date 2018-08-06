@@ -1,5 +1,8 @@
 package com.sunwuyou.swymcx.utils;
 
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+
 /**
  * Created by admin on
  * 2018/7/11.
@@ -12,5 +15,11 @@ public class TextUtils {
 
     public static boolean isEmpty(String str) {
         return (str == null) || (str.length() == 0);
+    }
+
+    public static CharSequence setTextStyle(String str1, String str2) {
+        SpannableString spannable = new SpannableString(str1 + str2);
+        spannable.setSpan(new ForegroundColorSpan(-65536), spannable.length() - str2.length(), spannable.length(), 33);
+        return spannable;
     }
 }

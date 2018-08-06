@@ -389,4 +389,22 @@ public class FieldSaleDAO {
     public boolean submit(long id) {
         return this.updateDocValue(id, "status", String.valueOf(2));
     }
+
+
+    public int getNotUploadCount() {
+        this.db = this.helper.getWritableDatabase();
+        cursor = this.db.rawQuery("select count(*) from kf_fieldsale where status!=?", new String[]{"2"});
+        if (cursor.moveToNext()) {
+            return cursor.getInt(0);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        if (db != null) {
+            db.close();
+        }
+        return 0;
+
+    }
+
 }

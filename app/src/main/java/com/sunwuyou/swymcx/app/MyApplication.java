@@ -40,7 +40,7 @@ public class MyApplication extends MultiDexApplication {
         OkGo.getInstance().init(this);
         Utils.init(this);
         DialogUIUtils.init(this);
-//        LeakCanary.install(this);
+        //        LeakCanary.install(this);
         //设置服务器IP地址
         String serverIp = new AccountPreference().getServerIp();
         MLog.d("本地服务器地址>>" + serverIp);
@@ -96,4 +96,16 @@ public class MyApplication extends MultiDexApplication {
         localIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(localIntent);
     }
+
+    public String getVersionName() {
+        String v3;
+        try {
+            v3 = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception v0) {
+            v0.printStackTrace();
+            v3 = "";
+        }
+        return v3;
+    }
+
 }
