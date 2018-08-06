@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
 
@@ -54,13 +55,18 @@ public class SplashAct extends Activity {
     TextView copyright;
     private ServerIpDialog seviceDialog;
     private AccountPreference ap;
-
+    public static int height;
+    public static int width;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         initView();
+        DisplayMetrics v0 = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(v0);
+       width = v0.widthPixels;
+        height = v0.heightPixels;
     }
 
     private void initView() {

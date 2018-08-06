@@ -1,43 +1,13 @@
 package com.sunwuyou.swymcx.ui.center;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
-import android.widget.TextView;
 
-import com.dou361.dialogui.DialogUIUtils;
-import com.dou361.dialogui.listener.DialogUIListener;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
-import com.sunwuyou.swymcx.app.SystemDBHelper;
-import com.sunwuyou.swymcx.app.SystemState;
-import com.sunwuyou.swymcx.dao.DepartmentDAO;
-import com.sunwuyou.swymcx.dao.WarehouseDAO;
-import com.sunwuyou.swymcx.in.EmptyDo;
-import com.sunwuyou.swymcx.model.Department;
-import com.sunwuyou.swymcx.model.Warehouse;
 import com.sunwuyou.swymcx.print.BTPrinter;
-import com.sunwuyou.swymcx.request.ReqSynUpdateInfo;
-import com.sunwuyou.swymcx.service.ServiceSynchronize;
-import com.sunwuyou.swymcx.ui.ClearLocalDataDialog;
 import com.sunwuyou.swymcx.ui.PrefsFragment;
-import com.sunwuyou.swymcx.utils.SwyUtils;
 import com.sunwuyou.swymcx.utils.TextUtils;
-import com.sunwuyou.swymcx.utils.UpdateUtils;
-import com.sunwuyou.swymcx.utils.Utils;
-
-import java.util.Date;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by admin
@@ -52,13 +22,13 @@ public class SettingActivity extends BaseHeadActivity {
 
     @Override
     public int getLayoutID() {
-        return 0;
+        return R.layout.act_setting_top;
     }
 
     @Override
     public void initView() {
         pref = new PrefsFragment();
-        getFragmentManager().beginTransaction().replace(android.R.id.content, pref).commit();
+        getFragmentManager().beginTransaction().replace(R.id.base_fragment, pref).commit();
         ap = new AccountPreference();
     }
 

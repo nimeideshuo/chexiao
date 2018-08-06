@@ -23,6 +23,7 @@ import com.sunwuyou.swymcx.dao.GoodsDAO;
 import com.sunwuyou.swymcx.dao.PricesystemDAO;
 import com.sunwuyou.swymcx.dao.TransferDocDAO;
 import com.sunwuyou.swymcx.dao.WarehouseDAO;
+import com.sunwuyou.swymcx.in.EmptyDo;
 import com.sunwuyou.swymcx.model.Department;
 import com.sunwuyou.swymcx.model.Warehouse;
 import com.sunwuyou.swymcx.print.BTPrintHelper;
@@ -114,9 +115,10 @@ public class PrefsFragment extends PreferenceFragment {
     private Preference.OnPreferenceClickListener preferenceClickListener = new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference paramAnonymousPreference) {
-
             if (paramAnonymousPreference.getKey().equals(PrefsFragment.this.getString(R.string.default_printer))) {
                 printsetting();
+            } else if (paramAnonymousPreference.getKey().equals(PrefsFragment.this.getString(R.string.clear_database))) {
+                clearDataBase();
             } else if (paramAnonymousPreference.getKey().equals(PrefsFragment.this.getString(R.string.printer_model))) {
                 setPrinterModel();
             } else if (paramAnonymousPreference.getKey().equals(PrefsFragment.this.getString(R.string.print_mode))) {
@@ -162,7 +164,6 @@ public class PrefsFragment extends PreferenceFragment {
         }
     };
 
-
     public PrefsFragment() {
         super();
         this.departmentposition = 0;
@@ -171,12 +172,30 @@ public class PrefsFragment extends PreferenceFragment {
         this.orders = new String[]{"默认", "编号", "名称", "条码", "类别"};
     }
 
+    private void clearDataBase() {
+        final ClearLocalDataDialog clearLocalDataDialogis = new ClearLocalDataDialog(getActivity());
+        clearLocalDataDialogis.setEmptyDo(new EmptyDo() {
+            public void doAction() {
+                if (clearLocalDataDialogis.isChecked()) {
+                    ap.setValue("basic_data_updatitme", "未同步");
+                    ap.setValue("customer_data_updateime", "未同步");
+                    ap.setValue("max_rversion", "0");
+                } else {
+                    ap.setValue("customer_data_updateime", "未同步");
+                }
+
+                getMyPreference(R.string.load_basic_data).setSummary(TextUtils.setTextStyle("上次同步时间：", PrefsFragment.this.ap.getValue("basic_data_updatitme", "未同步")));
+                getMyPreference(R.string.load_customer_data).setSummary(TextUtils.setTextStyle("上次同步时间：", PrefsFragment.this.ap.getValue("customer_data_updateime", "未同步")));
+            }
+        });
+        clearLocalDataDialogis.show();
+    }
+
     private void goodsCheckSet() {
         final boolean[] choice = new boolean[4];
         String v5 = PrefsFragment.this.ap.getValue("goods_check_select");
         if (!TextUtils.isEmptyS(v5)) {
             String[] v4 = v5.split(",");
-
             for (int i = 0; i < v4.length; i++) {
                 for (int j = 0; j < SystemState.goods_select_keys.length; j++) {
                     if (v4[i].equals(SystemState.goods_select_keys[j])) {
@@ -194,8 +213,8 @@ public class PrefsFragment extends PreferenceFragment {
         AlertDialog.Builder v0 = new AlertDialog.Builder(getActivity());
         v0.setTitle("商品检索方式");
         v0.setMultiChoiceItems(SystemState.goods_select_items, choice, new DialogInterface.OnMultiChoiceClickListener() {
-            public void onClick(DialogInterface arg2, int arg3, boolean arg4) {
-                choice[arg3] = arg4;
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                choice[which] = isChecked;
             }
         });
         v0.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -204,8 +223,10 @@ public class PrefsFragment extends PreferenceFragment {
                 StringBuilder v2 = new StringBuilder();
                 Field v1;
                 for (int i = 0; i < choice.length; i++) {
-                    v2.append(String.valueOf(SystemState.goods_select_items[i]) + "、");
-                    v3.append(String.valueOf(SystemState.goods_select_keys[i]) + ",");
+                    if(choice[i]) {
+                        v2.append(String.valueOf(SystemState.goods_select_items[i]) + "、");
+                        v3.append(String.valueOf(SystemState.goods_select_keys[i]) + ",");
+                    }
                 }
 
                 if (TextUtils.isEmptyS(v3.toString())) {
@@ -254,8 +275,8 @@ public class PrefsFragment extends PreferenceFragment {
         AlertDialog.Builder v0 = new AlertDialog.Builder(PrefsFragment.this.getActivity());
         v0.setTitle("客户检索方式");
         v0.setMultiChoiceItems(SystemState.customer_select_items, choice, new DialogInterface.OnMultiChoiceClickListener() {
-            public void onClick(DialogInterface arg2, int arg3, boolean arg4) {
-                choice[arg3] = arg4;
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                choice[which] = isChecked;
             }
         });
         v0.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -302,19 +323,18 @@ public class PrefsFragment extends PreferenceFragment {
     private void selectDepartment() {
         final List<Department> departments = new DepartmentDAO().getAllDepartment();
         String v1 = SystemState.getDepartment().getDid();
-        PrefsFragment.this.departmentposition = -1;
+        departmentposition = -1;
         String[] v4 = new String[departments.size()];
 
         for (int i = 0; i < departments.size(); i++) {
             v4[i] = departments.get(i).getDname();
             if (departments.get(i).getDid().equals(v1)) {
                 departmentposition = i;
-                break;
             }
         }
-        AlertDialog.Builder v0 = new AlertDialog.Builder(PrefsFragment.this.getActivity());
+        AlertDialog.Builder v0 = new AlertDialog.Builder(getActivity());
         v0.setTitle("工作部门");
-        v0.setSingleChoiceItems(((CharSequence[]) v4), PrefsFragment.this.departmentposition, new DialogInterface.OnClickListener() {
+        v0.setSingleChoiceItems(v4, departmentposition, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg2, int arg3) {
                 departmentposition = arg3;
             }
@@ -345,7 +365,6 @@ public class PrefsFragment extends PreferenceFragment {
             v2[i] = warehouses.get(i).getName();
             if (warehouses.get(i).getId().equals(v3_1)) {
                 this.warehouseposition = i;
-                break;
             }
         }
         AlertDialog.Builder v0 = new AlertDialog.Builder(getActivity());
@@ -512,11 +531,12 @@ public class PrefsFragment extends PreferenceFragment {
         } else if (new GoodsDAO().getTruckGoodsCount() > 0) {
             PDH.showMessage("同步前请先执行卸车");
         } else {
-            MAlertDialog v0 = new MAlertDialog(getActivity(), 300);
+            final MAlertDialog v0 = new MAlertDialog(getActivity(), 300);
             v0.setContentText("请选择同步方式");
             v0.setConfirmButton("全部同步", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    v0.dismiss();
                     PDH.show(getActivity(), "正在检查更新...", new PDH.ProgressCallBack() {
                         public void action() {
                             getMaxRVersion(true);
@@ -528,6 +548,7 @@ public class PrefsFragment extends PreferenceFragment {
                 v0.setCancelButton("增量同步", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        v0.dismiss();
                         PDH.show(getActivity(), "正在检查更新...", new PDH.ProgressCallBack() {
                             public void action() {
                                 getMaxRVersion(false);
@@ -668,7 +689,7 @@ public class PrefsFragment extends PreferenceFragment {
     }
 
     public Preference getCustomerPre() {
-        return this.getMyPreference(2131361833);
+        return this.getMyPreference(R.string.load_customer_data);
     }
 
     public Preference getMyPreference(int arg3) {

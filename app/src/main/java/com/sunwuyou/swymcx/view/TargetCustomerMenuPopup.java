@@ -107,7 +107,7 @@ public class TargetCustomerMenuPopup extends PopupWindow implements View.OnClick
                     return;
                 }
                 if (Utils.isDownloadCustomerByVisitLine) {
-                    final User paramView = (User) SystemState.getObject("cu_user", User.class);
+                    final User paramView = SystemState.getObject("cu_user", User.class);
                     if (!TextUtils.isEmpty(paramView.getVisitLineId())) {
                         String visitLineName = new VisitLineDAO().getVisitLineName(paramView.getVisitLineId());
                         String content = "";
@@ -127,9 +127,9 @@ public class TargetCustomerMenuPopup extends PopupWindow implements View.OnClick
 
                             }
                         });
+                        return;
                     }
                     this.activity.startActivityForResult(new Intent().setClass(this.activity, VisitLineListAct.class), 1);
-                    return;
                 }
                 break;
             case R.id.btnAddNew:

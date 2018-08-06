@@ -39,7 +39,9 @@ public class ClearLocalDataDialog extends TitleDialog implements View.OnClickLis
         this.setConfirmButton(this);
         this.setCancelButton(this);
     }
-
+    public boolean isChecked() {
+        return this.cbClearDatabase.isChecked();
+    }
     @Override
     public void onClick(View v) {
         this.dismiss();

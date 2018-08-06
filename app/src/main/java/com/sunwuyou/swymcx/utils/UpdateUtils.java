@@ -476,8 +476,8 @@ public class UpdateUtils {
                 paramHandler.sendMessage(paramHandler.obtainMessage(-2, listNoImage.size()));
                 for (v5 = 0; v5 < listNoImage.size(); ++v5) {
                     GoodsImage goodsImage = listNoImage.get(v5);
-                    v3.saveImage(goodsImage.getSerialid(), ssy.syn_QueryGoodsImage(goodsImage.getImagepath()),
-                            goodsImage.getImagepath());
+                    v3.saveImage(goodsImage.getSerialid(), ssy.syn_QueryGoodsImage(goodsImage.getImagePath()),
+                            goodsImage.getImagePath());
                     paramHandler.sendEmptyMessage(v5 + 1);
                 }
             }

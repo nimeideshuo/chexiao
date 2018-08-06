@@ -150,92 +150,86 @@ public class NewCustomerAddAct extends BaseHeadActivity implements View.OnClickL
     @Override
     public void initView() {
         setTitle("新增客户");
-        String v0 = this.getIntent().getStringExtra("updatecustomerid");
-        if (!TextUtils.isEmptyS(v0)) {
-            updateCustomer = new CustomerDAO().getCustomer(v0, true);
+        String updatecustomerid = this.getIntent().getStringExtra("updatecustomerid");
+        if (!TextUtils.isEmptyS(updatecustomerid)) {
+            updateCustomer = new CustomerDAO().getCustomer(updatecustomerid, true);
         }
-        if ((Utils.isDownloadCustomerByVisitLine) && !TextUtils.isEmpty(SystemState.getObject("cu_user", User.class).getVisitLineId())) {
+        if (Utils.isDownloadCustomerByVisitLine && !TextUtils.isEmpty(SystemState.getObject("cu_user", User.class).getVisitLineId())) {
             this.isAppointedVisitLine = true;
         }
         init();
-        this.loadData();
+        loadData();
     }
 
     private void loadData() {
         mapTypes = new CustomerTypeDAO().queryAllcuCustomertypes();
         if (mapTypes.isEmpty()) {
             PDH.showFail("客户分类信息不存在");
-            this.finish();
-        } else {
-            if (this.updateCustomer != null) {
-                for (int i = 0; i < mapTypes.size(); i++) {
-                    if (this.mapTypes.get(i).getId().equals(this.updateCustomer.getCustomerTypeId())) {
-                        this.customertype = this.mapTypes.get(i);
-                        break;
-                    }
+            finish();
+            return;
+        }
+        if (this.updateCustomer != null) {
+            for (int i = 0; i < mapTypes.size(); i++) {
+                if (this.mapTypes.get(i).getId().equals(this.updateCustomer.getCustomerTypeId())) {
+                    this.customertype = this.mapTypes.get(i);
+                    break;
                 }
-            } else {
-                this.customertype = this.mapTypes.get(0);
             }
-            this.btnCusType.setText(this.customertype.getName());
-            this.mapRegions = new RegionDAO().getAllRegions();
-            Region v1_1 = null;
-            if (this.mapRegions != null && this.mapRegions.size() != 0) {
-                if (this.updateCustomer != null) {
-                    for (int i = 0; i < mapRegions.size(); i++) {
-                        if (this.mapRegions.get(i).getId().equals(this.updateCustomer.getRegionId())) {
-                            v1_1 = this.mapRegions.get(i);
+        } else {
+            this.customertype = this.mapTypes.get(0);
+        }
+        //客户分类
+        this.btnCusType.setText(this.customertype.getName());
+        this.mapRegions = new RegionDAO().getAllRegions();
+        if (mapRegions.isEmpty()) {
+            PDH.showFail("地区信息不存在");
+            finish();
+            return;
+        }
+        Region v1_1 = null;
+        if (this.updateCustomer != null) {
+            for (int i = 0; i < mapRegions.size(); i++) {
+                if (this.mapRegions.get(i).getId().equals(this.updateCustomer.getRegionId())) {
+                    v1_1 = this.mapRegions.get(i);
+                    break;
+                }
+            }
+        } else {
+            v1_1 = this.mapRegions.get(0);
+        }
+        this.cusRegionId = v1_1.getId();
+        this.btnCusRegion.setText(v1_1.getName());
+        if (!isAppointedVisitLine) {
+            mapVisitLines = new VisitLineDAO().getAllVisitLines();
+            VisitLine v3_1;
+            if (!mapVisitLines.isEmpty()) {
+                if (updateCustomer != null) {
+                    for (int i = 0; i < mapVisitLines.size(); i++) {
+                        if (mapVisitLines.get(i).getId().equals(updateCustomer.getVisitLineId())) {
+                            v3_1 = mapVisitLines.get(i);
+                            this.cusVisitLineId = v3_1.getId();
+                            this.btnCusVisitLine.setText(v3_1.getName());
                             break;
                         }
                     }
                 } else {
-                    v1_1 = this.mapRegions.get(0);
+                    v3_1 = mapVisitLines.get(0);
+                    this.cusVisitLineId = v3_1.getId();
+                    this.btnCusVisitLine.setText(v3_1.getName());
                 }
-                assert v1_1 != null;
-                this.cusRegionId = v1_1.getId();
-                this.btnCusRegion.setText(v1_1.getName());
-                if (!this.isAppointedVisitLine) {
-                    mapVisitLines = new VisitLineDAO().getAllVisitLines();
-                    VisitLine v3_1 = null;
-                    if (!mapVisitLines.isEmpty()) {
-                        if (this.updateCustomer != null) {
-                            for (int i = 0; i < mapVisitLines.size(); i++) {
-                                if (mapVisitLines.get(i).getId().equals(this.updateCustomer.getVisitLineId())) {
-                                    v3_1 = mapVisitLines.get(i);
-                                }
-                            }
-                        } else {
-                            v3_1 = mapVisitLines.get(0);
-                        }
-
-                        assert v3_1 != null;
-                        this.cusVisitLineId = v3_1.getId();
-                        this.btnCusVisitLine.setText(v3_1.getName());
-                    }
-                } else {
-                    this.cusVisitLineId = SystemState.getObject("cu_user", User.class).getVisitLineId();
-                    if (mapVisitLines == null) {
-                        return;
-                    }
-                    if (this.mapVisitLines.size() <= 0) {
-                        return;
-                    }
-                    if (this.updateCustomer == null) {
-                        return;
-                    }
-                    for (int i = 0; i < this.mapVisitLines.size(); i++) {
-                        if (this.cusVisitLineId.equals(this.mapVisitLines.get(i).getId())) {
-                            this.btnCusVisitLine.setText(this.mapVisitLines.get(i).getName());
-                            break;
-                        }
-                    }
-                }
-                //TODO 代码有问题 等待调试
-                this.setText();
-                //                PDH.showFail("地区信息不存在");
-                //                this.finish();
             }
         }
+        this.cusVisitLineId = SystemState.getObject("cu_user", User.class).getVisitLineId();
+        for (int i = 0; i < this.mapVisitLines.size(); i++) {
+            if (this.cusVisitLineId.equals(this.mapVisitLines.get(i).getId())) {
+                this.btnCusVisitLine.setText(this.mapVisitLines.get(i).getName());
+                break;
+            }
+        }
+        if(this.updateCustomer == null) {
+            return;
+        }
+        this.setText();
     }
 
     private void init() {
@@ -253,7 +247,6 @@ public class NewCustomerAddAct extends BaseHeadActivity implements View.OnClickL
         this.etCusBankAccount = this.findViewById(R.id.etCusBankAccount);
         this.etAddress = this.findViewById(R.id.etAddress);
         actvCusBank = this.findViewById(R.id.actvCusBank);
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, this.getResources().getStringArray(R.array.banks));
         actvCusBank.setAdapter(adapter);
         this.actvCusBank.setThreshold(1);

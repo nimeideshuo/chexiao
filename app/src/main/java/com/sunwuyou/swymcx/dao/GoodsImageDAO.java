@@ -18,6 +18,7 @@ import java.util.List;
 public class GoodsImageDAO {
     private SQLiteDatabase db;
     private DBOpenHelper helper = new DBOpenHelper();
+    private Cursor cursor;
 
     // 查询 sz_goodsimage 数据
     public List<GoodsImage> getNoImage() {
@@ -28,12 +29,12 @@ public class GoodsImageDAO {
             while (cursor.moveToNext()) {
                 GoodsImage localGoodsImage = new GoodsImage();
                 localGoodsImage.setSerialid(cursor.getLong(cursor.getColumnIndex("serialid")));
-                localGoodsImage.setGoodsid(cursor.getString(cursor.getColumnIndex("goodsid")));
-                localGoodsImage.setImagepath(cursor.getString(cursor.getColumnIndex("imagepath")));
+                localGoodsImage.setGoodsId(cursor.getString(cursor.getColumnIndex("goodsid")));
+                localGoodsImage.setImagePath(cursor.getString(cursor.getColumnIndex("imagepath")));
                 if (cursor.getInt(cursor.getColumnIndex("isgot")) != 0) {
-                    localGoodsImage.setIsgot(true);
+                    localGoodsImage.setIsGot(true);
                 } else {
-                    localGoodsImage.setIsgot(false);
+                    localGoodsImage.setIsGot(false);
                 }
                 localArrayList.add(localGoodsImage);
             }
@@ -62,5 +63,31 @@ public class GoodsImageDAO {
 //            }
 //        }
     }
+
+    public List<GoodsImage> get(String arg9) {
+        this.db = this.helper.getWritableDatabase();
+        try {
+            cursor = this.db.rawQuery("select serialid, goodsid, imagepath from sz_goodsimage where isgot = 1 and goodsid = ?", new String[]{arg9});
+            ArrayList<GoodsImage> v3 = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                GoodsImage v2 = new GoodsImage();
+                v2.setSerialid(cursor.getLong(0));
+                v2.setGoodsId(cursor.getString(1));
+                v2.setImagePath(cursor.getString(2));
+                v2.setIsGot(true);
+                v3.add(v2);
+            }
+            return v3;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            if (this.db != null)
+                this.db.close();
+        }
+        return new ArrayList();
+    }
+
 
 }

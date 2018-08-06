@@ -88,4 +88,43 @@ public class GoodsPriceDAO {
         }
         return 0;
     }
+
+    public String getDefaultPrice(String arg15) {
+        String v8 = null;
+        int v11 = 2;
+        String v4 = Utils.pricesystemid;
+        if (TextUtils.isEmptyS(v4)) {
+            v4 = new PricesystemDAO().queryAvailablePricesystem();
+        }
+        if (TextUtils.isEmptyS(v4)) {
+            v8 = null;
+            return v8;
+        }
+        this.db = this.helper.getReadableDatabase();
+        SQLiteDatabase v10 = this.db;
+        String[] v11_1 = new String[v11];
+        v11_1[0] = arg15;
+        v11_1[1] = v4;
+        Cursor v0 = v10.rawQuery("select gp.price, gp.unitname, gu.ratio from sz_goodsprice as gp, sz_goodsunit as gu where gp.goodsid = gu.goodsid and gp.unitid = gu.unitid and gu.isshow = \'1\' and gu.goodsid=? and gp.pricesystemid=?", v11_1);
+        if (v0.moveToNext()) {
+            double v2 = Utils.normalizeDouble(v0.getDouble(0));
+            String v9 = v0.getString(1);
+            double v5 = v0.getDouble(2);
+            if (v2 <= 0) {
+                Cursor v01 = this.db.rawQuery("select gp.price from sz_goodsprice as gp, sz_goodsunit as gu where gp.goodsid = gu.goodsid and gp.unitid = gu.unitid and gu.isbasic = \'1\' and gu.goodsid=? and gp.pricesystemid=?", new String[]{arg15, v4});
+                if (v01.moveToNext()) {
+                    v8 = String.valueOf(Utils.normalizeDouble(v0.getDouble(0) * v5)) + "元/" + v9;
+                }
+                v01.close();
+            } else {
+                v8 = String.valueOf(v2) + "元/" + v9;
+            }
+
+        }
+        v0.close();
+        db.close();
+        return v8;
+    }
+
+
 }

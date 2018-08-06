@@ -39,7 +39,7 @@ public class RegionDAO extends BaseDao {
                 db.close();
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
 }

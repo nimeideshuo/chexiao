@@ -15,15 +15,15 @@ public class GoodsImage {
         return goodsid == null ? "" : goodsid;
     }
 
-    public void setGoodsid(String goodsid) {
+    public void setGoodsId(String goodsid) {
         this.goodsid = goodsid;
     }
 
-    public String getImagepath() {
+    public String getImagePath() {
         return imagepath == null ? "" : imagepath;
     }
 
-    public void setImagepath(String imagepath) {
+    public void setImagePath(String imagepath) {
         this.imagepath = imagepath;
     }
 
@@ -31,7 +31,7 @@ public class GoodsImage {
         return isgot;
     }
 
-    public void setIsgot(boolean isgot) {
+    public void setIsGot(boolean isgot) {
         this.isgot = isgot;
     }
 

@@ -22,4 +22,11 @@ public class TextUtils {
         spannable.setSpan(new ForegroundColorSpan(-65536), spannable.length() - str2.length(), spannable.length(), 33);
         return spannable;
     }
+    public static String out(String arg1) {
+        if(TextUtils.isEmptyS(arg1)) {
+            arg1 = "";
+        }
+
+        return arg1;
+    }
 }

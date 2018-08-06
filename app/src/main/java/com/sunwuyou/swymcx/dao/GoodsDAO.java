@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.EditText;
 
 import com.sunwuyou.swymcx.app.AccountPreference;
+import com.sunwuyou.swymcx.model.Goods;
 import com.sunwuyou.swymcx.model.GoodsThin;
 import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.UpdateUtils;
@@ -218,11 +219,96 @@ public class GoodsDAO {
             if (cursor != null) {
                 cursor.close();
             }
-            if (this.db != null)
+            if (this.db != null) {
                 this.db.close();
+            }
         }
 
         return "";
     }
+
+
+    public List<GoodsThin> queryGoodsThin(boolean arg11) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            String v4 = arg11 ? "select id,name,pinyin,barcode,specification,isusebatch,stocknumber,bigstocknumber,initnumber,biginitnumber from sz_goods where isavailable = \'1\' and (initnumber is not null and cast(initnumber as decimal(10, 2)) <> 0) or (stocknumber is not null and cast(stocknumber as decimal(10, 2)) <> 0) order by lower(pinyin)" : "select id,name,pinyin,barcode,specification,isusebatch,stocknumber,bigstocknumber,initnumber,biginitnumber from sz_goods where isavailable = \'1\' order by lower(pinyin)";
+            Cursor v0 = this.db.rawQuery(v4, null);
+            ArrayList<GoodsThin> v3 = new ArrayList<>();
+            while (v0.moveToNext()) {
+                GoodsThin v2 = new GoodsThin();
+                v2.setId(v0.getString(0));
+                v2.setName(v0.getString(1));
+                v2.setPinyin(v0.getString(2));
+                v2.setBarcode(v0.getString(3));
+                v2.setSpecification(v0.getString(4));
+                v2.setIsusebatch(v0.getInt(5) == 1);
+                v2.setStocknumber(v0.getDouble(6));
+                v2.setBigstocknumber(v0.getString(7));
+                v2.setInitnumber(v0.getDouble(8));
+                v2.setBiginitnumber(v0.getString(9));
+                v3.add(v2);
+            }
+            return v3;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    public int queryGoodsIndexByPinyin(String arg8) {
+        this.db = this.helper.getReadableDatabase();
+        String sql = "select count(*) from sz_goods where lower(substr(pinyin, 1, 1)) < lower(substr(?, 1, 1))";
+        Cursor v1 = this.db.rawQuery(sql, new String[]{arg8});
+        if (v1.moveToNext()) {
+            return v1.getInt(0);
+        }
+        v1.close();
+        db.close();
+        return 0;
+    }
+
+    public Goods getGoods(String arg10) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select id,name,pinyin,barcode,salecue,specification,model,isusebatch,goodsclassid,goodsclassname,stocknumber,bigstocknumber,initnumber,biginitnumber,getstocktime from sz_goods where id=?", new String[]{arg10});
+            if (cursor.moveToNext()) {
+                Goods v3 = new Goods();
+                v3.setId(cursor.getString(0));
+                v3.setName(cursor.getString(1));
+                v3.setPinyin(cursor.getString(2));
+                v3.setBarcode(cursor.getString(3));
+                v3.setSalecue(cursor.getString(4));
+                v3.setSpecification(cursor.getString(5));
+                v3.setModel(cursor.getString(6));
+                v3.setIsusebatch(cursor.getInt(7) == 1);
+                v3.setGoodsclassid(cursor.getString(8));
+                v3.setGoodsclassname(cursor.getString(9));
+                v3.setStocknumber(cursor.getString(10));
+                v3.setBigstocknumber(cursor.getString(11));
+                v3.setInitnumber(cursor.getString(12));
+                v3.setBiginitnumber(cursor.getString(13));
+                v3.setGetstocktime(cursor.getString(14));
+                return v3;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (this.db != null) {
+                this.db.close();
+            }
+        }
+        return null;
+    }
+
 
 }

@@ -219,6 +219,9 @@ public class HttpConnect {
         if (SystemState.getUser() != null) {
             sb.append("userid").append("=").append(SystemState.getUser().getId()).append("&");
         }
+        if (sb.toString().isEmpty()) {
+            return "";
+        }
         return sb.deleteCharAt(sb.length() - 1).toString();
     }
 }
