@@ -59,7 +59,8 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
     private Toast toast;
     private TextView toastView;
     private AllGoodsAdapter adapter;
-    @SuppressLint("HandlerLeak") private Handler handler = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -78,7 +79,8 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
 
         }
     };
-    @SuppressLint("HandlerLeak") private Handler handlerUpdate = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler handlerUpdate = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -102,24 +104,25 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
             }
         }
     };
-    @SuppressLint("HandlerLeak") private Handler handlerProgress = new Handler() {
+    @SuppressLint("HandlerLeak")
+    private Handler handlerProgress = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == -1) {
-                AllGoodsActivity.this.progressDialog.setProgress(0);
-                AllGoodsActivity.this.progressDialog.setMessage("数据同步中");
-                AllGoodsActivity.this.progressDialog.setMax(Integer.parseInt(msg.obj.toString()));
-                AllGoodsActivity.this.progressDialog.show();
+                progressDialog.setProgress(0);
+                progressDialog.setMessage("数据同步中");
+                progressDialog.setMax(Integer.parseInt(msg.obj.toString()));
+                progressDialog.show();
             } else if (msg.what == -2) {
-                AllGoodsActivity.this.progressDialog.setProgress(0);
-                AllGoodsActivity.this.progressDialog.setMessage("商品图片同步中");
-                AllGoodsActivity.this.progressDialog.setMax(Integer.parseInt(msg.obj.toString()));
-                AllGoodsActivity.this.progressDialog.show();
+                progressDialog.setProgress(0);
+                progressDialog.setMessage("商品图片同步中");
+                progressDialog.setMax(Integer.parseInt(msg.obj.toString()));
+                progressDialog.show();
             } else if (msg.what == -3) {
-                AllGoodsActivity.this.progressDialog.cancel();
+                progressDialog.cancel();
             } else {
-                AllGoodsActivity.this.progressDialog.setProgress(msg.what);
+                progressDialog.setProgress(msg.what);
             }
 
         }

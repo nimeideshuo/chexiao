@@ -313,4 +313,44 @@ public class FieldSaleItemBatchDAO {
     }
 
 
+    public List<FieldSaleItemBatchEx> getCancelItemBatchs(long arg12) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select fb.serialid,fb.fieldsaleid,fb.batch,fb.isout,fb.num,fb.goodsid,fb.unitid, b.stocknumber as stocknumber,b.bigstocknumber as bigstocknumber,fb.price,gu.unitname, fb.productiondate,gu.ratio, g.name as goodsname, g.barcode, g.specification, g.isusebatch  from kf_fieldsaleitembatch fb  left join kf_goodsbatch b on b.goodsid=fb.goodsid and b.batch=fb.batch  left join sz_goodsunit gu on gu.goodsid=fb.goodsid and gu.unitid=fb.unitid left join sz_goods g on g.id=fb.goodsid where fb.fieldsaleid=? and fb.isout=\'0\'", new String[]{new StringBuilder(String.valueOf(arg12)).toString()});
+            ArrayList<FieldSaleItemBatchEx> v0 = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                FieldSaleItemBatchEx v2 = new FieldSaleItemBatchEx();
+                v2.setSerialid(cursor.getLong(0));
+                v2.setFieldsaleid(cursor.getLong(1));
+                v2.setBatch(cursor.getString(2));
+                v2.setIsout(cursor.getInt(3) == 1);
+                v2.setNum(cursor.getDouble(4));
+                v2.setGoodsid(cursor.getString(5));
+                v2.setUnitid(cursor.getString(6));
+                v2.setStocknumber(cursor.getDouble(7));
+                v2.setBigstocknumber(cursor.getString(8));
+                v2.setPrice(cursor.getDouble(9));
+                v2.setUnitname(cursor.getString(10));
+                v2.setProductiondate(cursor.getString(11));
+                v2.setRatio(cursor.getDouble(12));
+                v2.setGoodsname(cursor.getString(13));
+                v2.setBarcode(cursor.getString(14));
+                v2.setSpecification(cursor.getString(15));
+                v2.setIsusebatch(cursor.getInt(16) == 1);
+                v0.add(v2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+
 }

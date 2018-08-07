@@ -1,7 +1,10 @@
 package com.sunwuyou.swymcx.ui.field;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,12 +31,17 @@ import com.sunwuyou.swymcx.dao.FieldSaleItemBatchDAO;
 import com.sunwuyou.swymcx.dao.FieldSaleItemDAO;
 import com.sunwuyou.swymcx.dao.FieldSalePayTypeDAO;
 import com.sunwuyou.swymcx.model.FieldSale;
+import com.sunwuyou.swymcx.model.FieldSaleForPrint;
 import com.sunwuyou.swymcx.model.FieldSaleItemBatchEx;
 import com.sunwuyou.swymcx.model.FieldSaleItemSource;
 import com.sunwuyou.swymcx.model.FieldSaleItemThin;
 import com.sunwuyou.swymcx.model.FieldSaleSum;
 import com.sunwuyou.swymcx.model.GoodsThin;
 import com.sunwuyou.swymcx.popupmenu.FieldEditMenuPopup;
+import com.sunwuyou.swymcx.print.BTPrintHelper;
+import com.sunwuyou.swymcx.print.BTdeviceListAct;
+import com.sunwuyou.swymcx.print.PrintMode;
+import com.sunwuyou.swymcx.ui.MAlertDialog;
 import com.sunwuyou.swymcx.ui.SearchHelper;
 import com.sunwuyou.swymcx.utils.ClickUtils;
 import com.sunwuyou.swymcx.utils.JSONUtil;
@@ -70,7 +78,6 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
     private List<FieldSaleItemThin> listItems;
     private SwipeMenuListView listView;
     private SearchHelper searchHelper;
-    //    private GoodsSelectMoreDialog selectMoreDialog;
     private TextView tvPreference;
     private TextView tvReceivablePrice;
     private TextView tvReceivedPrice;
@@ -86,9 +93,7 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
                 if (!"1".equals(ap.getValue("goods_select_more"))) {
                     startActivity(new Intent().setClass(FieldEditActivity.this, FieldAddMoreGoodsAct.class).putExtra("goods", JSONUtil.object2Json(v0)).putExtra("fieldsale", fieldsale));
                     atvSearch.setText("");
-                    return;
                 }
-
             }
         }
 
@@ -336,6 +341,71 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
 
     public void print() {
         //TODO 未完成
+        BluetoothAdapter v1 = BluetoothAdapter.getDefaultAdapter();
+        if(v1 == null) {
+            PDH.showMessage("当前设备不支持蓝牙功能");
+        }
+        else if(!v1.isEnabled()) {
+            this.startActivityForResult(new Intent("android.bluetooth.adapter.action.REQUEST_ENABLE"), 0);
+        }
+        else if(new AccountPreference().getPrinter() != null) {
+            this.btPrint();
+        }
+        else {
+            this.startActivity(new Intent().setClass(this, BTdeviceListAct.class).putExtra("type", 0).putExtra("doc", this.getDocPrintInfo()).putExtra("items", JSONUtil.object2Json(this.fieldsaleitemDAO.queryDocPrintData(this.fieldsale.getId()))));
+        }
+    }
+
+    private void btPrint() {
+        if(this.listItems == null || this.listItems.size() == 0) {
+            PDH.showMessage("单据为空，不允许打印");
+        }
+        else {
+            final MAlertDialog v0 = new MAlertDialog(this, 300);
+            v0.setContentText("确定进行打印吗？");
+            v0.setConfirmButton(new View.OnClickListener() {
+                public void onClick(View arg7) {
+                    v0.dismiss();
+                    BTPrintHelper v2 = new BTPrintHelper(FieldEditActivity.this);
+                    PrintMode v1 = PrintMode.getPrintMode();
+                    if(v1 == null) {
+                        PDH.showFail("未发现打印模版");
+                    }
+                    else {
+                        v1.setDatainfo(fieldsaleitemDAO.queryDocPrintData(FieldEditActivity.this.fieldsale.getId()));
+                        v1.setDocInfo(getDocPrintInfo());
+                        v2.setMode(v1);
+                        v2.setPrintOverCall(new BTPrintHelper.PrintOverCall() {
+                            public void printOver() {
+                                new FieldSaleDAO().updateDocValue(fieldsale.getId(), "printnum", "1");
+                            }
+                        });
+                        v2.print(new AccountPreference().getPrinter());
+                    }
+                }
+            });
+            v0.show();
+        }
+    }
+    public FieldSaleForPrint getDocPrintInfo() {
+        FieldSaleForPrint v10 = new FieldSaleForPrint();
+        v10.setId(this.fieldsale.getId());
+        v10.setDoctype("销售单");
+        v10.setShowid(this.fieldsale.getShowid());
+        v10.setCustomername(this.fieldsale.getCustomername());
+        v10.setDepartmentname(this.fieldsale.getDepartmentname());
+        v10.setBuildername(this.fieldsale.getBuildername());
+        v10.setBuildtime(Utils.formatDate(this.fieldsale.getBuildtime(), "yyyy-MM-dd HH:mm:ss"));
+        double v4 = this.fieldsaleitemDAO.getDocSalePrice(this.fieldsale.getId());
+        double v6 = this.fieldsaleitemDAO.getDocCancelPrice(this.fieldsale.getId());
+        double v8 = this.fieldsaleitemDAO.getDocSaleNum(this.fieldsale.getId());
+        v10.setSumamount("合计:" + Utils.getSubtotalMoney(v4 - v6));
+        v10.setPreference("优惠:" + this.fieldsale.getPreference());
+        v10.setReceivable("应收:" + Utils.getSubtotalMoney(v4 - v6 - this.fieldsale.getPreference()));
+        v10.setReceived("已收:" + Utils.getRecvableMoney(new FieldSalePayTypeDAO().getPayTypeAmount(this.fieldsale.getId())));
+        v10.setNum("数量:" + String.valueOf(v8));
+        v10.setRemark(new FieldSaleDAO().getFieldsale(1L).getRemark());
+        return v10;
     }
 
     @Override

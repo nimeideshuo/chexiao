@@ -8,10 +8,13 @@ import com.loc.d;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.model.FieldSaleItem;
+import com.sunwuyou.swymcx.model.FieldSaleItemBatchEx;
+import com.sunwuyou.swymcx.model.FieldSaleItemForPrint;
 import com.sunwuyou.swymcx.model.FieldSaleItemSource;
 import com.sunwuyou.swymcx.model.FieldSaleItemThin;
 import com.sunwuyou.swymcx.model.FieldSaleItemTotal;
 import com.sunwuyou.swymcx.model.FieldSaleSum;
+import com.sunwuyou.swymcx.model.GoodsThin;
 import com.sunwuyou.swymcx.request.ReqDocAddCheXiaoItem;
 import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
@@ -537,6 +540,104 @@ public class FieldSaleItemDAO {
             }
         }
         return new ArrayList<>();
+    }
+
+    public List queryDocPrintData(long arg13) {
+        FieldSaleItemForPrint v3;
+        List<FieldSaleItemSource> v6 = this.getFieldSaleItems(arg13);
+        ArrayList<FieldSaleItemForPrint> v5 = new ArrayList<>();
+        int v2;
+        for (v2 = 0; v2 < v6.size(); ++v2) {
+            FieldSaleItemSource v0 = v6.get(v2);
+            if (v0.getSalenum() > 0) {
+                v3 = new FieldSaleItemForPrint();
+                v3.setItemtype("销");
+                v3.setGoodsid(v0.getGoodsid());
+                v3.setGoodsname(v0.getGoodsname());
+                v3.setBarcode(v0.getBarcode());
+                v3.setSpecification(v0.getSpecification());
+                v3.setUnitname(v0.getSaleunitname());
+                v3.setNum(v0.getSalenum());
+                v3.setPrice(v0.getSaleprice());
+                v3.setDiscountratio(1);
+                v3.setDiscountsubtotal(Utils.getSubtotal(v3.getNum() * v3.getPrice()));
+                v3.setRemark(v0.getSaleremark());
+                v5.add(v3);
+            }
+
+            if (!TextUtils.isEmpty(v0.getGiftgoodsid()) && v0.getGiftnum() > 0) {
+                v3 = new FieldSaleItemForPrint();
+                v3.setItemtype("赠");
+                v3.setGoodsid(v0.getGiftgoodsid());
+                v3.setGoodsname(v0.getGiftgoodsname());
+                GoodsThin v1 = new GoodsDAO().getGoodsThin(v3.getGoodsid());
+                if (v1 != null) {
+                    v3.setBarcode(v1.getBarcode());
+                    v3.setSpecification(v1.getSpecification());
+                }
+                v3.setUnitname(v0.getGiftunitname());
+                v3.setNum(v0.getGiftnum());
+                v3.setPrice(0);
+                v3.setDiscountratio(1);
+                v3.setDiscountsubtotal(0);
+                v3.setRemark(v0.getGiftremark());
+                v5.add(v3);
+            }
+
+            if (v0.getGivenum() > 0) {
+                v3 = new FieldSaleItemForPrint();
+                v3.setItemtype("赠");
+                v3.setGoodsid(v0.getGoodsid());
+                v3.setGoodsname(v0.getGoodsname());
+                v3.setBarcode(v0.getBarcode());
+                v3.setSpecification(v0.getSpecification());
+                v3.setUnitname(v0.getGiveunitname());
+                v3.setNum(v0.getGivenum());
+                v3.setPrice(0);
+                v3.setDiscountratio(1);
+                v3.setDiscountsubtotal(0);
+                v3.setRemark(v0.getGiveremark());
+                v5.add(v3);
+            }
+        }
+
+        List<FieldSaleItemBatchEx> v4 = new FieldSaleItemBatchDAO().getCancelItemBatchs(arg13);
+        for (v2 = 0; v2 < v4.size(); ++v2) {
+            v3 = new FieldSaleItemForPrint();
+            v3.setItemtype("退");
+            v3.setGoodsid(v4.get(v2).getGoodsid());
+            v3.setGoodsname(v4.get(v2).getGoodsname());
+            v3.setBarcode(v4.get(v2).getBarcode());
+            v3.setSpecification(v4.get(v2).getSpecification());
+            v3.setUnitname(v4.get(v2).getUnitname());
+            v3.setNum(v4.get(v2).getNum());
+            v3.setPrice(v4.get(v2).getPrice());
+            v3.setDiscountratio(1);
+            v3.setDiscountsubtotal(Utils.getSubtotal(v4.get(v2).getNum() * v4.get(v2).getPrice()));
+            v3.setRemark("");
+            v5.add(v3);
+        }
+        return v5;
+    }
+
+    public double getDocSaleNum(long arg10) {
+        this.db = this.helper.getReadableDatabase();
+        try {
+            cursor = this.db.rawQuery("select total(salenum) from kf_fieldsaleitem where fieldsaleid=?", new String[]{String.valueOf(arg10)});
+            if (cursor.moveToNext()) {
+                return cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return 0;
     }
 
 }
