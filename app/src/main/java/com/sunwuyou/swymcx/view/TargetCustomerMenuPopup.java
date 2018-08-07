@@ -106,7 +106,7 @@ public class TargetCustomerMenuPopup extends PopupWindow implements View.OnClick
                     PDH.showFail("当前无可用网络");
                     return;
                 }
-                if (Utils.isDownloadCustomerByVisitLine) {
+//                if (Utils.isDownloadCustomerByVisitLine) {
                     final User paramView = SystemState.getObject("cu_user", User.class);
                     if (!TextUtils.isEmpty(paramView.getVisitLineId())) {
                         String visitLineName = new VisitLineDAO().getVisitLineName(paramView.getVisitLineId());
@@ -130,7 +130,7 @@ public class TargetCustomerMenuPopup extends PopupWindow implements View.OnClick
                         return;
                     }
                     this.activity.startActivityForResult(new Intent().setClass(this.activity, VisitLineListAct.class), 1);
-                }
+//                }
                 break;
             case R.id.btnAddNew:
                 this.activity.startActivityForResult(new Intent(activity, NewCustomerAddAct.class), 0);

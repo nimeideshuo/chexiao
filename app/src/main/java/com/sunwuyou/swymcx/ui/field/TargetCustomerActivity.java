@@ -61,7 +61,6 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
     private ListView listView;
     private Button btnSelectAll;
     private List<CustomerThin> customers;
-    private Button btnDelete;
     private CustomerItemAdapter adapter;
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
@@ -153,8 +152,8 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
                 selectAll();
             }
         });
-        btnDelete = this.findViewById(R.id.btnDelete);
-        this.btnDelete.setOnClickListener(new View.OnClickListener() {
+        Button btnDelete = this.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (!ClickUtils.isFastDoubleClick()) {
                     delete();
@@ -222,36 +221,38 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case 1:
-                final MAlertDialog dialog = new MAlertDialog(this);
-                dialog.simpleShow("是否同步该线路上的客户信息？");
-                dialog.setCancelButton(null);
-                dialog.setConfirmButton(new View.OnClickListener() {
-                    public void onClick(View arg5) {
-                        dialog.dismiss();
-                        updateCustomer(2, data.getStringExtra("visitlineid"));
-                    }
-                });
-                dialog.show();
-                break;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 1:
+                    final MAlertDialog dialog = new MAlertDialog(this);
+                    dialog.simpleShow("是否同步该线路上的客户信息？");
+                    dialog.setCancelButton(null);
+                    dialog.setConfirmButton(new View.OnClickListener() {
+                        public void onClick(View arg5) {
+                            dialog.dismiss();
+                            updateCustomer(2, data.getStringExtra("visitlineid"));
+                        }
+                    });
+                    dialog.show();
+                    break;
 
-            case 2:
-                Customer customer = (Customer) data.getSerializableExtra("customer");
-                this.updateCustomer(1, customer.getId());
-                break;
-            case 3:
-                final MAlertDialog dialogRegionid = new MAlertDialog(this);
-                dialogRegionid.simpleShow("是否同步该地区的客户信息？");
-                dialogRegionid.setCancelButton(null);
-                dialogRegionid.setConfirmButton(new View.OnClickListener() {
-                    public void onClick(View arg5) {
-                        dialogRegionid.dismiss();
-                        updateCustomer(3, data.getStringExtra("regionid"));
-                    }
-                });
-                dialogRegionid.show();
-                break;
+                case 2:
+                    Customer customer = (Customer) data.getSerializableExtra("customer");
+                    this.updateCustomer(1, customer.getId());
+                    break;
+                case 3:
+                    final MAlertDialog dialogRegionid = new MAlertDialog(this);
+                    dialogRegionid.simpleShow("是否同步该地区的客户信息？");
+                    dialogRegionid.setCancelButton(null);
+                    dialogRegionid.setConfirmButton(new View.OnClickListener() {
+                        public void onClick(View arg5) {
+                            dialogRegionid.dismiss();
+                            updateCustomer(3, data.getStringExtra("regionid"));
+                        }
+                    });
+                    dialogRegionid.show();
+                    break;
+            }
         }
         if (resultCode == RESULT_OK && (data.getBooleanExtra("refresh", false))) {
             this.refresh();

@@ -65,8 +65,8 @@ public class VisitLineListAct extends BaseHeadActivity {
     }
 
     @Override
-    public void setActionBar(@Nullable Toolbar toolbar) {
-        super.setActionBar(toolbar);
+    public void setActionBarText() {
+        super.setActionBarText();
         setTitle("巡店路线");
     }
 

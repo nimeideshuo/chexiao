@@ -161,7 +161,7 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
                 });
             }
         });
-
+        dialog.show();
 
     }
 
@@ -211,11 +211,8 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
         this.myLetterListView.setOnTouchingLetterChangedListener(new LetterListViewListener(this, null));
         this.myLetterListView.setChooseChar("#");
         atvSearch = this.findViewById(R.id.atvSearch);
-        progressDialog = new ProgressDialog(this);
-        this.progressDialog.setProgressStyle(1);
-        this.progressDialog.setCancelable(false);
         this.progressDialog = new ProgressDialog(this);
-        this.progressDialog.setProgressStyle(1);
+        this.progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         this.progressDialog.setCancelable(false);
         ap = new AccountPreference();
         this.loadData();
@@ -232,13 +229,12 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
             }
         });
 
-
         changeListener = new AutoTextView.OnTextChangeListener() {
 
             @Override
             public void onChanged(View v, String text) {
-                if (TextUtils.isEmptyS(text)) {
-                    ArrayList<GoodsThin> listThin = new ArrayList<GoodsThin>();
+                if (!TextUtils.isEmptyS(text)) {
+                    ArrayList<GoodsThin> listThin = new ArrayList<>();
                     String[] goods_check = Utils.GOODS_CHECK_SELECT.split(",");
                     for (int j = 0; j < listGoodsThin.size(); j++) {
                         for (int i = 0; i < goods_check.length; i++) {
@@ -262,8 +258,9 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
                         }
                     }
                     adapter.setDate(listThin);
+                } else {
+                    adapter.setDate(listGoodsThin);
                 }
-
             }
         };
         this.atvSearch.setOnTextChangeListener(this.changeListener);
@@ -302,10 +299,6 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
         setTitle("产品手册");
     }
 
-    public void resetItem(int positon) {
-        this.adapter.notifyDataSetChanged();
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         startActivity(new Intent().setClass(this, GoodDetailAct.class).putExtra("goodsid", adapter.getDate().get(position).getId()));
@@ -319,7 +312,7 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
     class LetterListViewListener implements MyLetterListView.OnTouchingLetterChangedListener {
         AllGoodsActivity allGoodsActivity;
 
-        public LetterListViewListener(AllGoodsActivity allGoodsActivity, Object object) {
+        LetterListViewListener(AllGoodsActivity allGoodsActivity, Object object) {
             this.allGoodsActivity = allGoodsActivity;
         }
 
