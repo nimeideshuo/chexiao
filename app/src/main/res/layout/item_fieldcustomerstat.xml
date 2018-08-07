@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingBottom="2.0dip"
+    android:paddingLeft="5.0dip"
+    android:paddingRight="5.0dip"
+    android:paddingTop="2.0dip">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@id/tvCustomerName"
+            style="@style/m_order_item"
+            android:gravity="center|left"
+            android:textSize="@dimen/list_item_inner_title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="2.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvNetSaleAmout"
+            style="@style/m_order_item"
+            android:gravity="center|left" />
+
+        <TextView
+            android:id="@id/tvPreference"
+            style="@style/m_order_item"
+            android:gravity="center|left" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="2.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@id/tvReceivable"
+            style="@style/m_order_item"
+            android:gravity="center|left" />
+
+        <TextView
+            android:id="@id/tvReceived"
+            style="@style/m_order_item"
+            android:gravity="center|left" />
+    </LinearLayout>
+</LinearLayout>

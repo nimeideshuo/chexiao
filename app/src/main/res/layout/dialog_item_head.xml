@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title_message"
+        style="@style/m_dialog_title"
+        android:background="@drawable/dialog_title"
+        android:gravity="center"
+        android:text="工作帐套"
+        android:textColor="@android:color/white" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/m_dialog_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:minHeight="@dimen/view_size_100">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
+

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="duration">100</integer>
+    <integer name="show_time">300</integer>
+    <integer name="number_default">1</integer>
+    <integer name="number_negative">2</integer>
+</resources>

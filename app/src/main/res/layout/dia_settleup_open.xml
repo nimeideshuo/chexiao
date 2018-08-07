@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:text="类型"
+            android:textSize="@dimen/dialog_label" />
+
+        <Button
+            android:id="@+id/btnDocType"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/btn_2_selector"
+            android:gravity="center|left"
+            android:paddingLeft="10.0dip"
+            android:textSize="@dimen/dialog_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10.0dip"
+            android:text="@string/department"
+            android:textSize="@dimen/dialog_label" />
+
+        <Button
+            android:id="@+id/btnDepartment"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/btn_2_selector"
+            android:gravity="center|left"
+            android:paddingLeft="10.0dip"
+            android:textSize="@dimen/dialog_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10.0dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:text="客户"
+            android:textSize="@dimen/dialog_label" />
+
+        <Button
+            android:id="@id/btnCustomer"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/btn_2_selector"
+            android:gravity="center|left"
+            android:paddingLeft="10.0dip"
+            android:textSize="@dimen/dialog_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10.0dip"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:text="经办"
+            android:textSize="@dimen/dialog_label" />
+
+        <EditText
+            android:id="@+id/etObjectPeople"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="10.0dip"
+            android:background="@drawable/login_panel_edit_bg"
+            android:ems="10"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="120"
+            android:paddingLeft="10.0dip"
+            android:textSize="@dimen/dialog_edit" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginRight="5.0dip"
+        android:layout_marginTop="10.0dip">
+
+        <Button
+            android:id="@+id/btnOpenSettleupDoc"
+            android:layout_width="fill_parent"
+            android:layout_height="36.0dip"
+            android:background="@drawable/btn_1_selector"
+            android:text="开单"
+            android:textSize="@dimen/dialog_button" />
+    </LinearLayout>
+</LinearLayout>

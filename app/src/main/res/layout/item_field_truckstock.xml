@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/alpha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_gray"
+        android:paddingStart="16.0dip"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/list_item_inner_info"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="@dimen/view_size_10"
+        android:minHeight="40.0dip"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvGoodsName"
+            android:layout_width="match_parent"
+            android:layout_height="0.0dip"
+            android:layout_marginTop="2.0dip"
+            android:layout_weight="1.0"
+            android:gravity="center|left"
+            android:textSize="@dimen/list_item_inner_title"
+            tools:text="名称1名称1fs名称名称名称名称名称名称名称名称dfs1111111111111" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.0dip"
+            android:layout_marginTop="2.0dip"
+            android:layout_weight="1.0"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvGoodsBarcode"
+                style="@style/m_order_item"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                tools:text="条码" />
+
+            <TextView
+                android:id="@+id/tvSpecifical"
+                style="@style/m_order_item"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                tools:text="规格" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.0dip"
+            android:layout_marginTop="2.0dip"
+            android:layout_weight="1.0"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvInit"
+                style="@style/m_order_item"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                tools:text="数量" />
+
+            <TextView
+                android:id="@+id/tvStock"
+                style="@style/m_order_item"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                tools:text="库存" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_desc" />
+</LinearLayout>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/record_selector"
+    android:minHeight="40.0dip"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4.0dip"
+        android:minHeight="40.0dip">
+
+        <TextView
+            android:id="@+id/tvSerialid"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="5.0dip"
+            android:textSize="@dimen/list_item_inner_title" />
+
+        <LinearLayout
+            style="@style/m_order_item"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2.0dip"
+            android:layout_marginTop="2.0dip"
+            android:layout_weight="4.0"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCustomerName"
+                    android:layout_width="0.0dip"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2.0dip"
+                    android:layout_weight="1.0"
+                    android:gravity="center|left"
+                    android:textSize="@dimen/list_item_inner_title" />
+
+                <TextView
+                    android:id="@+id/tvIsNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2.0dip"
+                    android:gravity="center|right"
+                    android:text="[新]"
+                    android:visibility="gone"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/list_item_inner_info" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTelephone"
+                android:layout_width="match_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/list_item_inner_info" />
+
+            <TextView
+                android:id="@+id/tvCusAddress"
+                android:layout_width="match_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/list_item_inner_info" />
+
+            <TextView
+                android:id="@+id/tvExhibition"
+                android:layout_width="match_parent"
+                android:layout_height="0.0dip"
+                android:layout_weight="1.0"
+                android:gravity="center|left"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/list_item_inner_info" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCheckBox"
+            style="@style/m_order_item"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:focusable="false"
+                android:textSize="@dimen/list_item_inner_info" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin1"
+        android:layout_width="match_parent"
+        android:layout_height="40.0dip"
+        android:background="@color/bg_item_button"
+        android:gravity="center|right"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btnTop"
+            android:layout_width="50.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginRight="5.0dip"
+            android:background="@drawable/btn_operation_selector"
+            android:text="顶端"
+            android:textSize="@dimen/list_item_inner_button" />
+
+        <Button
+            android:id="@+id/btnBefore"
+            android:layout_width="50.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginRight="5.0dip"
+            android:background="@drawable/btn_operation_selector"
+            android:text="上移"
+            android:textSize="@dimen/list_item_inner_button" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="50.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginRight="5.0dip"
+            android:background="@drawable/btn_operation_selector"
+            android:text="下移"
+            android:textSize="@dimen/list_item_inner_button" />
+
+        <Button
+            android:id="@+id/btnBottom"
+            android:layout_width="50.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginRight="5.0dip"
+            android:background="@drawable/btn_operation_selector"
+            android:text="末端"
+            android:textSize="@dimen/list_item_inner_button" />
+    </LinearLayout>
+</LinearLayout>

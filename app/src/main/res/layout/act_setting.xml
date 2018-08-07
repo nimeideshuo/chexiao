@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_white"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/view_size_30"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:text="数据管理"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_2"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_detault_updata"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginStart="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="同步基本数据"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上次同步时间:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="2018-11-11 11:11:11" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="同步客户信息"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上次同步时间:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_clear"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清空数据"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="删除本地所有数据"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/view_size_30"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:text="工作设置"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_2"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_select_department_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工作部门"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前工作部门:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_select_department"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_select_warehouse_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="车削仓库"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前车削仓库:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_select_warehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_select_customer_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="客户检索方式"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前检索关键字:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_select_customer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_select_goods_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商品检索方式:"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前检索关键字:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_select_goods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_select_goods_all_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商品检索范围"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品检索结果显示:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_select_goods_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_net_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="网络设置"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/net_select"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_net"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_goods_sort_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="单据商品排序"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/doc_item_order_key"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:id="@+id/setting_goods_sort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="商品多选模式"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/goods_select_more_add_string"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工作部门"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/view_size_1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前工作部门:"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/font_size_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/view_size_10"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/font_size_14"
+                    tools:text="未同步" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_1"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/view_size_30"
+            android:layout_marginLeft="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:text="关于"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_2"
+            android:layout_marginLeft="@dimen/main_dimens"
+            android:layout_marginRight="@dimen/main_dimens"
+            android:background="@color/line_dd" />
+
+        <LinearLayout
+            android:id="@+id/setting_about_app"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view_size_60"
+            android:layout_marginStart="@dimen/view_size_20"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关于競商勿忧"
+                android:textColor="@color/color_333333"
+                android:textSize="@dimen/font_size_16" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

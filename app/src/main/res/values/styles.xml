@@ -1,0 +1,138 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorBlack</item>
+        <item name="android:windowBackground">@color/colorWhite</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="actionBarSize">50dp</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+        <item name="toolbarStyle">@style/ClubToolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/MyToolbarNavigationButtonStyle</item>
+    </style>
+
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/right_out</item>
+    </style>
+    <!--设置ToolBar的边距-->
+    <style name="ClubToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetEnd">0dp</item>
+    </style>
+
+    <!--设置ToolBar的按钮样式-->
+    <style name="MyToolbarNavigationButtonStyle" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
+    <style name="AppTheme.Splas" parent="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/main_bg</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="m_dialog_title">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/dialog_title</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="AppFullTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorBlack</item>
+        <item name="android:windowBackground">@color/colorBackGround</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="actionBarSize">50dp</item>
+        <item name="toolbarStyle">@style/ClubToolbar</item>
+        <item name="toolbarNavigationButtonStyle">@style/MyToolbarNavigationButtonStyle</item>
+    </style>
+
+    <style name="m_dialog_button">
+        <item name="android:textSize">@dimen/dialog_button</item>
+        <item name="android:background">@drawable/btn_dialog_selector</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/dialog_button_height</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <!-- 自定义  dialog样式 -->
+    <style name="MyDialog_NoTitle" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/colorTransparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="style_function_menu">
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/btn_main_item</item>
+        <item name="android:padding">5.0dip</item>
+        <item name="android:onClick">onClick</item>
+    </style>
+
+    <style name="buttom_in_out" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/buttom_in</item>
+        <item name="android:windowExitAnimation">@anim/buttom_out</item>
+    </style>
+    <!-- 背景透明 -->
+    <style name="Transparent">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="m_order_item">
+        <item name="android:textSize">@dimen/list_item_inner_info</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <style name="m_order_title">
+        <item name="android:textSize">@dimen/list_item_title</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawableLeft">@drawable/title_divider</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <style name="m_table_buttom">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_dialog_nor</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/order_operation_height</item>
+    </style>
+    <style name="m_add_customer_text">
+        <item name="android:textSize">@dimen/dialog_label</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10.0dip</item>
+    </style>
+    <style name="m_add_customer_edit">
+        <item name="android:textSize">@dimen/dialog_edit</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:background">@drawable/login_panel_edit_bg</item>
+        <item name="android:paddingLeft">10.0dip</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">10.0dip</item>
+    </style>
+    <style name="m_titledialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:backgroundDimAmount">0.3</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+</resources>

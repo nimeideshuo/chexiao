@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical">
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/field_fields_open"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_menu_sale_open" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_remote_order" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main_divder" />
+
+        <LinearLayout
+            android:id="@+id/field_settleup_open"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_menu_settleup_open" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结算" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main_divder" />
+
+        <LinearLayout
+            android:id="@+id/field_transfer_open"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:background="@drawable/ic_menu_transfer_open" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:text="调拨" />
+        </LinearLayout>
+    </TableRow>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:background="@color/bg_main_divder" />
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/field_fields_record"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_menu_sale_record" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的销售" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main_divder" />
+
+        <LinearLayout
+            android:id="@+id/field_settleup_record"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_menu_settleup" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的结算" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main_divder" />
+
+        <LinearLayout
+            android:id="@+id/field_transfer_record"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:background="@drawable/ic_menu_transfer_record" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:text="我的调拨" />
+        </LinearLayout>
+    </TableRow>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:background="@color/bg_main_divder" />
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/fieldsale_customer"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:background="@drawable/ic_menu_customer" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:text="客户中心" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main_divder" />
+
+        <LinearLayout
+            android:id="@+id/field_truckstock"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:background="@drawable/ic_menu_truckstock" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:text="库存" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1.0dip"
+            android:layout_height="fill_parent"
+            android:background="@color/bg_main_divder" />
+
+        <LinearLayout
+            android:id="@+id/field_local_goods"
+            style="@style/style_function_menu"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:background="@drawable/ic_menu_stockgoods" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5.0dip"
+                android:text="产品手册" />
+        </LinearLayout>
+    </TableRow>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip">
+
+        <TextView
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@color/bg_main_divder" />
+
+        <TextView
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@color/bg_main_divder" />
+
+        <TextView
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@color/bg_main_divder" />
+    </LinearLayout>
+</TableLayout>
