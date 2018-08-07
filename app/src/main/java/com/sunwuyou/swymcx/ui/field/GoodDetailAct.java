@@ -34,7 +34,6 @@ import java.util.List;
  * 2018/8/6.
  * content
  */
-//TODO 未完成
 public class GoodDetailAct extends BaseHeadActivity {
 
     private Goods goods;

@@ -11,7 +11,7 @@ import com.sunwuyou.swymcx.app.BaseActivity;
 import com.sunwuyou.swymcx.app.MyApplication;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/8/6.
  * content
  */

@@ -340,7 +340,6 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
     }
 
     public void print() {
-        //TODO 未完成
         BluetoothAdapter v1 = BluetoothAdapter.getDefaultAdapter();
         if(v1 == null) {
             PDH.showMessage("当前设备不支持蓝牙功能");

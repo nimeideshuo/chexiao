@@ -4,9 +4,9 @@ import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/8/6.
- * content
+ * content  蓝牙模板类
  */
 public class PrintModeEditAvtivity extends BaseHeadActivity {
     @Override

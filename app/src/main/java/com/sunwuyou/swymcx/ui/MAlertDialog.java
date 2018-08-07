@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.sunwuyou.swymcx.R;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/8/6.
  * content
  */

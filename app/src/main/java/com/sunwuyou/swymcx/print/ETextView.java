@@ -14,7 +14,7 @@ import com.sunwuyou.swymcx.utils.TextUtils;
 import java.util.HashMap;
 
 /**
- * Created by liupiao on
+ * Created by admin on
  * 2018/8/6.
  * content
  */
@@ -88,31 +88,31 @@ public class ETextView extends android.support.v7.widget.AppCompatTextView {
 
     public void init(HashMap<String, String> arg10) {
         int v8 = -2;
-        ViewGroup.LayoutParams v3 = this.getLayoutParams();
+        FrameLayout.LayoutParams v3 = (FrameLayout.LayoutParams) this.getLayoutParams();
         this.setText(arg10.get("text"));
-        ((FrameLayout.LayoutParams) v3).width = v8;
-        ((FrameLayout.LayoutParams) v3).topMargin = Integer.parseInt(arg10.get("margintop"));
+        v3.width = v8;
+        v3.topMargin = Integer.parseInt(arg10.get("margintop"));
         String v1 = arg10.get("garity");
         String v4 = arg10.get("marginleft");
-        if (TextUtils.isEmpty(((String) v1))) {
+        if (TextUtils.isEmpty(v1)) {
             try {
-                ((FrameLayout.LayoutParams) v3).leftMargin = Integer.parseInt(((String) v4)) * LineGirdView.CELL_WIDTH;
+                v3.leftMargin = Integer.parseInt(v4) * LineGirdView.CELL_WIDTH;
             } catch (NumberFormatException v0) {
-                ((FrameLayout.LayoutParams) v3).leftMargin = 0;
+                v3.leftMargin = 0;
             }
         }
-        int v2 = Integer.parseInt(((String) v1));
+        int v2 = Integer.parseInt(v1);
         this.location = v2;
         if (v2 == -1) {
-            ((FrameLayout.LayoutParams) v3).gravity = 3;
+            v3.gravity = 3;
         }
 
         if (v2 == v8) {
-            ((FrameLayout.LayoutParams) v3).gravity = 1;
+            v3.gravity = 1;
         }
 
         if (v2 == -3) {
-            ((FrameLayout.LayoutParams) v3).gravity = 5;
+            v3.gravity = 5;
         }
         this.setLayoutParams(v3);
 
