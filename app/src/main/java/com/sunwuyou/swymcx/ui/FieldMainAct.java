@@ -15,7 +15,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
+import com.sunwuyou.swymcx.app.MyApplication;
 import com.sunwuyou.swymcx.app.SystemState;
+import com.sunwuyou.swymcx.bmob.molder.BUser;
+import com.sunwuyou.swymcx.bmob.service.UserDao;
 import com.sunwuyou.swymcx.dao.GoodsDAO;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
@@ -35,6 +38,7 @@ import com.sunwuyou.swymcx.ui.settleup.SettleupOpenAct;
 import com.sunwuyou.swymcx.ui.transfer.TransferDocOpenActivity;
 import com.sunwuyou.swymcx.ui.transfer.TransferEditActivity;
 import com.sunwuyou.swymcx.ui.transfer.TransferLocalRecordActivity;
+import com.sunwuyou.swymcx.utils.MLog;
 import com.sunwuyou.swymcx.utils.NetUtils;
 import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.SwyUtils;
@@ -50,6 +54,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
 
 /**
  * Created by admin
@@ -60,6 +65,7 @@ import butterknife.OnClick;
 public class FieldMainAct extends BaseHeadActivity {
     @BindView(R.id.root)
     TableLayout root;
+    BUser user;
     private MainMenuPopup menuPopup;
     private AccountPreference ap;
     private ProgressDialog progressDialog;
@@ -113,6 +119,18 @@ public class FieldMainAct extends BaseHeadActivity {
         setBackVisibility(false);
         setTitleRight("菜单", null);
         setTitle("競商勿忧车销");
+        final UserDao userDao = new UserDao();
+        userDao.querUser(new UserDao.BmobCallBackListener<BUser>() {
+            @Override
+            public void onSuccess(BUser object) {
+                user = object;
+            }
+
+            @Override
+            public void onError(String s, BmobException e) {
+                userDao.upPhone();
+            }
+        });
     }
 
     @Override
@@ -153,6 +171,24 @@ public class FieldMainAct extends BaseHeadActivity {
 
     @OnClick({R.id.field_fields_open, R.id.field_settleup_open, R.id.field_transfer_open, R.id.field_fields_record, R.id.field_settleup_record, R.id.field_transfer_record, R.id.fieldsale_customer, R.id.field_truckstock, R.id.field_local_goods, R.id.root})
     public void onViewClicked(View view) {
+        if (user == null) {
+            return;
+        }
+        // 0 默认 1, 警告，2 停止,3 退出
+        switch (user.getState().intValue()) {
+            case 0:
+                break;
+            case 1:
+                PDH.showFail(user.getMessage());
+                break;
+            case 2:
+                PDH.showFail(user.getMessage());
+                return;
+            case 3:
+                MyApplication.getInstance().exit();
+                break;
+        }
+        MLog.d("查询到>" + user.toString());
         switch (view.getId()) {
             case R.id.field_fields_open:
                 //销售

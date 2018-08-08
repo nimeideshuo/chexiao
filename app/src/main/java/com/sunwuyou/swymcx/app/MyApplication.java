@@ -16,6 +16,10 @@ import com.sunwuyou.swymcx.ui.SplashAct;
 import com.sunwuyou.swymcx.utils.MLog;
 import com.sunwuyou.swymcx.utils.TextUtils;
 
+import cn.bmob.v3.Bmob;
+
+import cn.bmob.v3.Bmob;
+
 /**
  * @author Administrator
  * @content 基础application的封装
@@ -41,12 +45,17 @@ public class MyApplication extends MultiDexApplication {
         Utils.init(this);
         DialogUIUtils.init(this);
         //        LeakCanary.install(this);
+        //第一：默认初始化
+        Bmob.initialize(this, "9f6763619c382ffb8e5f4cef8e582c28");
         //设置服务器IP地址
         String serverIp = new AccountPreference().getServerIp();
         MLog.d("本地服务器地址>>" + serverIp);
         BaseUrl.setUrl(serverIp);
     }
-
+    @SuppressLint("HardwareIds")
+    public String getAndroidId() {
+        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 
     public String getUniqueCode() {
         String keycode = SystemState.getValue("keycode");

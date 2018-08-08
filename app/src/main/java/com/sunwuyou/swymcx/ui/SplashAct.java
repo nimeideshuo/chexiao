@@ -15,6 +15,10 @@ import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.MyApplication;
 import com.sunwuyou.swymcx.app.SystemState;
+//import com.sunwuyou.swymcx.bmob.molder.BUser;
+//import com.sunwuyou.swymcx.bmob.service.UserDao;
+import com.sunwuyou.swymcx.bmob.molder.BUser;
+import com.sunwuyou.swymcx.bmob.service.UserDao;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
 import com.sunwuyou.swymcx.http.HttpErrorConnnet;
@@ -25,6 +29,8 @@ import com.sunwuyou.swymcx.request.RespUserEntity;
 import com.sunwuyou.swymcx.request.TerminalEntity;
 import com.sunwuyou.swymcx.ui.login.LoginAct;
 import com.sunwuyou.swymcx.ui.login.LoginPassword;
+import com.sunwuyou.swymcx.utils.MLog;
+import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.view.AccountSelectDialog;
 import com.sunwuyou.swymcx.view.ServerIpDialog;
 import com.yanzhenjie.permission.AndPermission;
@@ -36,6 +42,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
 
 /**
  * Created by admin
@@ -45,6 +52,8 @@ import butterknife.OnClick;
 
 public class SplashAct extends Activity {
     private static final int REQUEST_CODE_PERMISSION_MULTI = 101;
+    public static int height;
+    public static int width;
     @BindView(R.id.loading)
     TextView loading;
     @BindView(R.id.version)
@@ -55,8 +64,6 @@ public class SplashAct extends Activity {
     TextView copyright;
     private ServerIpDialog seviceDialog;
     private AccountPreference ap;
-    public static int height;
-    public static int width;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +72,7 @@ public class SplashAct extends Activity {
         initView();
         DisplayMetrics v0 = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(v0);
-       width = v0.widthPixels;
+        width = v0.widthPixels;
         height = v0.heightPixels;
     }
 
