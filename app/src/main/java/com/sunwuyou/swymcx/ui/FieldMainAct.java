@@ -119,6 +119,10 @@ public class FieldMainAct extends BaseHeadActivity {
         setBackVisibility(false);
         setTitleRight("菜单", null);
         setTitle("競商勿忧车销");
+        querUser();
+    }
+
+    private void querUser() {
         final UserDao userDao = new UserDao();
         userDao.querUser(new UserDao.BmobCallBackListener<BUser>() {
             @Override
@@ -172,10 +176,11 @@ public class FieldMainAct extends BaseHeadActivity {
     @OnClick({R.id.field_fields_open, R.id.field_settleup_open, R.id.field_transfer_open, R.id.field_fields_record, R.id.field_settleup_record, R.id.field_transfer_record, R.id.fieldsale_customer, R.id.field_truckstock, R.id.field_local_goods, R.id.root})
     public void onViewClicked(View view) {
         if (user == null) {
+            querUser();
             return;
         }
         // 0 默认 1, 警告，2 停止,3 退出
-        switch (user.getState().intValue()) {
+        switch (user.getState()) {
             case 0:
                 break;
             case 1:

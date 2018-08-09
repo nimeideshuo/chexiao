@@ -28,7 +28,7 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class UserDao {
 
-    private BmobCallBackListener listener;
+    public BmobCallBackListener listener;
 
     public void upPhone() {
         AccountSetEntity entity = SystemState.getAccountSet();
@@ -73,12 +73,14 @@ public class UserDao {
                     return;
                 }
                 if (e == null) {
+                    if (list.isEmpty()) {
+                        listener.onError(null, e);
+                        return;
+                    }
                     BUser bUser = list.get(0);
-                    MLog.d("查询到注册用户 " + bUser.getUserName() +  "  id>>"+bUser.getUserid()+"  code>>" + bUser.getCode());
+                    MLog.d("查询到注册用户 " + bUser.getUserName() + "  id>>" + bUser.getUserid() + "  code>>" + bUser.getCode());
                     MLog.d(bUser.toString());
                     listener.onSuccess(bUser);
-                } else {
-                    listener.onError(null, e);
                 }
             }
         });

@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.Utils;
 import com.dou361.dialogui.DialogUIUtils;
 import com.lzy.okgo.OkGo;
 import com.squareup.leakcanary.LeakCanary;
+import com.sunwuyou.swymcx.bmob.BmobManager;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.ui.SplashAct;
 import com.sunwuyou.swymcx.utils.MLog;
@@ -45,13 +46,13 @@ public class MyApplication extends MultiDexApplication {
         Utils.init(this);
         DialogUIUtils.init(this);
         //        LeakCanary.install(this);
-        //第一：默认初始化
-        Bmob.initialize(this, "9f6763619c382ffb8e5f4cef8e582c28");
+        BmobManager.getInstance().init(this);
         //设置服务器IP地址
         String serverIp = new AccountPreference().getServerIp();
         MLog.d("本地服务器地址>>" + serverIp);
         BaseUrl.setUrl(serverIp);
     }
+
     @SuppressLint("HardwareIds")
     public String getAndroidId() {
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);

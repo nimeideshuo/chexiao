@@ -17,13 +17,35 @@ public class BUser extends BmobObject {
     public String message;
     public String registerDate;
     public String model;
-
     public Integer sleep;
     public Integer state;// 0 默认 1, 警告，2 停止,3 退出
     public String userName;
-
     public String userid;
     public String versionname;
+
+    public String getVersionname() {
+        return versionname == null ? "" : versionname;
+    }
+
+    public void setVersionname(String versionname) {
+        this.versionname = versionname;
+    }
+
+    public String getMessage() {
+        return message == null ? "" : message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Integer getState() {
+        return state == null ? 0 : state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
 
     public String getModel() {
         return model;
@@ -41,14 +63,6 @@ public class BUser extends BmobObject {
         this.sleep = sleep;
     }
 
-    public Number getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
     public String getUserName() {
         return userName;
     }
@@ -63,14 +77,6 @@ public class BUser extends BmobObject {
 
     public void setUserid(String userid) {
         this.userid = userid;
-    }
-
-    public String getVersionname() {
-        return versionname;
-    }
-
-    public void setVersionname(String versionname) {
-        this.versionname = versionname;
     }
 
     public String getMemory() {
@@ -119,14 +125,6 @@ public class BUser extends BmobObject {
 
     public void setAccountset(String accountset) {
         this.accountset = accountset;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     @Override
