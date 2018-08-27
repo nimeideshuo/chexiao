@@ -29,7 +29,7 @@ public class PrintData {
         return this.info;
     }
 
-    public List getTestData() {
+    public List<FieldSaleItemForPrint> getTestData() {
         ArrayList<FieldSaleItemForPrint> v1 = new ArrayList<>();
         FieldSaleItemForPrint v0 = new FieldSaleItemForPrint();
         v0.setItemtype("销");
@@ -43,7 +43,7 @@ public class PrintData {
         v0.setDiscountratio(1);
         v0.setDiscountsubtotal(12000);
         v0.setRemark("测试电视机");
-        ((List)v1).add(v0);
+        v1.add(v0);
         v0 = new FieldSaleItemForPrint();
         v0.setItemtype("赠");
         v0.setGoodsid("00002");
@@ -56,7 +56,7 @@ public class PrintData {
         v0.setDiscountratio(1);
         v0.setDiscountsubtotal(0);
         v0.setRemark("测试电视机");
-        ((List)v1).add(v0);
+        v1.add(v0);
         return v1;
     }
 

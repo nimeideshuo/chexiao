@@ -92,34 +92,33 @@ public class BTdeviceListAct extends BaseHeadActivity implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         this.cancelScan();
-        BTPrinter v3 = this.devicesAdapter.getItem(position);
-        new AccountPreference().savePrinter(v3);
+        BTPrinter btPrinter = this.devicesAdapter.getItem(position);
+        new AccountPreference().savePrinter(btPrinter);
         if (this.type == 2) {
             this.setResult(-1, new Intent());
             this.finish();
         } else {
-            BTPrintHelper v2 = new BTPrintHelper(this);
-            PrintMode v1 = PrintMode.getPrintMode();
-            if (v1 == null) {
+            BTPrintHelper printHelper = new BTPrintHelper(this);
+            PrintMode mode = PrintMode.getPrintMode();
+            if (mode == null) {
                 PDH.showFail("未发现打印模版");
             } else {
                 if (this.type == 1) {
                     PrintData v4 = new PrintData();
-                    v1.setDatainfo(v4.getTestData());
-                    v1.setDocInfo(v4.getTestInfo());
+                    mode.setDatainfo(v4.getTestData());
+                    mode.setDocInfo(v4.getTestInfo());
                 } else {
-                    v1.setDatainfo(this.items);
-                    v1.setDocInfo(this.doc);
-                    v2.setPrintOverCall(new BTPrintHelper.PrintOverCall() {
+                    mode.setDatainfo(this.items);
+                    mode.setDocInfo(this.doc);
+                    printHelper.setPrintOverCall(new BTPrintHelper.PrintOverCall() {
                         public void printOver() {
-                            BTdeviceListAct.this.finish();
+                            finish();
                             new FieldSaleDAO().updateDocValue(BTdeviceListAct.this.doc.getId(), "printnum", "1");
                         }
                     });
                 }
-
-                v2.setMode(v1);
-                v2.print(v3);
+                printHelper.setMode(mode);
+                printHelper.print(btPrinter);
             }
         }
     }

@@ -341,25 +341,25 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
 
     public void print() {
         BluetoothAdapter v1 = BluetoothAdapter.getDefaultAdapter();
-        if(v1 == null) {
+        if (v1 == null) {
             PDH.showMessage("当前设备不支持蓝牙功能");
-        }
-        else if(!v1.isEnabled()) {
+        } else if (!v1.isEnabled()) {
             this.startActivityForResult(new Intent("android.bluetooth.adapter.action.REQUEST_ENABLE"), 0);
-        }
-        else if(new AccountPreference().getPrinter() != null) {
+        } else if (new AccountPreference().getPrinter() != null) {
             this.btPrint();
-        }
-        else {
-            this.startActivity(new Intent().setClass(this, BTdeviceListAct.class).putExtra("type", 0).putExtra("doc", this.getDocPrintInfo()).putExtra("items", JSONUtil.object2Json(this.fieldsaleitemDAO.queryDocPrintData(this.fieldsale.getId()))));
+        } else {
+            Intent intent = new Intent(this, BTdeviceListAct.class);
+            intent.putExtra("type", 0);
+            intent.putExtra("doc", this.getDocPrintInfo());
+            intent.putExtra("items", JSONUtil.object2Json(this.fieldsaleitemDAO.queryDocPrintData(this.fieldsale.getId())));
+            startActivity(intent);
         }
     }
 
     private void btPrint() {
-        if(this.listItems == null || this.listItems.size() == 0) {
+        if (this.listItems == null || this.listItems.size() == 0) {
             PDH.showMessage("单据为空，不允许打印");
-        }
-        else {
+        } else {
             final MAlertDialog v0 = new MAlertDialog(this, 300);
             v0.setContentText("确定进行打印吗？");
             v0.setConfirmButton(new View.OnClickListener() {
@@ -367,10 +367,9 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
                     v0.dismiss();
                     BTPrintHelper v2 = new BTPrintHelper(FieldEditActivity.this);
                     PrintMode v1 = PrintMode.getPrintMode();
-                    if(v1 == null) {
+                    if (v1 == null) {
                         PDH.showFail("未发现打印模版");
-                    }
-                    else {
+                    } else {
                         v1.setDatainfo(fieldsaleitemDAO.queryDocPrintData(FieldEditActivity.this.fieldsale.getId()));
                         v1.setDocInfo(getDocPrintInfo());
                         v2.setMode(v1);
@@ -386,6 +385,7 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
             v0.show();
         }
     }
+
     public FieldSaleForPrint getDocPrintInfo() {
         FieldSaleForPrint v10 = new FieldSaleForPrint();
         v10.setId(this.fieldsale.getId());

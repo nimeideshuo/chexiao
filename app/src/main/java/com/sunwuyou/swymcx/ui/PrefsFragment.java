@@ -670,17 +670,17 @@ public class PrefsFragment extends PreferenceFragment {
         AlertDialog.Builder v0 = new AlertDialog.Builder(getActivity());
         v0.setItems(new String[]{"重新设定", "打印测试"}, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg8, int arg9) {
-                BTPrintHelper v2 = new BTPrintHelper(getActivity());
+                BTPrintHelper printHelper = new BTPrintHelper(getActivity());
                 if (arg9 == 0) {
                     getActivity().startActivityForResult(new Intent().setClass(getActivity(), BTdeviceListAct.class).putExtra("type", 2), 0);
                 } else if (arg9 == 1) {
-                    PrintMode v1 = PrintMode.getPrintMode();
-                    if (v1 != null) {
-                        PrintData v0 = new PrintData();
-                        v1.setDatainfo(v0.getTestData());
-                        v1.setDocInfo(v0.getTestInfo());
-                        v2.setMode(v1);
-                        v2.print(ap.getPrinter());
+                    PrintMode printMode = PrintMode.getPrintMode();
+                    if (printMode != null) {
+                        PrintData printData = new PrintData();
+                        printMode.setDatainfo(printData.getTestData());
+                        printMode.setDocInfo(printData.getTestInfo());
+                        printHelper.setMode(printMode);
+                        printHelper.print(ap.getPrinter());
                     }
                 }
             }

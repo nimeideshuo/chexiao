@@ -36,7 +36,7 @@ public abstract class PrintMode {
     private PrintCallback callback;
     private int index;
 
-    public PrintMode(List<HashMap<String, String>> arg5) {
+    public PrintMode(List<HashMap<String, String>> pageinfo) {
         super();
         this.CHARSET = "gbk";
         this.divider = "-------------------------------";
@@ -50,23 +50,23 @@ public abstract class PrintMode {
         v0[1] = 45;
         this.r_line = v0;
         this.printermodel = new AccountPreference().getValue("printermodel_default", "epson");
-        this.pageinfo = arg5;
+        this.pageinfo = pageinfo;
     }
 
     public static PrintMode getPrintMode() {
-        ModeHelper v1 = new ModeHelper();
+        ModeHelper helper = new ModeHelper();
         try {
-            v1.parse();
+            helper.parse();
         } catch (IOException v0) {
             v0.printStackTrace();
         }
-        int v3 = v1.getBodytype();
-        List<HashMap<String, String>> v2 = v1.getTextViews();
+        int v3 = helper.getBodytype();
+        List<HashMap<String, String>> textViews = helper.getTextViews();
         if (v3 == 0) {
-            return new PrintMode1(v2);
+            return new PrintMode1(textViews);
         }
         if (v3 == 1) {
-            return new PrintMode2(v2);
+            return new PrintMode2(textViews);
         }
         return null;
     }

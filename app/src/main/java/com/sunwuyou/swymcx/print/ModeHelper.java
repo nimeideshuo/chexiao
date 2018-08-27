@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,12 +77,12 @@ public class ModeHelper {
      * @param input
      */
     private void parse(InputStream input) {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
+        HashMap<String, String> hashMap = new HashMap<>();
         try {
+            this.textViews = new ArrayList<>();
             XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
             parser.setInput(input, "utf-8");
             int eventType = parser.getEventType();
-
             while (eventType != XmlPullParser.END_DOCUMENT) {
                 switch (eventType) {
                     case XmlPullParser.START_DOCUMENT:
