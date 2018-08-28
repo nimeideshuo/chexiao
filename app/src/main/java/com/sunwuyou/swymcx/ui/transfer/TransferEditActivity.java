@@ -1,6 +1,7 @@
 package com.sunwuyou.swymcx.ui.transfer;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,12 +32,18 @@ import com.sunwuyou.swymcx.dao.TransferDocDAO;
 import com.sunwuyou.swymcx.dao.TransferItemDAO;
 import com.sunwuyou.swymcx.in.EmptyDo;
 import com.sunwuyou.swymcx.model.Department;
+import com.sunwuyou.swymcx.model.FieldSaleForPrint;
+import com.sunwuyou.swymcx.model.FieldSaleItemForPrint;
 import com.sunwuyou.swymcx.model.GoodsThin;
 import com.sunwuyou.swymcx.model.TransferDoc;
 import com.sunwuyou.swymcx.model.TransferItem;
 import com.sunwuyou.swymcx.model.TransferItemSource;
 import com.sunwuyou.swymcx.model.User;
 import com.sunwuyou.swymcx.popupmenu.TransferEditMenuPopup;
+import com.sunwuyou.swymcx.print.BTPrintHelper;
+import com.sunwuyou.swymcx.print.BTdeviceListAct;
+import com.sunwuyou.swymcx.print.PrintData;
+import com.sunwuyou.swymcx.print.PrintMode;
 import com.sunwuyou.swymcx.service.ServiceUser;
 import com.sunwuyou.swymcx.ui.SearchHelper;
 import com.sunwuyou.swymcx.ui.field.GoodsSelectMoreDialog;
@@ -48,6 +55,7 @@ import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.AutoTextView;
 import com.sunwuyou.swymcx.view.MessageDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -155,11 +163,13 @@ public class TransferEditActivity extends BaseHeadActivity implements View.OnTou
         Button btnAdd = this.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this.addMoreListener);
         transferItemDAO = new TransferItemDAO();
-        if(!this.transferDoc.isIsposted() && !this.transferDoc.isIsupload()) {
-            setTitleRight("菜单", null);
-        }else{
-            setTitleRight(null, null);
-        }
+        //单据不是过账状态 显示菜单
+        setTitleRight("菜单", null);
+//        if(!this.transferDoc.isIsposted() && !this.transferDoc.isIsupload()) {
+//            setTitleRight("菜单", null);
+//        }else{
+//            setTitleRight(null, null);
+//        }
         if ((this.transferDoc.isIsposted()) || (this.transferDoc.isIsupload())) {
             this.isModify = false;
             this.findViewById(R.id.lieSearch).setVisibility(View.GONE);
@@ -355,6 +365,58 @@ public class TransferEditActivity extends BaseHeadActivity implements View.OnTou
     public void setActionBarText() {
         setTitle("调拨单");
     }
+
+    public void print() {
+        BluetoothAdapter v1 = BluetoothAdapter.getDefaultAdapter();
+        if (v1 == null) {
+            PDH.showMessage("当前设备不支持蓝牙功能");
+        } else if (!v1.isEnabled()) {
+            startActivityForResult(new Intent("android.bluetooth.adapter.action.REQUEST_ENABLE"), 0);
+        } else {
+            BTPrintHelper printHelper = new BTPrintHelper(this);
+            PrintMode printMode = PrintMode.getPrintMode();
+            if (printMode != null) {
+                printMode.setDatainfo(getDatainfo());
+                printMode.setDocInfo(getDocInfo());
+                printHelper.setMode(printMode);
+                printHelper.print(new AccountPreference().getPrinter());
+            }
+        }
+    }
+    public FieldSaleForPrint getDocInfo() {
+        FieldSaleForPrint print = new FieldSaleForPrint();
+        print.setDoctype("调拨单");
+        print.setShowid(transferDoc.getShowid());
+        print.setCustomername("某某超市");
+        print.setDepartmentname("销售部");
+        print.setBuildername(transferDoc.getBuildername());
+        print.setBuildtime(transferDoc.getBuildtime());
+//        v0.setSumamount("合计:" + Utils.getSubtotalMoney(12000));
+//        v0.setReceivable("应收:" + Utils.getSubtotalMoney(12000));
+//        v0.setReceived("已收:" + Utils.getSubtotalMoney(2000));
+//        v0.setNum("数量:" + String.valueOf(11));
+//        v0.setPreference("优惠:" + String.valueOf(0));
+        return print;
+    }
+
+    public List<FieldSaleItemForPrint> getDatainfo() {
+        ArrayList<FieldSaleItemForPrint> printList = new ArrayList<>();
+        for (TransferItemSource itemSource : getItems()) {
+            FieldSaleItemForPrint item = new FieldSaleItemForPrint();
+            item.setGoodsid(itemSource.getGoodsid());
+            item.setGoodsname(itemSource.getGoodsname());
+            item.setBarcode(itemSource.getBarcode());
+            item.setSpecification(itemSource.getSpecification());
+            item.setUnitname(itemSource.getUnitname());
+            item.setNum(itemSource.getNum());
+            item.setRemark(itemSource.getRemark());
+            printList.add(item);
+        }
+        return printList;
+    }
+
+
+
 
     class TransferItemAdapter extends BaseAdapter {
         private Context context;

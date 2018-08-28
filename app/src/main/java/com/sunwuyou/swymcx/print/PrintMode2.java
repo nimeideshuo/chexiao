@@ -22,12 +22,12 @@ public class PrintMode2 extends PrintMode {
         this.println("-------------------------------");
         this.print_base(this.print_left("商品名称"), 22, "数量");
         this.print_base(22, 32, "小计");
+        enter();
         this.smallText();
-        int v0;
-        for (v0 = 0; v0 < this.datainfo.size(); ++v0) {
-            this.printItem(this.datainfo.get(v0));
+        enter();
+        for (int i = 0; i < datainfo.size(); i++) {
+            this.printItem(this.datainfo.get(i));
         }
-
         this.normalText();
         this.println("-------------------------------");
         this.printFoot();
@@ -37,44 +37,45 @@ public class PrintMode2 extends PrintMode {
 
 
     private void printItem(FieldSaleItemForPrint arg15) throws IOException {
-        int v13 = 22;
         String v7 = "";
-        if (!arg15.getItemtype().equals("销") && !"销售退货单".equals(this.docInfo.getDoctype())) {
+        if (!arg15.getItemtype().equals("销") && !"销售退货单".equals(this.docInfo.getDoctype())&&!arg15.getItemtype().isEmpty()) {
             v7 = "[" + arg15.getItemtype() + "]";
         }
-
-        String v3 = String.valueOf(v7) + arg15.getGoodsname();
-        String v6 = Utils.getNumber(arg15.getNum());
-        String v8 = Utils.getSubtotalMoney(arg15.getDiscountsubtotal());
+        String goodsName = String.valueOf(v7) + arg15.getGoodsname();
+        String goodsNumber = Utils.getNumber(arg15.getNum());
+        String subtotalMoney = Utils.getSubtotalMoney(arg15.getDiscountsubtotal());
         if ("0".equals(new AccountPreference().getValue("clearlastzero", "0"))) {
-            v6 = Utils.cutLastZero(v6);
-            v8 = Utils.cutLastZero(v8);
+            goodsNumber = Utils.cutLastZero(goodsNumber);
+            subtotalMoney = Utils.cutLastZero(subtotalMoney);
         }
 
         if (("0".equals(new AccountPreference().getValue("minustuihuo", "0"))) && ((arg15.getItemtype().equals("退")) || (arg15.getItemtype().equals("入"))) && !"销售退货单".equals(this.docInfo.getDoctype())) {
-            v6 = "-" + Utils.cutLastZero(v6);
-            v8 = "-" + Utils.cutLastZero(v8);
+            goodsNumber = "-" + Utils.cutLastZero(goodsNumber);
+            subtotalMoney = "-" + Utils.cutLastZero(subtotalMoney);
         }
 
-        v6 = String.valueOf(v6) + arg15.getUnitname();
+        goodsNumber = String.valueOf(goodsNumber) + arg15.getUnitname();
         int v5 = 0;
-        int v10 = v3.length() / 8;
-        int v9 = v3.length() % 8 == 0 ? 0 : 1;
+        int v10 = goodsName.length() / 8;
+        int v9 = goodsName.length() % 8 == 0 ? 0 : 1;
         int v0 = v10 + v9;
-
+        int defauleNameLength=17;
         for (int i = 0; i < v0; i++) {
-            int v1 = (i + 1) * 8;
-            if (v1 > v3.length()) {
-                v1 = v3.length();
-            }
-            v5 = this.print_left(v3.substring(i * 8, v1));
+//            int v1 = (i + 1) * 8;
+//            if (v1 > goodsName.length()) {
+//                v1 = goodsName.length();
+//            }
+            int v1=goodsName.length()>defauleNameLength?defauleNameLength:goodsName.length();
+            v5 = this.print_left(goodsName.substring(0, v1));
+            space(goodsName.length()>defauleNameLength?0:defauleNameLength-goodsName.length());
             if (i != v0 - 1) {
-                this.enter();
+//                this.enter();
             }
+            this.print_base(defauleNameLength, 15, goodsNumber);
+            this.print_base(15, 25, subtotalMoney);
+            this.enter();
         }
-        this.print_base(v5, v13, v6);
-        this.print_base(v13, 32, v8);
-        this.enter();
+
     }
 
 }

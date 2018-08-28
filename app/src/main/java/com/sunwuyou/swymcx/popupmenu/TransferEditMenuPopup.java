@@ -1,5 +1,7 @@
 package com.sunwuyou.swymcx.popupmenu;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +10,23 @@ import android.widget.Button;
 import android.widget.PopupWindow;
 
 import com.sunwuyou.swymcx.R;
+import com.sunwuyou.swymcx.app.AccountPreference;
+import com.sunwuyou.swymcx.dao.FieldSaleDAO;
+import com.sunwuyou.swymcx.dao.FieldSalePayTypeDAO;
 import com.sunwuyou.swymcx.dao.TransferDocDAO;
+import com.sunwuyou.swymcx.model.FieldSaleForPrint;
 import com.sunwuyou.swymcx.model.TransferDoc;
 import com.sunwuyou.swymcx.model.TransferItemSource;
+import com.sunwuyou.swymcx.print.BTPrintHelper;
+import com.sunwuyou.swymcx.print.BTdeviceListAct;
+import com.sunwuyou.swymcx.print.PrintMode;
+import com.sunwuyou.swymcx.ui.MAlertDialog;
+import com.sunwuyou.swymcx.ui.field.FieldEditActivity;
 import com.sunwuyou.swymcx.ui.transfer.TransferEditActivity;
+import com.sunwuyou.swymcx.utils.JSONUtil;
 import com.sunwuyou.swymcx.utils.NetUtils;
 import com.sunwuyou.swymcx.utils.PDH;
+import com.sunwuyou.swymcx.utils.Utils;
 import com.sunwuyou.swymcx.view.MessageDialog;
 
 import java.util.List;
@@ -28,18 +41,19 @@ public class TransferEditMenuPopup extends PopupWindow implements View.OnClickLi
     private TransferEditActivity activity;
     private Button btnDelete;
     private Button btnUpload;
+    private Button btnPrint;
     private View root;
     private TransferDoc transferDoc;
     private TransferDocDAO transferDocDAO;
 
-    public TransferEditMenuPopup(TransferEditActivity activity, long arg8) {
+    public TransferEditMenuPopup(TransferEditActivity activity, long id) {
         super();
         this.activity = activity;
         this.root = LayoutInflater.from(activity).inflate(R.layout.popup_menu_transferedit, null);
         this.setContentView(this.root);
         this.init();
         this.transferDocDAO = new TransferDocDAO();
-        this.transferDoc = this.transferDocDAO.getTransferDoc(arg8);
+        this.transferDoc = this.transferDocDAO.getTransferDoc(id);
         this.setAnimationStyle(R.style.buttom_in_out);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -48,13 +62,25 @@ public class TransferEditMenuPopup extends PopupWindow implements View.OnClickLi
         this.setWidth(v2);
         this.setHeight(v0 / 11);
         this.setBackgroundDrawable(null);
+        show();
+    }
+
+    private void show() {
+        //单据不是过账状态 显示菜单
+        if (transferDoc.isIsupload()) {
+            btnUpload.setVisibility(View.GONE);
+            btnDelete.setVisibility(View.GONE);
+            btnPrint.setVisibility(View.VISIBLE);
+        }
     }
 
     private void init() {
         this.btnUpload = this.root.findViewById(R.id.btnUpload);
         this.btnDelete = this.root.findViewById(R.id.btnDelete);
+        this.btnPrint = this.root.findViewById(R.id.btnPrint);
         this.btnUpload.setOnClickListener(this);
         this.btnDelete.setOnClickListener(this);
+        this.btnPrint.setOnClickListener(this);
     }
 
     @Override
@@ -82,6 +108,10 @@ public class TransferEditMenuPopup extends PopupWindow implements View.OnClickLi
                 break;
             case R.id.btnDelete:
                 this.delete();
+                break;
+            case R.id.btnPrint:
+                //打印
+                activity.print();
                 break;
         }
     }

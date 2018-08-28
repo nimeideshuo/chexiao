@@ -66,7 +66,7 @@ public abstract class PrintMode {
             return new PrintMode1(textViews);
         }
         if (v3 == 1) {
-            return new PrintMode2(textViews);
+            return new PrintMode2(textViews);//PrintMode2
         }
         return null;
     }
@@ -177,7 +177,6 @@ public abstract class PrintMode {
             if (this.index >= this.pageinfo.size()) {
                 return;
             }
-
             HashMap<String, String> v1 = this.pageinfo.get(this.index);
             Integer.parseInt((v1).get("margintop"));
             if (Integer.parseInt((v1).get("margintop")) / 50 > v2) {

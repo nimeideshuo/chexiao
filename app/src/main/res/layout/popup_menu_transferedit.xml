@@ -17,22 +17,23 @@
         android:text="上传"
         android:textSize="14.0sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="1.0dip"
-            android:layout_height="fill_parent"
-            android:background="@color/trans" />
-    </LinearLayout>
-
     <Button
         android:id="@id/btnDelete"
         android:layout_width="0.0dip"
+        android:layout_marginLeft="@dimen/view_size_1"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
         android:background="@color/bg_menu_button"
         android:text="删除"
+        android:textSize="14.0sp" />
+    <Button
+        android:id="@+id/btnPrint"
+        android:layout_width="0.0dip"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/view_size_1"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:background="@color/bg_menu_button"
+        android:text="打印"
         android:textSize="14.0sp" />
 </LinearLayout>

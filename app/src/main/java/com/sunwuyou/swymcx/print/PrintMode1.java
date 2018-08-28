@@ -38,7 +38,7 @@ public class PrintMode1 extends PrintMode {
         int v11 = 22;
         int v10 = 12;
         String v3 = "";
-        if(!arg13.getItemtype().equals("销") && !"销售退货单".equals(this.docInfo.getDoctype())) {
+        if(!arg13.getItemtype().equals("销") && !"销售退货单".equals(this.docInfo.getDoctype())&&!arg13.getItemtype().isEmpty()) {
             v3 = "[" + arg13.getItemtype() + "]";
         }
 

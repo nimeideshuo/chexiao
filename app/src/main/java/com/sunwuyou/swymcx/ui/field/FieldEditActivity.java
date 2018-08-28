@@ -183,14 +183,14 @@ public class FieldEditActivity extends BaseHeadActivity implements View.OnTouchL
         this.listView.setAdapter(adapter);
         this.listView.setMenuCreator(new SwipeMenuCreator() {
             public void create(SwipeMenu arg11) {
-                SwipeMenuItem v1 = new SwipeMenuItem(FieldEditActivity.this.getApplicationContext());
+                SwipeMenuItem v1 = new SwipeMenuItem(getApplicationContext());
                 v1.setTitle("详情");
                 v1.setTitleSize(14);
                 v1.setTitleColor(-16777216);
                 v1.setWidth(100);
                 v1.setBackground(new ColorDrawable(Color.rgb(48, 177, 245)));
                 arg11.addMenuItem(v1);
-                SwipeMenuItem v0 = new SwipeMenuItem(FieldEditActivity.this.getApplicationContext());
+                SwipeMenuItem v0 = new SwipeMenuItem(getApplicationContext());
                 v0.setTitle("删除");
                 v0.setTitleSize(14);
                 v0.setTitleColor(-16777216);

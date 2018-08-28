@@ -148,10 +148,10 @@ public class TransferDocDAO {
         return v1;
     }
 
-    public TransferDoc getTransferDoc(Long arg11) {
+    public TransferDoc getTransferDoc(Long id) {
         this.db = this.helper.getReadableDatabase();
         try {
-            cursor = this.db.rawQuery("select id,showid,departmentid,departmentname,inwarehouseid,inwarehousename, isposted,isupload,remark,builderid,buildername,buildtime from kf_transferdoc where id=?", new String[]{String.valueOf(arg11)});
+            cursor = this.db.rawQuery("select id,showid,departmentid,departmentname,inwarehouseid,inwarehousename, isposted,isupload,remark,builderid,buildername,buildtime from kf_transferdoc where id=?", new String[]{String.valueOf(id)});
             if (cursor.moveToNext()) {
                 TransferDoc v4 = new TransferDoc();
                 v4.setId(cursor.getLong(0));

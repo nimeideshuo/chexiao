@@ -10,16 +10,11 @@ import android.support.multidex.MultiDexApplication;
 import com.blankj.utilcode.util.Utils;
 import com.dou361.dialogui.DialogUIUtils;
 import com.lzy.okgo.OkGo;
-import com.squareup.leakcanary.LeakCanary;
 import com.sunwuyou.swymcx.bmob.BmobManager;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.ui.SplashAct;
 import com.sunwuyou.swymcx.utils.MLog;
 import com.sunwuyou.swymcx.utils.TextUtils;
-
-import cn.bmob.v3.Bmob;
-
-import cn.bmob.v3.Bmob;
 
 /**
  * @author Administrator
