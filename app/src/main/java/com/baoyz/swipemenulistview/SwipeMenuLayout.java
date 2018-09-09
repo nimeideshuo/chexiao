@@ -1,5 +1,6 @@
 package com.baoyz.swipemenulistview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.ScrollerCompat;
@@ -89,6 +90,7 @@ public class SwipeMenuLayout extends FrameLayout {
 		mSwipeDirection = swipeDirection;
 	}
 
+	@SuppressLint("ResourceType")
 	private void init() {
 		setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		mGestureListener = new SimpleOnGestureListener() {

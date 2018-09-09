@@ -15,22 +15,13 @@ import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.AccountPreference;
 import com.sunwuyou.swymcx.app.MyApplication;
 import com.sunwuyou.swymcx.app.SystemState;
-//import com.sunwuyou.swymcx.bmob.molder.BUser;
-//import com.sunwuyou.swymcx.bmob.service.UserDao;
-import com.sunwuyou.swymcx.bmob.molder.BUser;
-import com.sunwuyou.swymcx.bmob.service.UserDao;
 import com.sunwuyou.swymcx.http.BaseUrl;
 import com.sunwuyou.swymcx.http.HttpConnect;
 import com.sunwuyou.swymcx.http.HttpErrorConnnet;
 import com.sunwuyou.swymcx.http.HttpListener;
-import com.sunwuyou.swymcx.model.User;
-import com.sunwuyou.swymcx.request.ReqUsrUserLogin;
-import com.sunwuyou.swymcx.request.RespUserEntity;
 import com.sunwuyou.swymcx.request.TerminalEntity;
 import com.sunwuyou.swymcx.ui.login.LoginAct;
 import com.sunwuyou.swymcx.ui.login.LoginPassword;
-import com.sunwuyou.swymcx.utils.MLog;
-import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.view.AccountSelectDialog;
 import com.sunwuyou.swymcx.view.ServerIpDialog;
 import com.yanzhenjie.permission.AndPermission;
@@ -42,7 +33,6 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.bmob.v3.exception.BmobException;
 
 /**
  * Created by admin

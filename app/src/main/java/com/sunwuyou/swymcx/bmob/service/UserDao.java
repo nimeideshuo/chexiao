@@ -1,7 +1,5 @@
 package com.sunwuyou.swymcx.bmob.service;
 
-import android.provider.Settings;
-
 import com.sunwuyou.swymcx.app.MyApplication;
 import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.bmob.molder.BUser;
@@ -13,11 +11,8 @@ import com.sunwuyou.swymcx.utils.Utils;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobPointer;
-import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -92,7 +87,6 @@ public class UserDao {
 
     public interface BmobCallBackListener<T> {
         void onSuccess(T object);
-
         void onError(String s, BmobException e);
     }
 
