@@ -5,8 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.model.CustomerFieldSaleGoods;
+import com.sunwuyou.swymcx.model.RespGoodsPriceEntity;
 import com.sunwuyou.swymcx.utils.TextUtils;
 import com.sunwuyou.swymcx.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by admin
@@ -124,6 +128,35 @@ public class GoodsPriceDAO {
         v0.close();
         db.close();
         return v8;
+    }
+
+    /**
+     * 查询商品价格体系
+     *
+     * @param goodsid
+     * @return
+     */
+    public List<RespGoodsPriceEntity> queryPriceList(String goodsid) {
+        this.db = this.helper.getReadableDatabase();
+        String sql = "select goodsid,unitid,unitname,pricesystemid,pricesystemname,price from sz_goodsprice where goodsid=? and price!='0.0' and price is not null ";
+        List<RespGoodsPriceEntity> listPriceEntity = new ArrayList<RespGoodsPriceEntity>();
+        try {
+            Cursor cursor = db.rawQuery(sql, new String[] { goodsid, });
+            while (cursor.moveToNext()) {
+                RespGoodsPriceEntity entity = new RespGoodsPriceEntity();
+                entity.setGoodsid(cursor.getString(0));
+                entity.setUnitid(cursor.getString(1));
+                entity.setUnitname(cursor.getString(2));
+                entity.setPricesystemid(cursor.getString(3));
+                entity.setPricesystemname(cursor.getString(4));
+                entity.setPrice(cursor.getDouble(5));
+                listPriceEntity.add(entity);
+            }
+            return listPriceEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listPriceEntity;
     }
 
 

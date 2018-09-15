@@ -5,6 +5,7 @@ import com.sunwuyou.swymcx.model.FieldSaleItemForPrint;
 import com.sunwuyou.swymcx.utils.Utils;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  * content
  */
 public class PrintMode2 extends PrintMode {
-    public PrintMode2(List arg5) {
+    public PrintMode2(List<HashMap<String, String>> arg5) {
         super(arg5);
     }
 

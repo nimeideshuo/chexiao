@@ -263,7 +263,7 @@ public class AllGoodsActivity extends BaseHeadActivity implements AdapterView.On
                 }
             }
         };
-        this.atvSearch.setOnTextChangeListener(this.changeListener);
+        this.atvSearch.setOnTextChangeListener(changeListener);
     }
 
     private void loadData() {

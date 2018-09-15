@@ -17,10 +17,11 @@ public class FieldSaleItemForPrint {
     protected String remark;
     protected String specification;
     protected String unitname;
+    protected String busNumber;//装车数量
+    protected String bigStockNumber;//库存数量
 
     public FieldSaleItemForPrint() {
     }
-
     public FieldSaleItemForPrint(String barcode, double discountratio, double discountsubtotal, String goodsid, String goodsname, String itemtype, double num, double price, String remark, String specification, String unitname) {
         this.barcode = barcode;
         this.discountratio = discountratio;
@@ -33,6 +34,22 @@ public class FieldSaleItemForPrint {
         this.remark = remark;
         this.specification = specification;
         this.unitname = unitname;
+    }
+
+    public String getBusNumber() {
+        return busNumber == null ? "" : busNumber;
+    }
+
+    public void setBusNumber(String busNumber) {
+        this.busNumber = busNumber;
+    }
+
+    public String getBigStockNumber() {
+        return bigStockNumber == null ? "" : bigStockNumber;
+    }
+
+    public void setBigStockNumber(String bigStockNumber) {
+        this.bigStockNumber = bigStockNumber;
     }
 
     public String getBarcode() {

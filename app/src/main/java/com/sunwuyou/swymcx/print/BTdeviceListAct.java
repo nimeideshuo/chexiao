@@ -46,6 +46,7 @@ public class BTdeviceListAct extends BaseHeadActivity implements AdapterView.OnI
             }
         }
     };
+    private int modeType;
 
     @Override
     public int getLayoutID() {
@@ -58,6 +59,7 @@ public class BTdeviceListAct extends BaseHeadActivity implements AdapterView.OnI
         //        this.listView.setLayoutParams(new ViewGroup.LayoutParams(-1, 600));
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         type = this.getIntent().getIntExtra("type", 0);
+        modeType = getIntent().getIntExtra("modeType", -1);
         doc = (FieldSaleForPrint) this.getIntent().getSerializableExtra("doc");
         items = JSONUtil.str2list(this.getIntent().getStringExtra("items"), FieldSaleItemForPrint.class);
         if (this.mBtAdapter == null) {
@@ -99,7 +101,16 @@ public class BTdeviceListAct extends BaseHeadActivity implements AdapterView.OnI
             this.finish();
         } else {
             BTPrintHelper printHelper = new BTPrintHelper(this);
-            PrintMode mode = PrintMode.getPrintMode();
+            PrintMode mode = null;
+            if (modeType != -1) {
+                switch (modeType) {
+                    case 3:
+                        mode = new PrintMode3(new ModeHelper().getTextViews());
+                        break;
+                }
+            } else {
+                mode = PrintMode.getPrintMode();
+            }
             if (mode == null) {
                 PDH.showFail("未发现打印模版");
             } else {

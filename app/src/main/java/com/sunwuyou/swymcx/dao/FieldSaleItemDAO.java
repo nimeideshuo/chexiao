@@ -542,7 +542,7 @@ public class FieldSaleItemDAO {
         return new ArrayList<>();
     }
 
-    public List queryDocPrintData(long arg13) {
+    public List<FieldSaleItemForPrint> queryDocPrintData(long arg13) {
         FieldSaleItemForPrint v3;
         List<FieldSaleItemSource> v6 = this.getFieldSaleItems(arg13);
         ArrayList<FieldSaleItemForPrint> v5 = new ArrayList<>();

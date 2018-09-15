@@ -31,6 +31,7 @@ import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.dao.CustomerDAO;
 import com.sunwuyou.swymcx.model.Customer;
 import com.sunwuyou.swymcx.model.CustomerThin;
+import com.sunwuyou.swymcx.ui.CustomerTopSearchAct;
 import com.sunwuyou.swymcx.ui.MAlertDialog;
 import com.sunwuyou.swymcx.ui.NewCustomerAddOnlyForShowAct;
 import com.sunwuyou.swymcx.utils.ClickUtils;
@@ -105,7 +106,7 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
                         refresh();
                     }
                 } else if (!customers.get(v2).getIsNew()) {
-                    startActivityForResult(new Intent().setClass(TargetCustomerActivity.this, NewCustomerAddOnlyForShowAct.class).putExtra("updatecustomerid", TargetCustomerActivity.this.customers.get(v2).getId()), 0);
+                    startActivityForResult(new Intent().setClass(TargetCustomerActivity.this, NewCustomerAddOnlyForShowAct.class).putExtra("updatecustomerid", customers.get(v2).getId()), 0);
                 }
 
 
@@ -147,6 +148,12 @@ public class TargetCustomerActivity extends BaseHeadActivity implements View.OnT
         this.root.setOnTouchListener(this);
         listView = this.findViewById(R.id.listView);
         btnSelectAll = this.findViewById(R.id.btnSelectAll);
+        findViewById(R.id.atvSearch).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(TargetCustomerActivity.this, CustomerTopSearchAct.class));
+            }
+        });
         this.btnSelectAll.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 selectAll();

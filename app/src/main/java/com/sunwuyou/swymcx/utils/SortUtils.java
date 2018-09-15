@@ -12,7 +12,7 @@ import java.util.List;
  * content
  */
 public class SortUtils {
-    public static List sort(List arg4, final String key, SortMode arg6) {
+    public static List<HashMap<String, String>> sort(List<HashMap<String, String>> arg4, final String key, SortMode arg6) {
         ArrayList v1;
         MLog.d("排序:" + key);
         if (arg4 == null || (arg4.isEmpty())) {

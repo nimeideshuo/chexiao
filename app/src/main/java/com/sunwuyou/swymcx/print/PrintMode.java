@@ -10,6 +10,7 @@ import com.sunwuyou.swymcx.utils.Utils;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,13 +21,25 @@ import java.util.List;
  */
 public abstract class PrintMode {
     public static final int ERROR = 1;
-    public static  int SUCCESS;
+    public static int SUCCESS;
     protected final String CHARSET;
     protected final String divider;
     protected final String line;
     protected final int swidth;
     protected final int width;
+
+    public List<FieldSaleItemForPrint> getFieldSaleItemForPrint() {
+        if (datainfo == null) {
+            return new ArrayList<>();
+        }
+        return datainfo;
+    }
+
     protected List<FieldSaleItemForPrint> datainfo;
+
+    public FieldSaleForPrint getFieldSaleForPrint() {
+        return docInfo;
+    }
     protected FieldSaleForPrint docInfo;
     protected OutputStream out;
     protected List<HashMap<String, String>> pageinfo;
@@ -35,7 +48,6 @@ public abstract class PrintMode {
     byte[] r_line;
     private PrintCallback callback;
     private int index;
-
     public PrintMode(List<HashMap<String, String>> pageinfo) {
         super();
         this.CHARSET = "gbk";
@@ -60,15 +72,23 @@ public abstract class PrintMode {
         } catch (IOException v0) {
             v0.printStackTrace();
         }
-        int v3 = helper.getBodytype();
+        int bodytype = helper.getBodytype();
         List<HashMap<String, String>> textViews = helper.getTextViews();
-        if (v3 == 0) {
+        if (bodytype == 0) {
             return new PrintMode1(textViews);
         }
-        if (v3 == 1) {
+        if (bodytype == 1) {
             return new PrintMode2(textViews);//PrintMode2
         }
         return null;
+    }
+
+    public OutputStream getOutputStream() {
+        return out;
+    }
+
+    public void setOutputStream(OutputStream out) {
+        this.out = out;
     }
 
     private String getText(String arg7) {
@@ -169,7 +189,6 @@ public abstract class PrintMode {
         }
     }
 
-
     protected void printHead() throws IOException {
         int v0 = 1;
         int v2;
@@ -237,18 +256,18 @@ public abstract class PrintMode {
         return v1;
     }
 
-    protected int print_left(String arg5) throws IOException {
+    protected int print_left(String text) throws IOException {
         int v2;
         if ("epson".equals(this.printermodel)) {
             byte[] v1 = new byte[3];
             v1[0] = 27;
             v1[1] = 97;
             this.out.write(v1);
-            this.print(arg5);
+            this.print(text);
             v2 = v1.length;
         } else {
-            byte[] v0 = arg5.getBytes("gbk");
-            this.print(arg5);
+            byte[] v0 = text.getBytes("gbk");
+            this.print(text);
             v2 = v0.length;
         }
 
@@ -270,20 +289,16 @@ public abstract class PrintMode {
         this.enter();
     }
 
-    public void setCallback(PrintCallback arg1) {
-        this.callback = arg1;
+    public void setCallback(PrintCallback callback) {
+        this.callback = callback;
     }
 
-    public void setDatainfo(List arg1) {
-        this.datainfo = arg1;
+    public void setDatainfo(List<FieldSaleItemForPrint> datainfo) {
+        this.datainfo = datainfo;
     }
 
-    public void setDocInfo(FieldSaleForPrint arg1) {
-        this.docInfo = arg1;
-    }
-
-    public void setOutputStream(OutputStream arg1) {
-        this.out = arg1;
+    public void setDocInfo(FieldSaleForPrint docInfo) {
+        this.docInfo = docInfo;
     }
 
     protected void smallText() throws IOException {

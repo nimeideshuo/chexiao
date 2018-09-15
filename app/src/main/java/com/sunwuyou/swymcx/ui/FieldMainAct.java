@@ -2,7 +2,6 @@ package com.sunwuyou.swymcx.ui;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -35,7 +34,6 @@ import com.sunwuyou.swymcx.ui.field.TargetCustomerActivity;
 import com.sunwuyou.swymcx.ui.field.TruckStockActivity;
 import com.sunwuyou.swymcx.ui.settleup.SettletupActivity;
 import com.sunwuyou.swymcx.ui.settleup.SettleupOpenAct;
-import com.sunwuyou.swymcx.ui.transfer.TransferDocOpenActivity;
 import com.sunwuyou.swymcx.ui.transfer.TransferEditActivity;
 import com.sunwuyou.swymcx.ui.transfer.TransferLocalRecordActivity;
 import com.sunwuyou.swymcx.utils.MLog;

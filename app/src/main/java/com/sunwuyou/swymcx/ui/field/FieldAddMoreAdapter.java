@@ -17,6 +17,9 @@ import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.dao.GoodsUnitDAO;
 import com.sunwuyou.swymcx.model.FieldSaleItemSource;
 import com.sunwuyou.swymcx.model.GoodsUnit;
+import com.sunwuyou.swymcx.model.RespGoodsPriceEntity;
+import com.sunwuyou.swymcx.utils.DocUtils;
+import com.sunwuyou.swymcx.utils.PDH;
 import com.sunwuyou.swymcx.utils.Utils;
 
 import java.util.ArrayList;
@@ -59,7 +62,39 @@ public class FieldAddMoreAdapter extends BaseAdapter {
         }
     };
 
-    public FieldAddMoreAdapter(Context context) {
+    private View.OnClickListener onBarcodeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int i = (Integer) v.getTag();
+//            final TextView price = (TextView) v;
+            final FieldSaleItemSource itemXS = listItems.get(i);
+            final List<RespGoodsPriceEntity> listGoodPrice = DocUtils.queryGoodsPriceList(itemXS.getGoodsid());
+            if (listGoodPrice.isEmpty()) {
+                PDH.showFail("没有查询到价格!");
+                return;
+            }
+            String arrayPrice[] = new String[listGoodPrice.size()];
+            for (int j = 0; j < listGoodPrice.size(); j++) {
+                RespGoodsPriceEntity priceEntity = listGoodPrice.get(j);
+                arrayPrice[j] = priceEntity.getPricesystemname() + ":" + priceEntity.getPrice();
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("商品价格");
+            builder.setItems(arrayPrice, new AlertDialog.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+//                    double price2 = listGoodPrice.get(which).getPrice();
+//                    price.setText("单价:" + price2 + "元");
+                }
+            });
+            builder.show();
+        }
+    };
+
+
+        public FieldAddMoreAdapter(Context context) {
         super();
         this.context = context;
         this.listItems = new ArrayList<>();
@@ -103,6 +138,8 @@ public class FieldAddMoreAdapter extends BaseAdapter {
         item.btnUnit.setTag(position);
         item.etNum.setTag(position);
         item.btnUnit.setOnClickListener(this.onClickListener);
+        item.tvBarcode.setTag(position);
+        item.tvBarcode.setOnClickListener(onBarcodeListener);
         item.etNum.addTextChangedListener(new NumWatcher(item));
         item.setValue(listItems.get(position));
         return convertView;
@@ -126,7 +163,7 @@ public class FieldAddMoreAdapter extends BaseAdapter {
         public void onTextChanged(CharSequence arg1, int arg2, int arg3, int arg4) {
         }
     }
-
+//    DocUtils
     public class Item {
         private Button btnUnit;
         private EditText etNum;

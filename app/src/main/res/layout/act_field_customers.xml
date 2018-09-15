@@ -4,10 +4,28 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
+    <EditText
+        android:id="@id/atvSearch"
+        android:layout_width="match_parent"
+        android:layout_height="40.0dip"
+        android:background="@drawable/search_input"
+        android:drawableLeft="@drawable/search"
+        android:layout_marginTop="@dimen/main_dimens"
+        android:layout_marginLeft="@dimen/main_dimens"
+        android:layout_marginRight="@dimen/main_dimens"
+        android:hint="@string/hint_actin_bar_search"
+        android:imeOptions="actionDone"
+        android:popupBackground="@drawable/write_bg"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textColorHint="@color/qianlanse"
+        android:textSize="@dimen/list_edit" />
 
     <ListView
         android:id="@id/listView"
         android:layout_width="fill_parent"
+        android:layout_below="@+id/atvSearch"
+        android:layout_marginTop="@dimen/main_dimens"
         android:layout_height="fill_parent"
         android:layout_above="@id/llButtons" />
 

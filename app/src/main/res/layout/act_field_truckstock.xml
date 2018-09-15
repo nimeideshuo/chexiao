@@ -35,6 +35,15 @@
             android:textColor="@android:color/black"
             android:textColorHint="@color/qianlanse"
             android:textSize="@dimen/list_edit" />
+        <TextView
+            android:id="@+id/btnPrint"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="@dimen/view_size_10"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5.0dip"
+            android:text="打印"
+            android:textSize="@dimen/list_label" />
     </LinearLayout>
 
     <LinearLayout

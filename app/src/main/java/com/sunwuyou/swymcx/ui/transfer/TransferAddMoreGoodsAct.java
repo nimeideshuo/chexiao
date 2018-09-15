@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.sunwuyou.swymcx.R;
 import com.sunwuyou.swymcx.app.BaseHeadActivity;
 import com.sunwuyou.swymcx.app.RequestHelper;
+import com.sunwuyou.swymcx.app.SystemState;
 import com.sunwuyou.swymcx.dao.GoodsDAO;
 import com.sunwuyou.swymcx.dao.GoodsUnitDAO;
 import com.sunwuyou.swymcx.dao.TransferItemDAO;
@@ -28,6 +29,7 @@ import com.sunwuyou.swymcx.model.GoodsUnit;
 import com.sunwuyou.swymcx.model.TransferDoc;
 import com.sunwuyou.swymcx.model.TransferItem;
 import com.sunwuyou.swymcx.model.TransferItemSource;
+import com.sunwuyou.swymcx.model.Warehouse;
 import com.sunwuyou.swymcx.request.ReqStrGetGoodsPrice;
 import com.sunwuyou.swymcx.service.ServiceGoods;
 import com.sunwuyou.swymcx.utils.JSONUtil;
@@ -125,10 +127,14 @@ public class TransferAddMoreGoodsAct extends BaseHeadActivity {
                 if (RequestHelper.isSuccess(v7)) {
                     int v3 = 0;
                     List<ReqStrGetGoodsPrice> v6_1 = JSONUtil.str2list(v7, ReqStrGetGoodsPrice.class);
+                    Warehouse warehouse = SystemState.getWarehouse();
                     for (int i = 0; i < v6_1.size(); i++) {
                         ReqStrGetGoodsPrice v1_1 = v6_1.get(i);
                         TransferItemSource v4 = v5.get(i);
-                        v4.setWarehouseid(v1_1.getWarehouseid());
+                        //修改调拨单仓库
+//                        v4.setWarehouseid(v1_1.getWarehouseid());
+                        v4.setWarehouseid(warehouse.getId());
+                        v4.setWarehousename(warehouse.getName());
                         v4.setBatch(v1_1.getBatch());
                         v4.setProductiondate(v1_1.getProductiondate());
                         if ((v0.getGoodsThin(v4.getGoodsid()).getIsusebatch()) && (TextUtils.isEmptyS(v4.getBatch()))) {
